@@ -12,8 +12,18 @@ define ([], function () {
                 toolbar: true,
                 footer: true,
                 toolbarAdd: true,
-            },            
-
+            },
+            
+            toolbar: {
+                items: [
+                    {type: 'button', id: 'b1', caption: 'Что у меня в работе', onClick: $_DO.show_required_tasks},
+                    {type: 'button', id: 'b2', caption: 'Что я просил', onClick: $_DO.show_created_tasks},
+                ],
+//                onClick: function (target, data) {
+//                    console.log(target);
+//                }
+            },
+            
             columnGroups : [
                 {span: 4, caption: 'Дело'},
                 {span: 3, caption: 'Последняя реплика'},
@@ -45,13 +55,7 @@ define ([], function () {
 
             onAdd: function (e) {use.block ('tasks_new')},
             
-            onRender: function () {
-            
-                this.search ([
-                    {field: "id_user", type: "enum", operator: "in", value: [{"id": $_USER.id, "text": $_USER.label}]}
-                ], 'AND')
-            
-            }
+            onRender: $_DO.show_required_tasks,
 
         }).refresh ();
         
