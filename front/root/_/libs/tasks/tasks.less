@@ -49,3 +49,40 @@ body {
 span.anchor {
 	cursor: pointer;
 }
+
+div[data-block-name=task] {
+	
+	font-size: 14px;
+
+	header {
+		padding: 0 10px;
+		background-color: #ddffff;
+	}
+	
+	article {
+		padding: 10px;
+	}
+
+	&+button {
+	
+		@r: 50px;
+		width: @r;
+		height: @r;
+		border-radius: @r;
+	
+		border: 0;
+		box-shadow: none;
+		outline:0;
+
+		background-color: #00aa00;
+		color: white;
+		font-size:40px;
+		
+		position:fixed;
+		right:20px;
+		bottom:20px;
+		
+ 	}
+
+}
+

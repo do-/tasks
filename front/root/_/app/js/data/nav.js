@@ -1,10 +1,9 @@
 define ([], function () {
 
-/*
-    $_DO.open_widgets_nav = function () {
-        openTab ('/widgets', '/widgets')
+    $_DO.open_tasks_nav = function () {
+        openTab ('/tasks', '/tasks')
     }
-*/
+
     $_DO.open_users_nav = function () {
         openTab ('/users', '/users')
     }
@@ -36,11 +35,11 @@ define ([], function () {
         var is_admin = ($_USER.role == 'admin')
     
         var data = {_can: {
-            open_widgets: true,
+            open_tasks: true,
             open_users: is_admin,
             open_user_password: is_admin,
             open_settings: true,
-            open_help: true,
+            open_help: false,
             logout: true
         }}
 

@@ -13,9 +13,9 @@ module.exports = function (grunt) {
         },
         icons: {
             expand      : true,
-            cwd         : 'root/_/libs/elu_dia_w2ui_template/svg',
+            cwd         : 'root/_/libs/tasks/svg',
             src         : ['**/*.svg'],
-            dest        : 'root/_/libs/elu_dia_w2ui_template',
+            dest        : 'root/_/libs/tasks',
             sprite      : 'sprite.svg',
             options     : {
 
@@ -54,7 +54,7 @@ module.exports = function (grunt) {
           optimization: 2
         },
         files: {
-          "root/_/libs/elu_dia_w2ui_template/elu_dia_w2ui_template.css": "root/_/libs/elu_dia_w2ui_template/elu_dia_w2ui_template.less"
+          "root/_/libs/tasks/tasks.css": "root/_/libs/tasks/tasks.less"
         }
       }
     },
@@ -110,7 +110,7 @@ module.exports = function (grunt) {
     },    
     
     shell: {
-        reboot: {command: '/etc/init.d/elu_dia_w2ui_template restart'}
+        reboot: {command: '/etc/init.d/tasks restart'}
     },
 
     compress: {
@@ -145,13 +145,13 @@ module.exports = function (grunt) {
       },
 
       styles: {
-        files: ['root/_/libs/elu_dia_w2ui_template/*.less'],
+        files: ['root/_/libs/tasks/*.less'],
         tasks: ['less'],
         options: {nospawn: true}
       },
 
       svg: {
-        files: ['root/_/libs/elu_dia_w2ui_template/svg/*.svg'],
+        files: ['root/_/libs/tasks/svg/*.svg'],
         tasks: ['svg_sprite', 'less'],
         options: {nospawn: true}
       },

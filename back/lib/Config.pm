@@ -38,14 +38,14 @@ sub password_hash {
 
 sub check_session {
 
-	if ($ENV {REMOTE_ADDR} eq $ENV {SERVER_ADDR}) {
+#	if ($ENV {REMOTE_ADDR} eq $ENV {SERVER_ADDR}) {
 	
-		$_REQUEST {sid} = 1;
+#		$_REQUEST {sid} = 1;
 
-		our $_USER = sql (users => -2);
+#		our $_USER = sql (users => -2);
 
-	}
-	else {
+#	}
+#	else {
 
 		our $_USER = get_user ();
 
@@ -57,7 +57,7 @@ sub check_session {
 
 		}	
 
-	}
+#	}
 	
 	unless ($preconf -> {_} -> {roles_cache}) {
 	
@@ -93,14 +93,12 @@ sub get_page_data {
 	
 	$db -> {AutoCommit} = 0;
 	
-	sql_do (q {SELECT set_config ('elu_dia_w2ui_template.id_user', ?, true)}, $_USER -> {id}) if $_USER -> {id};
+	sql_do (q {SELECT set_config ('tasks.id_user', ?, true)}, $_USER -> {id}) if $_USER -> {id};
 			
 	my $data = call_for_role ($sub_name);
 		
 	call_for_role ("recalculate_$_REQUEST{type}");
-	
-	$id_contract_event and sql_do ('UPDATE contract_events SET dt = CURRENT_TIMESTAMP, fake = 0 WHERE id = ?', $id_contract_event);
-	
+		
 	return $data;
 
 }

@@ -7,7 +7,7 @@ requirejs.config ({
 
 function get_default_url () {
 
-    return '/users'
+    return '/tasks'
 
 }
 
