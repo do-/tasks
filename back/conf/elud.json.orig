@@ -1,8 +1,8 @@
 {
 		
 	"fcgi": {
-		"name"    : "elu_dia_w2ui_template",
-		"pidfile" : "/var/run/elu_dia_w2ui_template.pid",
+		"name"    : "tasks",
+		"pidfile" : "/var/run/tasks.pid",
 		"port"    : ...
 	},
 		
@@ -17,11 +17,11 @@
 
 	},
 
-	"files": "/var/projects/elu_dia_w2ui_template/files",
+	"files": "/var/projects/tasks/files",
 
 	"db": {
-		"dsn"      : "DBI:Pg:database=elu_dia_w2ui_template;host=localhost",
-		"user"     : "elu_dia_w2ui_template",
+		"dsn"      : "DBI:Pg:database=tasks;host=localhost",
+		"user"     : "tasks",
 		"password" : "..."
 	},		
 
@@ -30,7 +30,7 @@
 	"auth": {
 		"allow_test_admin": 1,
 		"sessions": {"timeout": 30},
-		"salt_file" : "/etc/elu_dia_w2ui_template.salt"		
+		"salt_file" : "/etc/tasks.salt"		
 	}
 
 }
