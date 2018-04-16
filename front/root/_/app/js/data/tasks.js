@@ -19,7 +19,8 @@ define ([], function () {
         grid.search ([
 
             {field: "id_other_user", type: "enum", operator: "in", value: [{"id": $_USER.id, "text": $_USER.label}]},
-            {field: "is_author", type: "list", operator: "is", value: 1, "text": "Автор"}
+            {field: "is_author", type: "list", operator: "is", value: 1, "text": "Автор"},
+            {field: "status", type: "list", operator: "is", value: 1, "text": "В работе"}
 
         ], 'AND')
         
