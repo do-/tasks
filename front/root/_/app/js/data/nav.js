@@ -1,11 +1,15 @@
 define ([], function () {
 
     $_DO.open_tasks_nav = function () {
-        openTab ('/tasks', '/tasks')
+        openTab ('/tasks')
+    }
+
+    $_DO.open_task_notes_nav = function () {
+        openTab ('/task_notes')
     }
 
     $_DO.open_users_nav = function () {
-        openTab ('/users', '/users')
+        openTab ('/users')
     }
     
     $_DO.open_user_password_nav = function () {
@@ -36,6 +40,7 @@ define ([], function () {
     
         var data = {_can: {
             open_tasks: true,
+            open_task_notes: true,
             open_users: is_admin,
             open_user_password: is_admin,
             open_settings: true,
