@@ -119,20 +119,79 @@ sub get_vocs_of_tasks {
 sub select_tasks {
 
 	$_REQUEST {sort} = [{field => "id", direction => "asc"}];
+	
+	my $note = undef;
+	my $status = undef;
+	my $id_other_user = undef;
+	my $is_author = undef;
 
 	if ($_REQUEST {searchLogic} eq 'OR') {
 		
-		my $q = $_REQUEST {search} [0] {value};
+		$note = $_REQUEST {search} [0] {value};
+		
+		$_REQUEST {search} = [];
 	
-		$_REQUEST {search} = [
-			{field => 'label', operator => 'contains', value => $q},
-		]
+	}
+	else {
+	
+		my @r = ();
+		
+		foreach my $s (@{$_REQUEST {search}}) {
+		
+			if ($s -> {field} eq 'note') {
+
+				$note = $s -> {value};
+
+			}
+			elsif ($s -> {field} eq 'status') {
+
+				$status = $s -> {value};
+
+			}
+			elsif ($s -> {field} eq 'id_other_user') {
+
+				$id_other_user = $s -> {value};
+
+			}
+			elsif ($s -> {field} eq 'is_author') {
+
+				$is_author = $s -> {value} == 1 ? 1 : 0;
+
+			}
+			else {
+
+				push @r, $s;
+
+			}
+		
+		}
+
+		$_REQUEST {search} = \@r;
 
 	}
 	
 	my $filter = w2ui_filter ();
 	
-#	push @$filter, ['id > ' => 0];
+	if ($status) {
+	
+		push @$filter, $status == 1 ? ['id_user IS NOT NULL'] : ['id_user IS NULL'];
+	
+	}
+
+	if ($note) {
+	
+		push @$filter, [id => sql ('task_notes(id_task)' => [['label ILIKE %?% OR body ILIKE %?%' => [$note, $note]]])]
+	
+	}
+
+	if ($id_other_user) {
+	
+		push @$filter, [id => sql ('task_users(id_task)' => [
+			[id_user => [map {$_ -> {id}} @$id_other_user]],
+			[is_author => $is_author],
+		])]
+	
+	}
 
 	sql ({}, tasks => $filter,
 		, 'task_notes(*) ON id_last_task_note'

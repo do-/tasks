@@ -12,10 +12,12 @@ define ([], function () {
         f.lock ()
 
         query ({action: 'create'}, {data: v}, function (data) {
+        
+            w2ui ['tasksGrid'].reload ()
+
+            w2popup.close ()
 
             openTab ('/tasks/' + data.uuid)
-            
-            w2popup.close ()
         
         })
     

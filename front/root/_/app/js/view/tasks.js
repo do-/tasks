@@ -19,6 +19,15 @@ define ([], function () {
                 {span: 3, caption: 'Последняя реплика'},
             ],
             
+            searches: [
+                {field: 'label',   caption: 'Тема',      type: 'text'},
+                {field: 'note',    caption: 'Переписка', type: 'text'},
+                {field: 'id_user', caption: 'Кто занимается сейчас',    type: 'enum', options: {items: data.users.items}},
+                {field: 'status',  caption: 'Статус',    type: 'list', options: {items: [{id: 1, text: 'В работе'}, {id: -1, text: 'Закрыто'}]}},
+                {field: 'id_other_user', caption: 'Участник(и)...',  type: 'enum', options: {items: data.users.items}},
+                {field: 'is_author',  caption: '...в роли',    type: 'list', options: {items: [{id: 1, text: 'Автор'}, {id: -1, text: 'Адресат'}]}},
+            ],
+            
             columns: [
 
                 {field: 'uuid',              caption: 'ID',        size: 87, hidden: true},
