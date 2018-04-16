@@ -6,6 +6,17 @@
 		"port"    : ...
 	},
 		
+	"mail": {
+
+		"host": "127.0.0.1",
+		"options": {"Debug": 1},
+		"from": {
+			"address": "foo@bar.ru",
+			"label": "tasks"
+		}
+
+	},
+
 	"files": "/var/projects/elu_dia_w2ui_template/files",
 
 	"db": {

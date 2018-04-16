@@ -30,7 +30,14 @@ sub do_comment_tasks {
 	$d -> {body} = _tasks_get_note ($d);	
 	
 	sql_do_insert (task_notes => $d);
-	
+
+	send_mail ({
+		to           => $d -> {id_user_to},
+		subject      => $d -> {label},
+		text         => $d -> {body},
+		href         => "/tasks/$_REQUEST{id}",
+	});
+
 }
 
 ################################################################################
