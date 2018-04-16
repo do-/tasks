@@ -1,0 +1,13 @@
+server {
+
+    listen		*:80;
+    server_name		tasks.mydomain;
+
+    root		/var/projects/tasks/front/root;
+
+    access_log		/var/log/nginx/tasks.access.log eludia_requests;
+    error_log		/var/log/nginx/tasks.error.log;
+
+    include		/var/projects/tasks/front/conf/app.conf;
+
+}
