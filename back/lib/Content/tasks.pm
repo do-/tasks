@@ -19,20 +19,17 @@ sub _tasks_get_note {
 
 sub do_comment_tasks {
 
-	my $id_task = get_id ();
-
 	my $d = {fake => 0};
 	
+	$d -> {id_task} = get_id ();
+
 	$d -> {$_} = $_REQUEST {data} {$_} foreach qw (label id_user_to);
 	
-	my $note = _tasks_get_note ($d);	
+	$d -> {id_user_to} > 0 or $d -> {id_user_to} = undef;
 	
-	sql_do_insert (task_notes => {
-		fake	=> 0,
-		id_task	=> $id_task,
-		label	=> $d -> {label},
-		body	=> $note,
-	});
+	$d -> {body} = _tasks_get_note ($d);	
+	
+	sql_do_insert (task_notes => $d);
 	
 }
 

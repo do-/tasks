@@ -23,10 +23,17 @@ define ([], function () {
         
             this.from_to = data.users [this.id_user_from]
             
-            if (this.id_user_from == this.id_user_to) return
+            if (this.id_user_to == this.id_user_from) return
             
-            this.from_to += ' \u2192 '
-            this.from_to += data.users [this.id_user_to]
+            if (!this.id_user_to) {
+                this.from_to += ' \u2192 \u274C'
+            }
+            else {
+                this.from_to += ' \u2192 '
+                this.from_to += data.users [this.id_user_to]
+            }
+
+            
         
         })
         

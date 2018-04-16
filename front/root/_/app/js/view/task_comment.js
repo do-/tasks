@@ -14,17 +14,15 @@ define ([], function () {
             
                 name: 'task_comment_form',
 
-                record: darn({
-                    id_user: {id: parseInt (data.author.id) + parseInt (data.executor.id) - $_USER.id}
-                }),
+                record: {
+                    id_user_to: {id: parseInt (data.author.id) + parseInt (data.executor.id) - $_USER.id}
+                },
 
                 fields : [                
                     {name: 'label',   type: 'text'},
                     {name: 'id_user_to', type: 'list', options: {items: users}},
                 ],
                 
-                focus: 1,
-
             });
 
             clickOn ($('#w2ui-popup button'), $_DO.update_task_comment)
