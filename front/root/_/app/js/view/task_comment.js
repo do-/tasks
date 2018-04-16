@@ -27,12 +27,6 @@ define ([], function () {
 
             clickOn ($('#w2ui-popup button'), $_DO.update_task_comment)
             
-//            $('textarea').keydown (function (e) {
-            
-//                if (e.ctrlKey && e.keyCode == 13) $_DO.update_task_comment ()
-            
-//            })
-
         })
 
     }

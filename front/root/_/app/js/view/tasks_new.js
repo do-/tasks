@@ -1,6 +1,10 @@
 define ([], function () {
 
     return function (data, view) {
+
+        var users = JSON.parse (JSON.stringify (data.users.items))
+
+        $.each (users, function () {if (this.id == $_USER.id) this.text += ' (то есть я же)'})
     
         $(view).w2uppop ({}, function () {
             
@@ -12,7 +16,7 @@ define ([], function () {
     
                 fields : [                
                     {name: 'label',   type: 'text'},
-                    {name: 'id_user', type: 'list', options: {items: data.users.items}},
+                    {name: 'id_user', type: 'list', options: {items: users}},
                 ],
                                 
             });
