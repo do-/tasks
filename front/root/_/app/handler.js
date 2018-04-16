@@ -193,7 +193,9 @@ function not_off (i) {return !i.off}
 
 function reload_page () { location.reload () }
 
-requirejs (['elu/elu', 'elu_w2ui/elu_w2ui'], function (jq, elu, elu_w2ui) {
+requirejs (['elu/elu', 'elu_w2ui/elu_w2ui', 'showdown/showdown.min'], function (elu, elu_w2ui, _showdown) {
+
+    window.showdown = _showdown
 
     clearTimeout (window.alarm)
 

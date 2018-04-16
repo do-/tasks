@@ -18,9 +18,13 @@ define ([], function () {
         data._can = {comment: data.id_user > 0 && data.users [$_USER.id]}
 
         $('title').text (data.label + ' (' + from_to (data, data.author.id) + ')')
+                
+        var converter = new window.showdown.Converter ()
         
         $.each (data.task_notes, function () {
         
+            this.html_body = converter.makeHtml (this.body)
+
             this.from_to = data.users [this.id_user_from]
             
             if (this.id_user_to == this.id_user_from) return
@@ -33,8 +37,6 @@ define ([], function () {
                 this.from_to += data.users [this.id_user_to]
             }
 
-            
-        
         })
         
         fill (view, data, $('main'))
