@@ -17,8 +17,6 @@
 
 	},
 
-	"files": "/var/projects/tasks/files",
-
 	"db": {
 		"dsn"      : "DBI:Pg:database=tasks;host=localhost",
 		"user"     : "tasks",
