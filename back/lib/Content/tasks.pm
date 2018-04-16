@@ -76,8 +76,23 @@ sub do_create_tasks {
 		is_author  => 0,
 	});
 
-	sql (tasks => $id_task);
+	my $data = sql (tasks => $id_task);
+	
+	eval {
 
+		send_mail ({
+			to           => $d -> {id_user},
+			subject      => $d -> {label},
+			text         => $note,
+			href         => "/tasks/$data->{uuid}",
+		});
+
+	};
+	
+	darn $@ if $@;
+	
+	$data;
+	
 }
 
 ################################################################################
