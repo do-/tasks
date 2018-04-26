@@ -42,7 +42,7 @@ define ([], function () {
             open_tasks: true,
             open_task_notes: true,
             open_users: is_admin,
-            open_user_password: is_admin,
+            open_user_password: !is_admin,
             open_settings: true,
             open_help: false,
             logout: true
