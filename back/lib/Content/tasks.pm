@@ -50,16 +50,16 @@ sub do_create_tasks {
 
 	$d -> {id_user} or die '#id_user#: Не указан адресат';
 	
-	my $note = _tasks_get_note ($d);	
-
 	my $id_task = sql_do_insert (tasks => $d);
 	
+	$d -> {$_} = $_REQUEST {data} {$_} foreach qw (body);
+
 	sql_do_insert (task_notes => {
 		fake	   => 0,
 		id_task	   => $id_task,
 		id_user_to => $d -> {id_user},
 		label	   => $d -> {label},
-		body	   => $note,
+		body	   => $d -> {body},
 	});
 
 	sql_do_insert (task_users => {
@@ -83,7 +83,7 @@ sub do_create_tasks {
 		send_mail ({
 			to           => $d -> {id_user},
 			subject      => $d -> {label},
-			text         => $note,
+			text         => $d -> {body},
 			href         => "/tasks/$data->{uuid}",
 		});
 
