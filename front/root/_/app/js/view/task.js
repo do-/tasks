@@ -23,6 +23,7 @@ define ([], function () {
         
         $.each (data.task_notes, function () {
         
+            this.html_label = converter.makeHtml (this.label)
             this.html_body = converter.makeHtml (this.body)
 
             this.from_to = data.users [this.id_user_from]
@@ -40,6 +41,8 @@ define ([], function () {
         })
         
         fill (view, data, $('main'))
+        
+        $('header b').each (function () {var $this = $(this); $this.attr ('title', $this.text ())})
         
         window.scrollTo (0, document.body.scrollHeight);
 
