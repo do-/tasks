@@ -22,9 +22,8 @@ define ([], function () {
         var converter = new window.showdown.Converter ()
         
         $.each (data.task_notes, function () {
-        
-            this.html_label = converter.makeHtml (this.label)
-            this.html_body = converter.makeHtml (this.body)
+                    
+            this.html_body = converter.makeHtml (this.body.replace (/[\r\n]+/g, "\n\n"))
 
             this.from_to = data.users [this.id_user_from]
             
