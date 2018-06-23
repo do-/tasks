@@ -1,49 +1,36 @@
 define ([], function () {
 
-    $_DO.cancel_users = function (e) {
+    $_DO.cancel_user = function (e) {
         
         if (!confirm ('Отменить несохранённые правки?')) return
-
-        var data = w2ui ['form'].record
         
-        if (data.fake > 0) {
-        
-            window.close ()
-        
-        }
-        else {
-        
-            query ({}, {}, function (data) {
+        query ({}, {}, function (data) {
 
-                data.__read_only = true
+            data.__read_only = true
 
-                $_F5 (data)
+            $_F5 (data)
 
-            })
+        })
         
-        }
-
     }
 
-    $_DO.pass_users = function (e) {
+    $_DO.pass_user = function (e) {
 
         use.block ('user_password')
 
     }
     
-    $_DO.edit_users = function (e) {
+    $_DO.edit_user = function (e) {
 
         var data = w2ui ['form'].record
 
         data.__read_only = false
-        
-        var $form = w2ui ['form']
                 
         $_F5 (data)
 
     }
 
-    $_DO.update_users = function (e) {
+    $_DO.update_user = function (e) {
     
         if (!confirm ('Сохранить изменения?')) return
         

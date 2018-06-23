@@ -157,22 +157,6 @@ function __d (data) {
 
 }
 
-function refreshButtons (e) {e.done (
-                
-    function () {
-
-        $('button', $(this.box)).each (function () {
-        
-            clickOn ($(this), $_DO [this.name + '_' + $_REQUEST.type])
-            
-        })
-
-        clickOn ($('span.anchor'), onDataUriDblClick)
-
-    }
-                
-)}
-
 var _do_apologize = $_DO.apologize
 
 $_DO.apologize = function (o, fail) {    
