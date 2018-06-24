@@ -24,9 +24,6 @@ define ([], function () {
                 ],
                 
             });
-
-            clickOn ($('#w2ui-popup button:first'), $_DO.update_task_comment)
-            clickOn ($('#w2ui-popup button:last'), function () {openTab ("https://github.com/showdownjs/showdown/wiki/Showdown's-Markdown-syntax")})
             
         })
 

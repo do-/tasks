@@ -10,7 +10,7 @@ sub get_vocs_of_task_notes {
 
 sub select_task_notes {
 
-	$_REQUEST {sort} = [{field => "id", direction => "asc"}];
+	$_REQUEST {sort} = [{field => "id", direction => "desc"}];
 	
 	my $note = undef;
 	

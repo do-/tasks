@@ -18,12 +18,15 @@ define ([], function () {
         data._can = {comment: data.id_user > 0 && data.users [$_USER.id]}
 
         $('title').text (data.label + ' (' + from_to (data, data.author.id) + ')')
-                
-        var converter = new window.showdown.Converter ()
-        
+                        
         $.each (data.task_notes, function () {
-                    
-            this.html_body = converter.makeHtml (this.body.replace (/[\r\n]+/g, "\n\n"))
+
+            this.html_body = this.body
+                .replace (/[<>]/g, "")
+                .replace (/[\r\n]/g, "<p>")
+                .replace (/<p>\* /g, "<li>")
+                .replace (/\*\*([^\*]*?)\*\*/g, "<b>$1</b>")
+                .replace (/https?:\/\/\S+/g, "<a href='$&'>[URL]</a>")
 
             this.from_to = data.users [this.id_user_from]
             
@@ -38,7 +41,7 @@ define ([], function () {
             }
 
         })
-        
+
         fill (view, data, $('main'))
         
         $('header b').each (function () {var $this = $(this); $this.attr ('title', $this.text ())})

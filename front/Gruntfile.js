@@ -102,7 +102,6 @@ module.exports = function (grunt) {
             src: [
                 'root/_/libs/jquery/jquery-3.1.1.min.js', 
                 'root/_/libs/requirejs/require.js',
-//                'root/_/libs/showdown/showdown.min.js',
                 'root/_/libs/w2ui/w2ui-1.5.rc1.min.js',
                 'root/_/app/js/app.js'
             ],
