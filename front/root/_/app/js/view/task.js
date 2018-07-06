@@ -21,7 +21,7 @@ define ([], function () {
                         
         $.each (data.task_notes, function () {
 
-            this.html_body = this.body
+            this.html_body = (this.body || '')
                 .replace (/[<>]/g, "")
                 .replace (/[\r\n]/g, "<p>")
                 .replace (/<p>\* /g, "<li>")
