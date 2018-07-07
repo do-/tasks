@@ -8,6 +8,43 @@ define ([], function () {
         return from.label + ' \u2192 ' + to.label
 
     }
+    
+    function txt2html (s) {
+        
+        var depth = 0
+        
+        return s
+            .split (/[\r\n]/)
+            .map (
+            
+                function (line) {
+
+                    line = line
+                        .replace (/[<>]/g, "")
+                        .replace (/\*\*([^\*]*?)\*\*/g, "<b>$1</b>")
+                        .replace (/https?:\/\/\S+/g, "<a href='$&'>[URL]</a>")
+
+                    var stars = 0
+
+                    for (i = 0; i < line.length; i ++) {
+                        if (line.charAt (i) != '*') break
+                        stars ++
+                    }
+
+                    var delta = stars - depth
+
+                    var s = delta == 0 ? '' : (delta > 0 ? '<ul>' : '</ul>').repeat (Math.abs (delta))
+
+                    depth = stars
+
+                    return s + (depth ? '<li>' : '<p>') + line.substr (depth)
+
+                }
+                
+            )
+            .join ('')
+
+    }
         
     return function (data, view) {
     
@@ -21,12 +58,7 @@ define ([], function () {
                         
         $.each (data.task_notes, function () {
 
-            this.html_body = (this.body || '')
-                .replace (/[<>]/g, "")
-                .replace (/[\r\n]/g, "<p>")
-                .replace (/<p>\* /g, "<li>")
-                .replace (/\*\*([^\*]*?)\*\*/g, "<b>$1</b>")
-                .replace (/https?:\/\/\S+/g, "<a href='$&'>[URL]</a>")
+            this.html_body = txt2html (this.body || '')
 
             this.from_to = data.users [this.id_user_from]
             
