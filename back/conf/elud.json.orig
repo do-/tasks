@@ -17,6 +17,8 @@
 
 	},
 
+	"pics": "/var/projects/tasks/front/root/_pics",
+
 	"db": {
 		"dsn"      : "DBI:Pg:database=tasks;host=localhost",
 		"user"     : "tasks",

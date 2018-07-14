@@ -23,6 +23,16 @@ define ([], function () {
                     {name: 'id_user_to', type: 'list', options: {items: users}},
                 ],
                 
+                onRefresh: function (e) {
+                
+                    e.done (function () {
+
+                        document.getElementById ('label').onpaste = $_DO.paste_tasks_comment
+
+                    })
+                
+                }
+                
             });
             
         })

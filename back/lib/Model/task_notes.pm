@@ -12,6 +12,8 @@ columns => {
 	
 	label              => "text", # Заголовок
 	body               => "text", # Текст
+	
+	is_illustrated     => 'int=0',  # Есть ли картинка
 
 },
 

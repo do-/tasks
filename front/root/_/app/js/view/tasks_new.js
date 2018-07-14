@@ -19,7 +19,7 @@ define ([], function () {
                     {name: 'body',    type: 'text'},
                     {name: 'id_user', type: 'list', options: {items: users}},
                 ],
-                                
+
             })
 
         })

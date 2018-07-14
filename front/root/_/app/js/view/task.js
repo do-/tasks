@@ -59,6 +59,12 @@ define ([], function () {
         $.each (data.task_notes, function () {
 
             this.html_body = txt2html (this.body || '')
+            
+            if (this.is_illustrated) {
+                
+                this.img_url = '/_pics/' + this.ts.substr (0, 10).replace (/-/g, '/') + '/' + this.uuid + '.png'
+            
+            }
 
             this.from_to = data.users [this.id_user_from]
             
@@ -71,14 +77,22 @@ define ([], function () {
                 this.from_to += ' \u2192 '
                 this.from_to += data.users [this.id_user_to]
             }
-
+            
         })
 
         fill (view, data, $('main'))
         
+        $('img').each (function () {
+            clickOn ($(this), function () {
+                openTab (this.src)
+            })
+        })
+        
         $('header b').each (function () {var $this = $(this); $this.attr ('title', $this.text ())})
         
         window.scrollTo (0, document.body.scrollHeight);
+        
+        if (data._can.comment) document.onpaste = $_DO.paste_task
 
     }
 

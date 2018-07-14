@@ -1,5 +1,5 @@
 define ([], function () {
-
+    
     $_DO.comment_task = function () {
     
         use.block ('task_comment')

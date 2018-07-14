@@ -20,22 +20,48 @@ sub _tasks_get_note {
 sub do_comment_tasks {
 
 	my $d = {fake => 0};
-	
+
 	$d -> {id_task} = get_id ();
 
-	$d -> {$_} = $_REQUEST {data} {$_} foreach qw (label id_user_to);
-	
+	$d -> {$_} = $_REQUEST {data} {$_} foreach qw (label id_user_to img);
+
 	$d -> {id_user_to} > 0 or $d -> {id_user_to} = undef;
+
+	$d -> {body} = _tasks_get_note ($d);
+
+	my $img = delete $d -> {img};
+
+	$d -> {is_illustrated} = 1 if $img;
+
+	my $id = sql_do_insert (task_notes => $d);
 	
-	$d -> {body} = _tasks_get_note ($d);	
-	
-	sql_do_insert (task_notes => $d);
+	my $attach = undef;
+
+	if ($img) {
+
+		my $data = sql (task_notes => $id);
+
+		my $path = sprintf ('%04d/%02d/%02d', Date::Calc::Today ());
+
+		my $abs_path = $preconf -> {pics} . '/' . $path;
+
+		File::Path::make_path ($abs_path);
+		
+		$attach = {real_path => "$abs_path/$data->{uuid}.png"};
+
+		open (F, ">$attach->{real_path}") or die "Can't write to $fn:$!\n";
+		binmode F;
+		print F MIME::Base64::decode ($img);
+		close (F);
+
+	}	
 
 	send_mail ({
 		to           => $d -> {id_user_to},
 		subject      => $d -> {label},
 		text         => $d -> {body},
 		href         => "/tasks/$_REQUEST{id}",
+		attach       => $attach,
 	});
 
 }

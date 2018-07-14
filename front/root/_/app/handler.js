@@ -157,16 +157,6 @@ function __d (data) {
 
 }
 
-var _do_apologize = $_DO.apologize
-
-$_DO.apologize = function (o, fail) {    
-
-    _do_apologize (o, fail)
-
-    w2utils.unlockAll ()    
-
-}
-
 function die (name, text) {
     alert (text)
     $('[name=' + name + ']').focus ()
