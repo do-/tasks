@@ -19,6 +19,16 @@ define ([], function () {
                     {name: 'body',    type: 'text'},
                     {name: 'id_user', type: 'list', options: {items: users}},
                 ],
+                
+                onRefresh: function (e) {
+                
+                    e.done (function () {
+
+                        document.getElementById ('body').onpaste = check_clipboard_for_png
+
+                    })
+                
+                }
 
             })
 

@@ -27,7 +27,7 @@ define ([], function () {
                 
                     e.done (function () {
 
-                        document.getElementById ('label').onpaste = $_DO.paste_tasks_comment
+                        document.getElementById ('label').onpaste = check_clipboard_for_png
 
                     })
                 

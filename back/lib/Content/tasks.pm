@@ -60,17 +60,23 @@ sub do_comment_tasks {
 
 	$d -> {is_illustrated} = 1 if $img;
 
-	send_mail ({
-		to           => $d -> {id_user_to},
-		subject      => $d -> {label},
-		text         => $d -> {body},
-		href         => "/tasks/$_REQUEST{id}",
-		attach       => _tasks_illustrate (		
-			sql_do_insert (task_notes => $d), 			
-			$img			
-		),
-		
-	});
+	eval {
+
+		send_mail ({
+			to           => $d -> {id_user_to},
+			subject      => $d -> {label},
+			text         => $d -> {body},
+			href         => "/tasks/$_REQUEST{id}",
+			attach       => _tasks_illustrate (		
+				sql_do_insert (task_notes => $d), 			
+				$img			
+			),
+
+		});
+	
+	};
+	
+	darn $@ if $@;	
 
 }
 
@@ -86,14 +92,17 @@ sub do_create_tasks {
 	
 	my $id_task = sql_do_insert (tasks => $d);
 	
-	$d -> {$_} = $_REQUEST {data} {$_} foreach qw (body);
+	$d -> {$_} = $_REQUEST {data} {$_} foreach qw (body img);
 
-	sql_do_insert (task_notes => {
+	my $img = delete $d -> {img};
+
+	my $id_task_note = sql_do_insert (task_notes => {
 		fake	   => 0,
 		id_task	   => $id_task,
 		id_user_to => $d -> {id_user},
 		label	   => $d -> {label},
 		body	   => $d -> {body},
+		is_illustrated => $img ? 1 : 0,
 	});
 
 	sql_do_insert (task_users => {
@@ -119,6 +128,7 @@ sub do_create_tasks {
 			subject      => $d -> {label},
 			text         => $d -> {body},
 			href         => "/tasks/$data->{uuid}",
+			attach       => _tasks_illustrate ($id_task_note, $img),
 		});
 
 	};
