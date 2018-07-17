@@ -14,7 +14,7 @@ define ([], function () {
             
         reader.onload = function () {
             var url = reader.result
-            $('#png').prop ('src', url)
+            $('#png').css ('content', 'url(' + url + ')')
             $('input[name=img]').val (url.split (',') [1])
             alert ('Изображение скопировано')
         }
