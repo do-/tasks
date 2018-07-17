@@ -15,6 +15,33 @@ sub _tasks_get_note {
 
 }
 
+#################################################################################
+
+sub _tasks_illustrate {
+
+	my ($id, $img) = @_;
+	
+	$img or return undef;
+
+	my $data = sql (task_notes => $id);
+
+	my $path = sprintf ('%04d/%02d/%02d', Date::Calc::Today ());
+
+	my $abs_path = $preconf -> {pics} . '/' . $path;
+
+	File::Path::make_path ($abs_path);
+	
+	my $attach = {real_path => "$abs_path/$data->{uuid}.png"};
+
+	open (F, ">$attach->{real_path}") or die "Can't write to $fn:$!\n";
+	binmode F;
+	print F MIME::Base64::decode ($img);
+	close (F);
+	
+	return $attach;
+
+}
+
 ################################################################################
 
 sub do_comment_tasks {
@@ -33,35 +60,16 @@ sub do_comment_tasks {
 
 	$d -> {is_illustrated} = 1 if $img;
 
-	my $id = sql_do_insert (task_notes => $d);
-	
-	my $attach = undef;
-
-	if ($img) {
-
-		my $data = sql (task_notes => $id);
-
-		my $path = sprintf ('%04d/%02d/%02d', Date::Calc::Today ());
-
-		my $abs_path = $preconf -> {pics} . '/' . $path;
-
-		File::Path::make_path ($abs_path);
-		
-		$attach = {real_path => "$abs_path/$data->{uuid}.png"};
-
-		open (F, ">$attach->{real_path}") or die "Can't write to $fn:$!\n";
-		binmode F;
-		print F MIME::Base64::decode ($img);
-		close (F);
-
-	}	
-
 	send_mail ({
 		to           => $d -> {id_user_to},
 		subject      => $d -> {label},
 		text         => $d -> {body},
 		href         => "/tasks/$_REQUEST{id}",
-		attach       => $attach,
+		attach       => _tasks_illustrate (		
+			sql_do_insert (task_notes => $d), 			
+			$img			
+		),
+		
 	});
 
 }
