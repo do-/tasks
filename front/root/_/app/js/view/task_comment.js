@@ -4,7 +4,7 @@ define ([], function () {
     
         $(view).w2uppop ({}, function () {
 
-            var users = JSON.parse (JSON.stringify (data.users.items))
+            var users = clone (data.users.items)
 
             $.each (users, function () {if (this.id == $_USER.id) this.text = 'Я, ' + this.text})
 
@@ -27,13 +27,13 @@ define ([], function () {
                 
                     e.done (function () {
 
-                        document.getElementById ('label').onpaste = check_clipboard_for_png
+                        use.block ('img')
 
                     })
                 
                 }
                 
-            });
+            })
             
         })
 

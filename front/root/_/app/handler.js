@@ -167,29 +167,6 @@ function not_off (i) {return !i.off}
 
 function reload_page () { location.reload () }
 
-function check_clipboard_for_png (e) {
-
-    var item = e.clipboardData.items
-
-    var png
-    
-    for (i in item) if (item [i].type == 'image/png') png = item [i]
-    
-    if (!png) return
-    
-    var reader = new FileReader ()
-        
-    reader.onload = function () {
-        var url = reader.result
-        $('#png').css ('content', 'url(' + url + ')')
-        $('input[name=img]').val (url.split (',') [1])
-        alert ('Изображение скопировано')
-    }
-        
-    reader.readAsDataURL (png.getAsFile ())
-
-}
-
 requirejs (['elu/elu', 'elu_w2ui/elu_w2ui'], function (elu, elu_w2ui) {
 
     clearTimeout (window.alarm)

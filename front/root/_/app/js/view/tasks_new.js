@@ -2,7 +2,7 @@ define ([], function () {
 
     return function (data, view) {
 
-        var users = JSON.parse (JSON.stringify (data.users.items))
+        var users = clone (data.users.items)
 
         $.each (users, function () {if (this.id == $_USER.id) this.text += ' (то есть я же)'})
     
@@ -24,7 +24,7 @@ define ([], function () {
                 
                     e.done (function () {
 
-                        document.getElementById ('body').onpaste = check_clipboard_for_png
+                        use.block ('img')
 
                     })
                 
