@@ -30,6 +30,10 @@ define ([], function () {
     $_DO.open_img = function (e) {
         loadImage (getFileInput ().get (0).files [0])
     }
+    
+    $_DO.drop_img = function (e) {
+        loadImage (blockEvent (e).originalEvent.dataTransfer.files [0])
+    }
         
     $_DO.click_img = function (e) {
         getFileInput ().get (0).click ()
