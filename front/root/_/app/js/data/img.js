@@ -17,10 +17,22 @@ define ([], function () {
         var reader = new FileReader ()
 
         reader.onload = function () {
+        
             var url = reader.result
-            $('#png').css ('content', 'url(' + url + ')')
-            $('input[name=img]').val (url.split (',') [1])
-            alert ('Изображение скопировано')
+            
+            Base64file.measure (url, function (dim) {
+            
+                var $png = $('#png')
+                                    
+                $png.css ({
+                    height: $png.width () * dim.height / dim.width,
+                    content: 'url(' + url + ')'
+                })
+                
+                $('input[name=img]').val (url.split (',') [1])
+
+            })
+            
         }
 
         reader.readAsDataURL (file)
