@@ -6,6 +6,14 @@ define ([], function () {
     
     }
 
+    $_DO.close_task = function () {
+    
+        $_SESSION.set ('close', 1)
+    
+        use.block ('task_comment')
+    
+    }
+
     return function (done) {
     
         query ({}, {}, function (data) {

@@ -8,17 +8,29 @@ define ([], function () {
         
         v.img = $('input[name=img]').val ()
         
-        if (!v.label)   die ('label', 'Напишите что-нибудь')
+        if (v.id_user_to && !v.label) die ('label', 'Напишите что-нибудь')
         
         f.lock ()
 
         query ({action: 'comment'}, {data: v}, reload_page)
     
     }
+    
+    function get_user (data) {
+    
+        if ($_SESSION.delete ('close')) return null
+        
+        return parseInt (data.author.id) + parseInt (data.executor.id) - $_USER.id
+        
+    }
 
     return function (done) {
-                    
-        done ($('body').data ('data'))
+    
+        var data = clone ($('body').data ('data'))
+        
+        data.record = {id_user_to: {id: get_user (data)}}
+                            
+        done (data)
             
     }
     

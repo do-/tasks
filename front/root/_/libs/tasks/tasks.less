@@ -68,25 +68,39 @@ div[data-block-name=task] {
 		padding: 10px;
 	}
 
-	&+button {
+	&+footer {
 	
-		@r: 50px;
-		width: @r;
-		height: @r;
-		border-radius: @r;
-	
-		border: 0;
-		box-shadow: none;
-		outline:0;
-
-		background-color: #00aa00;
-		color: white;
-		font-size:40px;
-		
 		position:fixed;
 		right:20px;
 		bottom:20px;
-		
+		display: flex;	
+		flex-direction: row;
+
+		&>button {
+
+			@r: 50px;
+			width: @r;
+			height: @r;
+			border-radius: @r;
+
+			border: 0;
+			margin: 0 0 0 20px;
+			box-shadow: none;
+			outline:0;
+
+			color: white;
+			font-size:40px;
+			
+			&[name=close] {
+				background-color: #005500;
+			}
+			
+			&[name=comment] {
+				background-color: #00aa00;
+			}
+
+		}
+
  	}
 
 }

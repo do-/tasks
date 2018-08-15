@@ -167,7 +167,10 @@ sub get_item_of_tasks {
 		[id_task => $data -> {id}],
 		[ORDER   => 'id'],
 	]);
-
+	
+	$data -> {z} = 'тест';
+	
+darn $data;
 	$data;
 
 }

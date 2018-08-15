@@ -52,7 +52,11 @@ define ([], function () {
     
         $butt = $('.w2ui-buttons > span', view)
 
-        data._can = {comment: data.id_user > 0 && data.users [$_USER.id]}
+        data._can = {
+            comment: data.id_user > 0 && data.users [$_USER.id],
+        }
+
+        data._can.close = data._can.comment && data.author.id == $_USER.id
 
         $('title').text (data.label + ' (' + from_to (data, data.author.id) + ')')
                         
