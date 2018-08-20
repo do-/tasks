@@ -1,5 +1,6 @@
 use Digest::SHA;
 use File::Path;
+use HTTP::Status;
 
 $preconf -> {auth} -> {sessions} -> {cookie} = {
 	name => 'session_id',
@@ -51,7 +52,7 @@ sub check_session {
 
 		if (!$_USER -> {id} && ($_REQUEST {type} ne 'sessions')) {
 
-			$_HEADERS -> header (Status => 401);
+			$_HEADERS -> header (Status => '401 Unauthorized');
 
 			send_http_header ();
 
@@ -107,7 +108,7 @@ sub get_page_data {
 
 sub handle_valid_request {
 
-	$_HEADERS -> header (Status => 200);
+	$_HEADERS -> header (Status => '200 OK');
 
 	my $page = {success => \1};
 
@@ -117,7 +118,7 @@ sub handle_valid_request {
 		
 		sql_reconnect ();
 
-		check_session (); $_HEADERS -> header ('Status') eq 200 or return;
+		check_session (); $_HEADERS -> header ('Status') =~ /^200/ or return;
 
 		$page -> {content} = get_page_data () if $_REQUEST {type};
 
@@ -135,7 +136,7 @@ sub handle_valid_request {
 			$page -> {message} = $';
 			$page -> {message} =~ s{ at .*}{}gsm;
 
-			$_HEADERS -> header (Status => 422);
+			$_HEADERS -> header (Status => '422 Unprocessable Entity');
 
 		}
 		else {
@@ -152,7 +153,7 @@ darn ($@);
 
 			$h -> {dt} =~ y{ }{T};
 			
-			$_HEADERS -> header (Status => 500);
+			$_HEADERS -> header (Status => '500 Internal Server Error');
 			
 		}
 	
