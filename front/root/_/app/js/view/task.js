@@ -22,7 +22,28 @@ define ([], function () {
                     line = line
                         .replace (/[<>]/g, "")
                         .replace (/\*\*([^\*]*?)\*\*/g, "<b>$1</b>")
-                        .replace (/https?:\/\/\S+/g, "<a href='$&'>[URL]</a>")
+                        .replace (/https?:\/\/\S+/g, function (url) {
+                        
+                            var txt = 'URL'
+                            
+                            if (/https?:\/\/wiki/.test (url)) {
+                                                            
+                                var parts = url.split ('/').pop ().split ('#')
+                            
+                                txt = decodeURIComponent (parts [0]).replace (/_/g, ' ')
+                                
+                                if (parts [1]) txt += ' / ' + decodeURIComponent (parts [1].replace (/\.([0-9A-F]{2})/g, '%$1'))
+                                
+                            }
+                            else {
+                            
+                                txt = url.split ('/') [2] + '/...'
+                            
+                            }
+                            
+                            return "<a href='" + url + "'>[" + txt + "]</a>"
+                            
+                        })
 
                     var stars = 0
 
