@@ -83,7 +83,7 @@ define ([], function () {
                         
         $.each (data.task_notes, function () {
 
-            this.html_body = txt2html (this.body || '')
+            this.html_body = txt2html (String (this.body || ''))
             
             if (this.is_illustrated) {
                 
