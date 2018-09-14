@@ -60,6 +60,8 @@ sub do_comment_tasks {
 
 	$d -> {is_illustrated} = 1 if $img;
 
+	my $id_task_note = sql_do_insert (task_notes => $d);
+
 	eval {
 
 		send_mail ({
@@ -67,15 +69,11 @@ sub do_comment_tasks {
 			subject      => $d -> {label},
 			text         => $d -> {body},
 			href         => "/tasks/$_REQUEST{id}",
-			attach       => _tasks_illustrate (		
-				sql_do_insert (task_notes => $d), 			
-				$img			
-			),
-
+			attach       => _tasks_illustrate ($id_task_note, $img),
 		});
-	
-	};
-	
+
+	} if $d -> {id_user_to} and $d -> {id_user_to} ne $_USER -> {id};
+
 	darn $@ if $@;	
 
 }
@@ -131,8 +129,8 @@ sub do_create_tasks {
 			attach       => _tasks_illustrate ($id_task_note, $img),
 		});
 
-	};
-	
+	} if $d -> {id_user} ne $_USER -> {id};
+
 	darn $@ if $@;
 	
 	$data;
