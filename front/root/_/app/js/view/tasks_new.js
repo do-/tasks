@@ -12,13 +12,15 @@ define ([], function () {
             
                 name: 'tasks_new_form',
                 
-                record: {},
+                record: {id_user: $_USER.id},
     
                 fields : [                
                     {name: 'label',   type: 'text'},
                     {name: 'body',    type: 'text'},
                     {name: 'id_user', type: 'list', options: {items: users}},
                 ],
+                
+                focus: 1,
                 
                 onRefresh: function (e) {
                 
