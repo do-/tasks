@@ -61,6 +61,8 @@ sub do_comment_tasks {
 	$d -> {is_illustrated} = 1 if $img;
 
 	my $id_task_note = sql_do_insert (task_notes => $d);
+	
+	my $attach = _tasks_illustrate ($id_task_note, $img);
 
 	eval {
 
@@ -69,12 +71,62 @@ sub do_comment_tasks {
 			subject      => $d -> {label},
 			text         => $d -> {body},
 			href         => "/tasks/$_REQUEST{id}",
-			attach       => _tasks_illustrate ($id_task_note, $img),
+			attach       => $attach,
 		});
 
 	} if $d -> {id_user_to} and $d -> {id_user_to} ne $_USER -> {id};
 
 	darn $@ if $@;	
+
+}
+
+################################################################################
+
+sub do_assign_tasks {
+
+	my $d = {fake => 0};
+
+	$d -> {id_task} = get_id ();
+
+	$d -> {$_} = $_REQUEST {data} {$_} foreach qw (label id_user_to img);
+
+	$d -> {id_user_to} > 0 or die '#id_user_to#: Не указан адресат';
+
+	$d -> {body} = _tasks_get_note ($d);
+
+	my $img = delete $d -> {img};
+
+	$d -> {is_illustrated} = 1 if $img;
+	
+	sql_do ('UPDATE task_users SET id_user = ? WHERE id_task = ? AND is_author = 0', $d -> {id_user_to}, $d -> {id_task});
+
+	sql_do ('UPDATE task_notes SET id_user_to = ? WHERE id_task = ?', $d -> {id_user_to}, $d -> {id_task});
+
+	my $id_task_note = sql_do_insert (task_notes => $d);
+
+	my $mail = {
+		to           => $d -> {id_user_to},
+		subject      => $d -> {label},
+		text         => "$_USER->{label} пишет:\n",
+		href         => "/tasks/$_REQUEST{id}",
+		attach       => [],
+	};
+
+	sql_select_loop ('SELECT * FROM task_notes WHERE id_task = ? ORDER BY id', sub {
+
+		$mail -> {text} .= "\n$i->{label}\n$i->{body}\n";
+		
+		$i -> {is_illustrated} or next;
+		
+		my $path = sprintf ('%04d/%02d/%02d', (split /\D/, $i -> {ts}));
+		
+		push @{$mail -> {attach}}, {real_path => "$preconf->{pics}/$path/$i->{uuid}.png"};
+
+	}, $d -> {id_task});
+
+	eval {send_mail ($mail)};
+
+	darn $@ if $@;
 
 }
 
@@ -119,6 +171,8 @@ sub do_create_tasks {
 
 	my $data = sql (tasks => $id_task);
 	
+	my $attach = _tasks_illustrate ($id_task_note, $img);
+	
 	eval {
 
 		send_mail ({
@@ -126,7 +180,7 @@ sub do_create_tasks {
 			subject      => $d -> {label},
 			text         => $d -> {body},
 			href         => "/tasks/$data->{uuid}",
-			attach       => _tasks_illustrate ($id_task_note, $img),
+			attach       => $attach,
 		});
 
 	} if $d -> {id_user} ne $_USER -> {id};

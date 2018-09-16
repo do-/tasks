@@ -6,9 +6,13 @@ define ([], function () {
 
             var users = clone (data.users.items)
 
-            $.each (users, function () {if (this.id == $_USER.id) this.text = 'Я, ' + this.text})
+            if (!data.record.is_assigning) {
+            
+                if ($_USER.id == data.author.id) users.push ({id: "0", text: 'Никто. Дело окончно.'})
 
-            if ($_USER.id == data.author.id) users.push ({id: null, text: 'Никто. Дело окончно.'})
+                $.each (users, function () {if (this.id == $_USER.id) this.text = 'Я, ' + this.text})
+
+            }
 
             $('#w2ui-popup .w2ui-form').w2reform ({
             
@@ -20,6 +24,8 @@ define ([], function () {
                     {name: 'label',   type: 'text'},
                     {name: 'id_user_to', type: 'list', options: {items: users}},
                 ],
+                
+                focus: data.record.is_assigning ? 0 : 1,
                 
                 onRefresh: function (e) {
                 
