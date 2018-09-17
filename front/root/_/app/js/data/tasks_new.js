@@ -18,8 +18,8 @@ define ([], function () {
             w2ui ['tasksGrid'].reload ()
 
             w2popup.close ()
-
-            openTab ('/tasks/' + data.uuid)
+            
+            w2confirm ('Задача зарегистрирована. Открыть её страницу?').yes (function () {openTab ('/tasks/' + data.uuid)})
         
         })
     
