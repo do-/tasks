@@ -7,7 +7,6 @@ define ([], function () {
         var v = f.values ()
         
         if (!v.label)   die ('label', 'Конкретизируйте, пожалуйста, тему')
-        if (!v.id_user) die ('id_user', 'Укажите, к кому это дело')
         
         v.img = $('input[name=img]').val ()
 

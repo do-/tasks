@@ -17,11 +17,8 @@ define ([], function () {
                 fields : [                
                     {name: 'label',   type: 'text'},
                     {name: 'body',    type: 'text'},
-                    {name: 'id_user', type: 'list', options: {items: users}},
                 ],
-                
-                focus: 1,
-                
+                                
                 onRefresh: function (e) {
                 
                     e.done (function () {

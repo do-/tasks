@@ -69,7 +69,7 @@ sub do_comment_tasks {
 		send_mail ({
 			to           => $d -> {id_user_to},
 			subject      => $d -> {label},
-			text         => $d -> {body},
+			text         => "$_USER->{label} пишет:\n\n$d->{body}",
 			href         => "/tasks/$_REQUEST{id}",
 			attach       => $attach,
 		});
@@ -138,7 +138,7 @@ sub do_create_tasks {
 	
 	$d -> {$_} = $_REQUEST {data} {$_} foreach qw (label id_user);
 
-	$d -> {id_user} or die '#id_user#: Не указан адресат';
+	$d -> {id_user} = $_USER -> {id};
 	
 	my $id_task = sql_do_insert (tasks => $d);
 	
@@ -172,21 +172,7 @@ sub do_create_tasks {
 	my $data = sql (tasks => $id_task);
 	
 	my $attach = _tasks_illustrate ($id_task_note, $img);
-	
-	eval {
 
-		send_mail ({
-			to           => $d -> {id_user},
-			subject      => $d -> {label},
-			text         => $d -> {body},
-			href         => "/tasks/$data->{uuid}",
-			attach       => $attach,
-		});
-
-	} if $d -> {id_user} ne $_USER -> {id};
-
-	darn $@ if $@;
-	
 	$data;
 	
 }
