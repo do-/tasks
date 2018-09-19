@@ -155,8 +155,6 @@ sub get_item_of_users {
 
 sub select_users {
 
-	$_USER -> {role} eq 'admin' or die ('#foo#: Доступ запрещён');
-
 	$_REQUEST {sort} ||= [{field => "label", direction => "asc"}];
 
 	if ($_REQUEST {searchLogic} eq 'OR') {
