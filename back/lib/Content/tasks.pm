@@ -106,15 +106,25 @@ sub do_assign_tasks {
 
 	my $mail = {
 		to           => $d -> {id_user_to},
-		subject      => $d -> {label},
 		text         => "$_USER->{label} пишет:\n",
 		href         => "/tasks/$_REQUEST{id}",
 		attach       => [],
 	};
 
 	sql_select_loop ('SELECT * FROM task_notes WHERE id_task = ? ORDER BY id', sub {
+	
+		if ($mail -> {subject}) {
 
-		$mail -> {text} .= "\n$i->{label}\n$i->{body}\n";
+			$mail -> {text} .= "$i->{label}\n$i->{body}\n";
+
+		}
+		else {
+		
+			$mail -> {subject} = $i -> {label};
+			
+			$mail -> {text} .= "$i->{body}\n";
+		
+		}
 		
 		$i -> {is_illustrated} or next;
 		
