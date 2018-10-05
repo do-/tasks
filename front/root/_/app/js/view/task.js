@@ -70,8 +70,6 @@ define ([], function () {
     return function (data, view) {
     
         $('body').data ('data', data)
-    
-        $butt = $('.w2ui-buttons > span', view)
 
         data._can = {
             comment: data.id_user > 0 && data.users [$_USER.id],
@@ -120,6 +118,23 @@ define ([], function () {
         window.scrollTo (0, document.body.scrollHeight);
         
         if (data._can.comment) document.onpaste = $_DO.paste_task
+        
+        $('button.peer').each (function () {
+        
+            var $this = $(this)
+        
+            var data = $this.data ('data')
+            
+            var label = data.label
+            var s = 0; for (var i = 0; i < label.length; i ++) s += 513 * label.charCodeAt (i)
+            var hsl = 'hsl(' + (s % 360) + ',50%,40%)'
+            
+            clickOn ($this.attr ({title: label}).css  ({
+                'background-color': hsl,
+                'border-color': hsl,
+            }), $_DO.assign_task)
+        
+        })
 
     }
 

@@ -25,7 +25,7 @@ define ([], function () {
                     {name: 'id_user_to', type: 'list', options: {items: users}},
                 ],
                 
-                focus: data.record.is_assigning ? 0 : 1,
+                focus: data.record.id_user_to ? 1 : 0,
                 
                 onRefresh: function (e) {
                 

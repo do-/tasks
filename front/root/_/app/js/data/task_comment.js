@@ -33,7 +33,10 @@ define ([], function () {
     
         var data = clone ($('body').data ('data'))
         
-        data.record = {is_assigning: $_SESSION.delete ('assign')}
+        data.record = {
+            is_assigning: $_SESSION.delete ('assign'),
+            id_user_to:   $_SESSION.delete ('id_user_to'),
+        }
 
         if (data.record.is_assigning) {
         

@@ -153,6 +153,39 @@ sub get_item_of_users {
 
 ################################################################################
 
+sub do_set_peers_users {
+
+	sql_do ('UPDATE user_users SET is_on = 0 WHERE id_user = ?', $_USER -> {id});
+
+	sql_do_upsert (user_users => [map {{
+	
+		fake               => 0,
+		is_on              => 1,
+		id_user            => $_USER -> {id},
+		id_user_ref        => $_,
+		
+	}} @{$_REQUEST {data} {ids}}]);
+
+}
+
+################################################################################
+
+sub get_peers_of_users {
+
+	sql ({}, users => [
+			['id >'  => 0],
+			['id <>' => $_USER -> {id}],
+		]
+		, ['user_users ON user_users.id_user_ref = users.id' => [
+			[id_user => $_USER -> {id}],
+			[is_on   => 1],
+		]]
+	);
+
+}
+
+################################################################################
+
 sub select_users {
 
 	$_REQUEST {sort} ||= [{field => "label", direction => "asc"}];

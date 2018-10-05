@@ -19,11 +19,11 @@ define ([], function () {
     $_DO.open_settings_nav = function () {
         use.block ('user_own_options')
     }
-/*
-    $_DO.open_help_nav = function () {
-        openTab ('https://.../docs/')
+    
+    $_DO.open_users_select_nav = function () {
+        use.block ('user_peers')
     }
-*/
+
     $_DO.logout_nav = function () {
             
         query ({type: 'sessions', action: 'delete'}, {}, $.noop, $.noop)
@@ -44,6 +44,7 @@ define ([], function () {
             open_users: is_admin,
             open_user_password: !is_admin,
             open_settings: true,
+            open_users_select: true,
             open_help: false,
             logout: true
         }}

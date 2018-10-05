@@ -216,6 +216,16 @@ sub get_item_of_tasks {
 		[ORDER   => 'id'],
 	]);
 	
+	$data -> {peers} = sql (users => [
+			['id >'  => 0],
+			['id <>' => $_USER -> {id}],
+		]
+		, ['-user_users ON user_users.id_user_ref = users.id' => [
+			[id_user => $_USER -> {id}],
+			[is_on   => 1],
+		]]
+	);	
+	
 	$data;
 
 }
