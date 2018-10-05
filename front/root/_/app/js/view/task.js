@@ -78,6 +78,8 @@ define ([], function () {
         data._can.close = data._can.comment && data.author.id == $_USER.id
 
         data._can.assign = data._can.close && data.author.id == data.executor.id
+        
+        if (!data._can.assign) data.peers = []
 
         $('title').text (data.label + ' (' + from_to (data, data.author.id) + ')')
                         
