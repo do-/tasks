@@ -9,6 +9,7 @@ define ([], function () {
         if (!v.label)   die ('label', 'Конкретизируйте, пожалуйста, тему')
         
         v.img = $('input[name=img]').val ()
+        v.ext = $('input[name=ext]').val ()
 
         f.lock ()
 

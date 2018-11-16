@@ -12,6 +12,8 @@ define ([], function () {
             .on ("drop",      $_DO.drop_img)
             .on ("click",     $_DO.click_img)
 
+        $('video').on ("click", $_DO.click_img)
+
         $('input[name=file]').change ($_DO.open_img)
 
     }

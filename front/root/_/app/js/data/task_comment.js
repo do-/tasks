@@ -9,6 +9,7 @@ define ([], function () {
         var v = f.values ()
         
         v.img = $('input[name=img]').val ()
+        v.ext = $('input[name=ext]').val ()
 
         if (tia.action == 'assign') {
 

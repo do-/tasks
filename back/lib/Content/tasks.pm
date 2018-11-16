@@ -19,7 +19,9 @@ sub _tasks_get_note {
 
 sub _tasks_illustrate {
 
-	my ($id, $img) = @_;
+	my ($id, $img, $ext) = @_;
+
+	$ext ||= 'png';
 	
 	$img or return undef;
 
@@ -31,7 +33,7 @@ sub _tasks_illustrate {
 
 	File::Path::make_path ($abs_path);
 	
-	my $attach = {real_path => "$abs_path/$data->{uuid}.png"};
+	my $attach = {real_path => "$abs_path/$data->{uuid}.$ext"};
 
 	open (F, ">$attach->{real_path}") or die "Can't write to $fn:$!\n";
 	binmode F;
@@ -50,7 +52,7 @@ sub do_comment_tasks {
 
 	$d -> {id_task} = get_id ();
 
-	$d -> {$_} = $_REQUEST {data} {$_} foreach qw (label id_user_to img);
+	$d -> {$_} = $_REQUEST {data} {$_} foreach qw (label id_user_to img ext);
 
 	$d -> {id_user_to} > 0 or $d -> {id_user_to} = undef;
 
@@ -62,7 +64,7 @@ sub do_comment_tasks {
 
 	my $id_task_note = sql_do_insert (task_notes => $d);
 	
-	my $attach = _tasks_illustrate ($id_task_note, $img);
+	my $attach = _tasks_illustrate ($id_task_note, $img, $d -> {ext});
 
 	eval {
 
@@ -130,7 +132,7 @@ sub do_assign_tasks {
 		
 		my $path = sprintf ('%04d/%02d/%02d', (split /\D/, $i -> {ts}));
 		
-		push @{$mail -> {attach}}, {real_path => "$preconf->{pics}/$path/$i->{uuid}.png"};
+		push @{$mail -> {attach}}, {real_path => "$preconf->{pics}/$path/$i->{uuid}." . ($i -> {ext} || 'png')};
 
 	}, $d -> {id_task});
 
@@ -152,7 +154,7 @@ sub do_create_tasks {
 	
 	my $id_task = sql_do_insert (tasks => $d);
 	
-	$d -> {$_} = $_REQUEST {data} {$_} foreach qw (body img);
+	$d -> {$_} = $_REQUEST {data} {$_} foreach qw (body img ext);
 
 	my $img = delete $d -> {img};
 
@@ -162,6 +164,7 @@ sub do_create_tasks {
 		id_user_to => $d -> {id_user},
 		label	   => $d -> {label},
 		body	   => $d -> {body},
+		ext	   => $d -> {ext},
 		is_illustrated => $img ? 1 : 0,
 	});
 
@@ -181,7 +184,7 @@ sub do_create_tasks {
 
 	my $data = sql (tasks => $id_task);
 	
-	my $attach = _tasks_illustrate ($id_task_note, $img);
+	my $attach = _tasks_illustrate ($id_task_note, $img, $d -> {ext});
 
 	$data;
 	

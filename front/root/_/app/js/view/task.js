@@ -88,8 +88,13 @@ define ([], function () {
             this.html_body = txt2html (String (this.body || ''))
             
             if (this.is_illustrated) {
-                
-                this.img_url = '/_pics/' + this.ts.substr (0, 10).replace (/-/g, '/') + '/' + this.uuid + '.png'
+            
+                if (this.ext == 'mp4') {
+                    this.video_url = '/_pics/' + this.ts.substr (0, 10).replace (/-/g, '/') + '/' + this.uuid + '.' + this.ext
+                }
+                else {
+                    this.img_url = '/_pics/' + this.ts.substr (0, 10).replace (/-/g, '/') + '/' + this.uuid + '.' + (this.ext || 'png')
+                }                            
             
             }
 
