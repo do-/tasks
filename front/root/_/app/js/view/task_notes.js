@@ -19,6 +19,7 @@ define ([], function () {
                 {field: 'id_user_from', caption: 'Автор', type: 'enum', options: {items: data.users.items}},
                 {field: 'id_user_to', caption: 'Адресат', type: 'enum', options: {items: data.users.items}},
                 {field: 'ts',    caption: 'Дата', type: 'date'},
+                {field: 'status',  caption: 'Текущий статус',    type: 'list', options: {items: [{id: 1, text: 'В работе'}, {id: -1, text: 'Закрыто'}]}},
             ],
 
             columns: [

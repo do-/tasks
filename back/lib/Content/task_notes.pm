@@ -13,6 +13,7 @@ sub select_task_notes {
 	$_REQUEST {sort} = [{field => "id", direction => "desc"}];
 	
 	my $note = undef;
+	my $status = undef;
 	
 	if ($_REQUEST {searchLogic} eq 'OR') {
 		
@@ -30,6 +31,11 @@ sub select_task_notes {
 			if ($s -> {field} eq 'note') {
 
 				$note = $s -> {value};
+
+			}
+			elsif ($s -> {field} eq 'status') {
+
+				$status = $s -> {value};
 
 			}
 			else {
@@ -53,7 +59,13 @@ sub select_task_notes {
 	}
 
 	sql ({}, task_notes => $filter,
-		'tasks(uuid)'
+
+		['-tasks(uuid) ON task_notes.id_task' => [
+
+			$status == 1 ? ['id_user IS NOT NULL'] : ['id_user IS NULL']
+
+		]]
+
 	);
 
 }
