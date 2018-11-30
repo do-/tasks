@@ -61,9 +61,9 @@ sub select_task_notes {
 	sql ({}, task_notes => $filter,
 
 		['-tasks(uuid) ON task_notes.id_task' => [
-
-			$status == 1 ? ['id_user IS NOT NULL'] : ['id_user IS NULL']
-
+			$status ==  1 ? ['id_user IS NOT NULL'] :
+			$status == -1 ? ['id_user IS NULL'] :
+			[]
 		]]
 
 	);
