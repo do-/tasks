@@ -170,6 +170,12 @@ function reload_page () { location.reload () }
 requirejs (['elu/elu', 'elu_w2ui/elu_w2ui'], function (elu, elu_w2ui) {
 
     clearTimeout (window.alarm)
+    
+    ///// TMP HACK
+    if (!$_USER) {    
+        $_SESSION.start ({id: 1, role: 'admin', label: 'admin', opt: {}}, 30)
+        location.reload ()
+    }    
 
     $_SESSION.beforeExpiry ($_SESSION.keepAlive)
     
