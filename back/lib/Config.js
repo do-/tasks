@@ -2,11 +2,10 @@ const http = require ('http')
 const fs   = require ('fs')
 const url  = require ('url')
 
-var $_CONF = JSON.parse (fs.readFileSync ('../conf/elud.json', 'utf8'))
+global.$_CONF = JSON.parse (fs.readFileSync ('../conf/elud.json', 'utf8'))
+global.$_REQUEST = {}
 
-var $_REQUEST
-
-function darn (o) {
+global.darn = (o) => {
     console.log (o)
     return (o)
 }
@@ -26,19 +25,17 @@ darn ($_REQUEST)
     $_REQUEST.action ? 'do_' + $_REQUEST.action : 
     'select'
     
-darn (method)
-  
-  var data = module [method] ()
-    
-  rp.statusCode = 200
-  rp.setHeader ('Content-Type', 'application/json')
-  rp.end (JSON.stringify ({
-    success: true,
-    content: data,
-  }))
+  module [method] ((data) => {
+      rp.statusCode = 200
+      rp.setHeader ('Content-Type', 'application/json')
+      rp.end (JSON.stringify ({
+        success: true,
+        content: data,
+      }))
+  })    
   
 }
 
 http.createServer (handler).listen ($_CONF.listen.port, $_CONF.listen.host, () => {
-  console.log (`Server running at http://${$_CONF.listen.host}:${$_CONF.listen.port}/`);
+  darn (`Server running at http://${$_CONF.listen.host}:${$_CONF.listen.port}/`);
 })
