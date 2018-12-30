@@ -2,8 +2,8 @@ const Dia = require ('./Ext/Dia/Dia.js')
 
 function handle_valid_request (rp) {
 
-    var module = require ('./Content/' + $_REQUEST.type + '.js')
-    if (!module) return out_error (rp, `No code defined for ${$_REQUEST.type}`)
+    var module = Dia.require_fresh ()
+    if (!module) return Dia.out_error (rp, `No code defined for ${$_REQUEST.type}`)
 
     var name = 
         $_REQUEST.part   ? 'get_' + $_REQUEST.part   : 
@@ -11,7 +11,7 @@ function handle_valid_request (rp) {
         $_REQUEST.id     ? 'get'                     : 
                            'select'
 
-    var fun = module [name]; 
+    var fun = module [name]
     if (!fun) return out_error (rp, `No ${name} defined for ${$_REQUEST.type}`)
 
     new Promise (fun)

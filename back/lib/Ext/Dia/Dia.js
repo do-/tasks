@@ -1,6 +1,7 @@
 const http = require ('http')
 const fs   = require ('fs')
 const url  = require ('url')
+const path = require ('path')
 
 global.$_CONF = JSON.parse (fs.readFileSync ('../conf/elud.json', 'utf8'))
 
@@ -33,4 +34,19 @@ exports.out_error = (rp, ex) => {
     var id = s4 () + s4 () + '-' + s4 () + '-' + s4 () + '-' + s4 () + '-' + s4 () + s4 () + s4 ()
     darn ([id, ex])
     exports.out_json (rp, 500, {success: false, id: id, dt: new Date ().toJSON ()})
+}
+
+exports.require_fresh = () => {
+
+    var tail = $_REQUEST.type + '.js'
+
+    for (var k in require.cache) {
+        var parts = k.split (path.sep)
+        if (parts [parts.length - 2] != 'Content') continue
+        if (parts [parts.length - 1] != tail) continue
+        delete require.cache [k]
+    }
+
+    return require ('../../Content/' + $_REQUEST.type + '.js')
+    
 }
