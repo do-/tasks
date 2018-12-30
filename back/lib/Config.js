@@ -6,19 +6,36 @@ var $_CONF = JSON.parse (fs.readFileSync ('../conf/elud.json', 'utf8'))
 
 var $_REQUEST
 
+function darn (o) {
+    console.log (o)
+    return (o)
+}
+
 function handler (rq, rp) {
   
   var uri = url.parse (rq.url)
   var params = new URLSearchParams (uri.search);
-  $_REQUEST = {type: params.get ('type')}
-//  ['id', 'action', 'part'].forEach ((k) => {if (params.has (k)) $_REQUEST [k] = params.get (k)})
-  for (var k of ['id', 'action', 'part']) if (params.has (k)) $_REQUEST [k] = params.get (k)
+  $_REQUEST = {}; for (var k of ['type', 'id', 'action', 'part']) if (params.has (k)) $_REQUEST [k] = params.get (k)
   
-  console.log ($_REQUEST)
+darn ($_REQUEST)
   
+  var module = require ('./Content/' + $_REQUEST.type + '.js')
+  
+  var method = 
+    $_REQUEST.part ? 'get_' + $_REQUEST.part : 
+    $_REQUEST.action ? 'do_' + $_REQUEST.action : 
+    'select'
+    
+darn (method)
+  
+  var data = module [method] ()
+    
   rp.statusCode = 200
   rp.setHeader ('Content-Type', 'application/json')
-  rp.end ("['Hello World']")
+  rp.end (JSON.stringify ({
+    success: true,
+    content: data,
+  }))
   
 }
 
