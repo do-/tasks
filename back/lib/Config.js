@@ -25,14 +25,31 @@ darn ($_REQUEST)
     $_REQUEST.action ? 'do_' + $_REQUEST.action : 
     'select'
     
-  module [method] ((data) => {
-      rp.statusCode = 200
-      rp.setHeader ('Content-Type', 'application/json')
-      rp.end (JSON.stringify ({
-        success: true,
-        content: data,
-      }))
-  })    
+  new Promise (module [method])
+  .then (
+  
+      (data) => {
+          rp.statusCode = 200
+          rp.setHeader ('Content-Type', 'application/json')
+          rp.end (JSON.stringify ({
+            success: true,
+            content: data,
+          }))
+      }
+      
+  )    
+  .catch (
+
+      (ex) => {
+          rp.statusCode = 500
+          rp.setHeader ('Content-Type', 'application/json')
+          rp.end (JSON.stringify ({
+            success: false,
+            content: ex,
+          }))
+      }
+
+  )
   
 }
 
