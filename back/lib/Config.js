@@ -1,18 +1,27 @@
-const http = require ('http');
+const http = require ('http')
+const fs   = require ('fs')
+const url  = require ('url')
 
-const hostname = '127.0.0.1';
-const port = 8002;
+var $_CONF = JSON.parse (fs.readFileSync ('../conf/elud.json', 'utf8'))
 
-const server = http.createServer ((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n');
-});
+var $_REQUEST
 
-var fs = require ('fs');
+function handler (rq, rp) {
+  
+  var uri = url.parse (rq.url)
+  var params = new URLSearchParams (uri.search);
+  $_REQUEST = {type: params.get ('type')}
+//  ['id', 'action', 'part'].forEach ((k) => {if (params.has (k)) $_REQUEST [k] = params.get (k)})
+  for (var k of ['id', 'action', 'part']) if (params.has (k)) $_REQUEST [k] = params.get (k)
+  
+  console.log ($_REQUEST)
+  
+  rp.statusCode = 200
+  rp.setHeader ('Content-Type', 'application/json')
+  rp.end ("['Hello World']")
+  
+}
 
-var $_CONF = JSON.parse (fs.readFileSync ('../conf/elud.json', 'utf8'));
-
-server.listen ($_CONF.listen.port, $_CONF.listen.host, () => {
-  console.log(`Server running at http://${$_CONF.listen.host}:${$_CONF.listen.port}/`);
-});
+http.createServer (handler).listen ($_CONF.listen.port, $_CONF.listen.host, () => {
+  console.log (`Server running at http://${$_CONF.listen.host}:${$_CONF.listen.port}/`);
+})
