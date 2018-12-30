@@ -1,5 +1,10 @@
 {
 		
+	"listen": {
+		"host"    : "127.0.0.1",
+		"port"    : 8000
+	},
+
 	"fcgi": {
 		"name"    : "tasks",
 		"pidfile" : "/var/run/tasks.pid",
