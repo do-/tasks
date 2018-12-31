@@ -20,7 +20,13 @@ function handle_valid_request (rp) {
 
 }
 
-Dia.listen ((rq, rp) => {
-    Dia.parse_request (rq)    
-    handle_valid_request (rp)
-})
+Dia.init ().then (() => {
+
+    Dia.listen ((rq, rp) => {
+
+        Dia.parse_request (rq)    
+        handle_valid_request (rp)
+
+    })
+
+}).catch ((x) => suicide (x))
