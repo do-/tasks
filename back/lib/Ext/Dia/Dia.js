@@ -3,14 +3,23 @@ const fs   = require ('fs')
 const url  = require ('url')
 const path = require ('path')
 
-global.$_CONF = JSON.parse (fs.readFileSync ('../conf/elud.json', 'utf8'))
-
-global.$_REQUEST = {}
-
 global.darn = (o) => {
     console.log (new Date ().toISOString (), o)
     return (o)
 }
+
+darn ("Dia.js is loading...")
+
+load_conf ()
+
+function load_conf () {
+    var fn = path.resolve (process.env.DIA_JS_CONFIGURATION_FILE_PATH || '../conf/elud.json')
+    darn (`Dia.js is loading configuration from ${fn}...`)
+    global.$_CONF = JSON.parse (fs.readFileSync (fn, 'utf8'))
+    darn (` ...ok`)
+}
+
+global.$_REQUEST = {}
 
 exports.listen = (handler) => http.createServer (handler).listen ($_CONF.listen.port, $_CONF.listen.host, () => {
   darn (`Dia.js server running at http://${$_CONF.listen.host}:${$_CONF.listen.port}/`);
@@ -38,15 +47,17 @@ exports.out_error = (rp, ex) => {
 
 var inc_fresh = {}
 
-function check_inc_fresh (abs, mtime) {
-    var old = inc_fresh [abs]
-    if (old == mtime) return
-    if (old < mtime) delete require.cache [abs]
-    inc_fresh [abs] = mtime
-}
-
 exports.require_fresh = () => {
+
+    const check = (abs, mtime) => {
+        var old = inc_fresh [abs]
+        if (old == mtime) return
+        if (old < mtime) delete require.cache [abs]
+        inc_fresh [abs] = mtime
+    }
+
     var abs = path.resolve ('Content/' + $_REQUEST.type + '.js')
-    check_inc_fresh (abs, fs.statSync (abs).mtime)
+    check (abs, fs.statSync (abs).mtime)
     return require (abs)
+
 }
