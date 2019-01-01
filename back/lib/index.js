@@ -7,8 +7,6 @@ function get_function_name (q) {
 }
 
 async function handle () {
-
-    this.uuid = Dia.new_uuid ()
     
     this.q = Dia.get_request (this.rq)
     let function_name = get_function_name (this.q)
@@ -38,4 +36,4 @@ async function handle () {
 
 }
 
-Dia.listen ((rq, rp) => {handle.call ({rq: rq, rp: rp})})
+Dia.listen ((rq, rp) => {handle.call (new Dia.Request ({rq: rq, rp: rp}))})
