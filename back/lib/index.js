@@ -16,16 +16,12 @@ class WebUiRequest extends Dia.Request {
 
         var module = Dia.require_fresh (this.module_name)
 
-        try {
-
-            if (!module) throw `No code defined for ${this.q.type}`
-
-            var fun = module [this.method_name]; if (!fun) throw `No ${name} defined for ${this.module_name}`
-
-            this.out (await fun.call (this))
-
+        try {        
+            this.out (await this.get_method ().call (this))
         }
-        catch (x) {this.carp (x)}
+        catch (x) {
+            this.carp (x)
+        }
 
         console.timeEnd (label)
 
