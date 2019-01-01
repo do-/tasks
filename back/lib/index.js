@@ -6,33 +6,44 @@ function get_function_name (q) {
     return q.id ? 'get': 'select'
 }
 
-async function handle () {
-    
-    let function_name = get_function_name (this.q)
+class WebUiRequest extends Dia.Request {
 
-    let label = `${this.q.type} ${function_name} ${this.uuid}`
-    console.time (label)
+    async run () {
 
-    var module = Dia.require_fresh (this.q.type)
-    
-    try {
+        let function_name = get_function_name (this.q)
 
-        if (!module) throw `No code defined for ${this.q.type}`
+        let label = `${this.q.type} ${function_name} ${this.uuid}`
+        console.time (label)
 
-        var fun = module [function_name]; if (!fun) throw `No ${name} defined for ${this.q.type}`
+        var module = Dia.require_fresh (this.q.type)
 
-        this.out_json (200, {success: true, content: await fun.call (this)})
+        try {
+
+            if (!module) throw `No code defined for ${this.q.type}`
+
+            var fun = module [function_name]; if (!fun) throw `No ${name} defined for ${this.q.type}`
+
+            this.out_json (200, {success: true, content: await fun.call (this)})
+
+        }
+        catch (x) {
+
+            darn ([this.uuid, x])
+            this.out_json (500, {success: false, id: this.uuid, dt: new Date ().toJSON ()})
+
+        }
+
+        console.timeEnd (label)
 
     }
-    catch (x) {
-    
-        darn ([this.uuid, x])
-        this.out_json (500, {success: false, id: this.uuid, dt: new Date ().toJSON ()})
-
-    }
-    
-    console.timeEnd (label)
 
 }
 
-Dia.listen ((rq, rp) => {handle.call (new Dia.Request ({http_request: rq, http_response: rp}))})
+Dia.listen ((rq, rp) => {
+
+    new WebUiRequest ({
+        http_request: rq, 
+        http_response: rp
+    }).run ()
+
+})
