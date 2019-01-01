@@ -1,26 +1,41 @@
 const Dia = require ('./Ext/Dia/Dia.js')
 
-async function handle ($_REQUEST, rp) {
+function get_function_name (q) {
+    if (q.part)   return 'get_' + q.part
+    if (q.action) return 'do_'  + q.action
+    return q.id ? 'get': 'select'
+}
 
-    var module = Dia.require_fresh ($_REQUEST.type)
-    if (!module) return Dia.out_error ($_REQUEST, rp, `No code defined for ${$_REQUEST.type}`)
+async function handle () {
 
-    var name = 
-        $_REQUEST.part   ? 'get_' + $_REQUEST.part   : 
-        $_REQUEST.action ? 'do_'  + $_REQUEST.action : 
-        $_REQUEST.id     ? 'get'                     : 
-                           'select'
+    this.uuid = Dia.new_uuid ()
+    
+    this.q = Dia.get_request (this.rq)
+    let function_name = get_function_name (this.q)
 
-    var fun = module [name]
-    if (!fun) return Dia.out_error ($_REQUEST, rp, `No ${name} defined for ${$_REQUEST.type}`)
+    let label = `${this.q.type} ${function_name} ${this.uuid}`
+    console.time (label)
+
+    var module = Dia.require_fresh (this.q.type)
     
     try {
-        Dia.out_json ($_REQUEST, rp, 200, {success: true, content: await fun ($_REQUEST)})
+
+        if (!module) throw `No code defined for ${this.q.type}`
+
+        var fun = module [function_name]; if (!fun) throw `No ${name} defined for ${this.q.type}`
+
+        Dia.out_json (this.rp, 200, {success: true, content: await fun.call (this)})
+
     }
     catch (x) {
-        Dia.out_error ($_REQUEST, rp, x)
+    
+        darn ([this.uuid, x])
+        Dia.out_json (this.rp, 500, {success: false, id: this.uuid, dt: new Date ().toJSON ()})
+
     }
+    
+    console.timeEnd (label)
 
 }
 
-Dia.listen ((rq, rp) => {handle (Dia.get_request (rq), rp)})
+Dia.listen ((rq, rp) => {handle.call ({rq: rq, rp: rp})})
