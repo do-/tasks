@@ -2,6 +2,11 @@ const Dia = require ('./Ext/Dia/Dia.js')
 
 class WebUiRequest extends Dia.Request {
     
+    constructor (o) {
+        super (o)
+        this.label = `${this.module_name} ${this.method_name} ${this.uuid}`
+    }
+
     get_method_name () {
         let q = this.q
         if (q.part)   return 'get_' + q.part
@@ -11,10 +16,7 @@ class WebUiRequest extends Dia.Request {
 
     async run () {
 
-        let label = `${this.module_name} ${this.method_name} ${this.uuid}`
-        console.time (label)
-
-        var module = Dia.require_fresh (this.module_name)
+        console.time (this.label)
 
         try {        
             this.out (await this.get_method ().call (this))
@@ -23,7 +25,7 @@ class WebUiRequest extends Dia.Request {
             this.carp (x)
         }
 
-        console.timeEnd (label)
+        console.timeEnd (this.label)
 
     }
 
