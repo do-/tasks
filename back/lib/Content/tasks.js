@@ -18,9 +18,8 @@ _.select = async function () {
 
 _.get_vocs = async function () {
 
-    return {
-//        users: await this.db.select_all ("SELECT id, label, fake FROM users WHERE 1=1 AND fake = 0 AND id > 0 ORDER BY 2"),
-        users: await this.db.select_vocabulary ('users', {filter: 'id > 0'}),
-    }
+    return await this.db.add_vocabularies ({}, {
+        users: {filter: 'id > 0'}
+    })
 
 }
