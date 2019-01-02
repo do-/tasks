@@ -2,7 +2,7 @@ const _ = exports
 
 // #############################################################################
 
-_.select = async function ($_REQUEST) {
+_.select = async function () {
 
     let params = ['1']
 
@@ -16,8 +16,11 @@ _.select = async function ($_REQUEST) {
 
 // #############################################################################
 
-_.get_vocs = async function ($_REQUEST) {
+_.get_vocs = async function () {
 
-    return {users: await this.db.select_all ("SELECT id, label, fake FROM users WHERE 1=1 AND fake = 0 AND id > 0 ORDER BY 2")}
+    return {
+//        users: await this.db.select_all ("SELECT id, label, fake FROM users WHERE 1=1 AND fake = 0 AND id > 0 ORDER BY 2"),
+        users: await this.db.select_vocabulary ('users', {filter: 'id > 0'}),
+    }
 
 }
