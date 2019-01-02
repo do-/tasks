@@ -1,8 +1,6 @@
 const Dia = require ('./Ext/Dia/Dia.js')
 const { Client } = require ('pg')
 
-let db_pool = Dia.DB.Pool ($_CONF.db)
-
 class WebUiRequest extends Dia.Request {
     
     get_method_name () {
@@ -31,10 +29,12 @@ class WebUiRequest extends Dia.Request {
 
 }
 
+const db_pool = Dia.DB.Pool ($_CONF.db)
+
 Dia.HTTP.listen ((rq, rp) => {
 
     new WebUiRequest ({
-        db_pool      : db_pool,
+        db_pools     : {db: db_pool},
         http_request : rq, 
         http_response: rp
     })
