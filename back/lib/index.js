@@ -1,4 +1,5 @@
 const Dia = require ('./Ext/Dia/Dia.js')
+const { Client } = require ('pg')
 
 class WebUiRequest extends Dia.Request {
     
@@ -9,27 +10,35 @@ class WebUiRequest extends Dia.Request {
         return q.id ? 'get': 'select'
     }
 
+    async lock_resources () {
+        this.client = new Client ($_CONF.db)
+        await this.client.connect ()
+    }
+
+    async unlock_resources () {
+        await this.client.end ()
+    }
+    
     async process_params () {
         
         super.process_params ()
-        this.label = `${this.module_name} ${this.method_name} ${this.uuid}`
+        
+        console.log (`${this.uuid}: ${this.module_name} ${this.method_name}`)
 
         console.time (this.label)
 
-        try {        
+        try {
             this.out (await this.get_method ().call (this))
         }
         catch (x) {
             this.carp (x)
         }
 
-        console.timeEnd (this.label)
-
     }
 
 }
 
-Dia.listen ((rq, rp) => {
+Dia.HTTP.listen ((rq, rp) => {
 
     new WebUiRequest ({
         http_request: rq, 
