@@ -11,14 +11,6 @@ class WebUiRequest extends Dia.Request {
         if (q.action) return 'do_'  + q.action
         return q.id ? 'get': 'select'
     }
-
-    async lock_resources () {
-        this.client = await db_pool.acquire ()
-    }
-
-    async unlock_resources () {
-        await db_pool.release (this.client)
-    }
     
     async process_params () {
         
@@ -42,7 +34,8 @@ class WebUiRequest extends Dia.Request {
 Dia.HTTP.listen ((rq, rp) => {
 
     new WebUiRequest ({
-        http_request: rq, 
+        db_pool      : db_pool,
+        http_request : rq, 
         http_response: rp
     })
 
