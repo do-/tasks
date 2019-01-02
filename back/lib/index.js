@@ -1,6 +1,8 @@
 const Dia = require ('./Ext/Dia/Dia.js')
 const { Client } = require ('pg')
 
+let db_pool = Dia.DB.Pool ($_CONF.db)
+
 class WebUiRequest extends Dia.Request {
     
     get_method_name () {
@@ -11,12 +13,11 @@ class WebUiRequest extends Dia.Request {
     }
 
     async lock_resources () {
-        this.client = new Client ($_CONF.db)
-        await this.client.connect ()
+        this.client = await db_pool.acquire ()
     }
 
     async unlock_resources () {
-        await this.client.end ()
+        await db_pool.release (this.client)
     }
     
     async process_params () {
