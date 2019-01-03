@@ -29,7 +29,45 @@ class WebUiRequest extends Dia.Request {
 
 }
 
-const db_pool = Dia.DB.Pool ($_CONF.db)
+class TasksModel extends Dia.DB.Model {
+
+    adjust_table (table) {
+        
+        let cols = table.columns
+        
+        cols.id   = 'int'
+        cols.fake = 'int'
+        cols.uuid = "uuid=uuid_generate_v4()",
+
+        table.pk = 'id'
+
+    }
+
+    get_default_query_columns (query_part) {
+        return query_part.is_root ? ['*'] : ['id', 'label']
+    }
+
+}
+
+const model = new TasksModel ({path: './Model'})
+
+darn (model.tables.tasks)
+
+/*
+darn (new Dia.DB.Query (model, {'tasks()': 1}, 'task_notes (*)').sql)
+darn (new Dia.DB.Query (model, {'tasks()': 1}, 'task_notes (*)').sql)
+*/
+
+//darn (new Dia.DB.Query (model, 'tasks(id, uuid AS guid, label) AS r').sql)
+darn (new Dia.DB.Query (model, 
+    {'tasks(*)' : 1}, 
+    {task_notes : {}},
+).sql)
+
+let q = new Dia.DB.Query (model, {tasks: {fake: 0, id_last_task_note: null, label: undefined}})
+darn (q.sql)
+
+const db_pool = Dia.DB.Pool ($_CONF.db, )
 
 Dia.HTTP.listen ((rq, rp) => {
 
