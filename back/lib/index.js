@@ -51,23 +51,21 @@ class TasksModel extends Dia.DB.Model {
 
 const model = new TasksModel ({path: './Model'})
 
-darn (model.tables.tasks)
-
 /*
 darn (new Dia.DB.Query (model, {'tasks()': 1}, 'task_notes (*)').sql)
 darn (new Dia.DB.Query (model, {'tasks()': 1}, 'task_notes (*)').sql)
-*/
 
 //darn (new Dia.DB.Query (model, 'tasks(id, uuid AS guid, label) AS r').sql)
 darn (new Dia.DB.Query (model, 
     {'tasks(*)' : 1}, 
     {task_notes : {}},
 ).sql)
+let q = new Dia.DB.Query (model, {tasks: {'fake...': 0, 'id_last_task_note <>': null, label: undefined, ORDER: 'label'}})
+darn ([q.sql, q.params])
+*/
 
-let q = new Dia.DB.Query (model, {tasks: {fake: 0, id_last_task_note: null, label: undefined}})
-darn (q.sql)
 
-const db_pool = Dia.DB.Pool ($_CONF.db, )
+const db_pool = Dia.DB.Pool ($_CONF.db, model)
 
 Dia.HTTP.listen ((rq, rp) => {
 
