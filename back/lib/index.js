@@ -32,12 +32,12 @@ class WebUiRequest extends Dia.Request {
 class TasksModel extends Dia.DB.Model {
 
     adjust_table (table) {
-        
+
         let cols = table.columns
         
         cols.id   = 'int'
         cols.fake = 'int'
-        cols.uuid = "uuid=uuid_generate_v4()",
+        if (table.name != 'task_users') cols.uuid = "uuid=uuid_generate_v4()"
 
         table.pk = 'id'
 
