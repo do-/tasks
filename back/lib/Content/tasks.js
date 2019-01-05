@@ -36,7 +36,7 @@ get: async function () {
 
     let data = await this.db.get ([{tasks: {uuid: this.q.id}}])
 
-    data.users = Object.values (await this.db.fold ([{task_users: {id_task: data.id}}, 'users'], (i, idx) => {
+    data.users = Object.values (await this.db.fold ([{task_users: {id_task: data.id}}, '$users'], (i, idx) => {
     
         let user = {id: i ['users.id'], label: i ['users.label']}
         
@@ -52,6 +52,21 @@ get: async function () {
             ORDER:   'id',
         }}
     ])
+    
+    this.user = {id: 1}    
+    
+    data.peers = await this.db.list ([
+    
+        {users: {
+            'id >'  : 0,
+            'id <>' : this.user.id,
+        }},
+        {'$user_users ON user_users.id_user_ref = users.id' : {
+            id_user : this.user.id,
+            is_on   : 1,
+        }}
+        
+    ])    
 
     return data
 

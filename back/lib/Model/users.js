@@ -5,6 +5,7 @@ module.exports = {
     columns : {
 
         id_role            : '(roles)=2 // Роль',           
+        label              : 'string // ФИО',             
         login              : 'string // login',             
         mail               : 'string // E-mail',              
         password           : 'string // Пароль',             
