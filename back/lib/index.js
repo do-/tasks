@@ -9,23 +9,6 @@ class WebUiRequest extends Dia.Request {
         if (q.action) return 'do_'  + q.action
         return q.id ? 'get': 'select'
     }
-    
-    async process_params () {
-        
-        super.process_params ()
-        
-        console.log (`${this.uuid}: ${this.module_name} ${this.method_name}`)
-
-        console.time (this.label)
-
-        try {
-            this.out (await this.get_method ().call (this))
-        }
-        catch (x) {
-            this.carp (x)
-        }
-
-    }
 
 }
 

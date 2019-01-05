@@ -65,7 +65,7 @@ module.exports = {
         for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.q.data [k]
         
         return this.db.upsert ('user_options', d, ['id_user', 'id_voc_user_option'])
-
+        
     },
 
 }
