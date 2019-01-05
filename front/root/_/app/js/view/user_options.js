@@ -16,7 +16,7 @@ define ([], function () {
 
             columns: [                
                 {field: 'label',                caption: 'Опция',         size: 10},
-                {field: 'foo',                caption: 'Статус',         size: 10, render: function (i) {return i.user_option.is_on ? 'Установлено' : ''}},
+                {field: 'foo',                caption: 'Статус',         size: 10, render: function (i) {return i ['user_options.is_on'] ? 'Установлено' : ''}},
             ],
 
             url: '_back/?type=users&part=options&id=' + data.uuid,

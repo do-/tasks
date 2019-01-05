@@ -37,7 +37,7 @@ class TasksModel extends Dia.DB.Model {
         
         cols.id   = 'int'
         cols.fake = 'int'
-        if (table.name != 'task_users' && table.name != 'roles' && table.name != 'user_users') cols.uuid = "uuid=uuid_generate_v4()"
+        if (table.name != 'task_users' && table.name != 'roles' && table.name != 'user_users' && table.name != 'voc_user_options') cols.uuid = "uuid=uuid_generate_v4()"
 
         table.pk = 'id'
 
