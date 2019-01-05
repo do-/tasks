@@ -47,6 +47,25 @@ module.exports = {
 
         ])
 
-    }
+    },
+    
+///////////////////
+  do_set_option: //
+///////////////////
+    
+    async function () {
+    
+        // $_USER -> {role} eq 'admin' or die '#foo#:Доступ запрещён';
+                
+        let d = {
+            fake: 0,
+            id_user: await this.db.get ({'users(id)': {uuid: this.q.id}})
+        }
+        
+        for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.q.data [k]
+        
+        return this.db.upsert ('user_options', d, ['id_user', 'id_voc_user_option'])
+
+    },
 
 }

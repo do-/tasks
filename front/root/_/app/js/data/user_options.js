@@ -8,7 +8,7 @@ define ([], function () {
 
         var r = g.get (data.id_voc_user_option = e.recid)
 
-        data.is_on = 1 - (r.user_option.is_on || 0)
+        data.is_on = 1 - (r ['user_options.is_on'] || 0)
 
         if (!confirm ((data.is_on ? 'Установить' : 'Снять') + ' опцию "' + r.label + '"?')) return
 
