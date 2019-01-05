@@ -37,14 +37,10 @@ class TasksModel extends Dia.DB.Model {
         
         cols.id   = 'int'
         cols.fake = 'int'
-        if (table.name != 'task_users' && table.name != 'roles') cols.uuid = "uuid=uuid_generate_v4()"
+        if (table.name != 'task_users' && table.name != 'roles' && table.name != 'user_users') cols.uuid = "uuid=uuid_generate_v4()"
 
         table.pk = 'id'
 
-    }
-
-    get_default_query_columns (query_part) {
-        return query_part.is_root ? ['*'] : ['id', 'label'].filter ((col) => this.tables [query_part.table].columns [col])
     }
 
 }

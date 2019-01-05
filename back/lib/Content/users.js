@@ -4,7 +4,7 @@ module.exports = {
 
 // #############################################################################
 
-select: async function () {
+select: function () {
         
     return this.db.add ({}, [{users: {'id >': 0}}, 'roles AS role'])
 
