@@ -40,9 +40,15 @@ module.exports = class extends Dia.HTTP.Handler {
             async get_user () {
 
                 if (!this.id) return this.restrict_access ()
+                
+                let ts = new Date ()
+                ts.setMinutes (ts.getMinutes () - this.o.timeout)
 
                 let r = await this.h.db.get ([                
-                    {sessions: {client_cookie: this.id || null}},
+                    {sessions: {
+                        client_cookie: this.id,
+                        'ts >=':       ts,
+                    }},
                     'users (id, label)', 
                     'roles (name)'
                 ])
