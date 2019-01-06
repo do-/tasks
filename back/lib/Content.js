@@ -28,7 +28,7 @@ module.exports = class extends Dia.HTTP.Handler {
             
             async finish () {            
                 super.finish ()                
-                return this.h.db.do ('DELETE FROM sessions WHERE client_cookie = ?', [this.id])                
+                return this.h.db.do ('DELETE FROM sessions WHERE client_cookie = ?', [this.id])
             }
             
             restrict_access () {
@@ -37,12 +37,18 @@ module.exports = class extends Dia.HTTP.Handler {
                 return undefined
             }
             
+            keep_alive () {            
+                setImmediate (() => 
+                    this.h.db.do ('UPDATE sessions SET ts = ? WHERE client_cookie = ?', [new Date (), this.id])
+                )
+            }
+
             async get_user () {
 
                 if (!this.id) return this.restrict_access ()
                 
                 let ts = new Date ()
-                ts.setMinutes (ts.getMinutes () - this.o.timeout)
+                ts.setMinutes (ts.getMinutes () - this.o.timeout - 1)
 
                 let r = await this.h.db.get ([                
                     {sessions: {
@@ -54,6 +60,10 @@ module.exports = class extends Dia.HTTP.Handler {
                 ])
 
                 if (!r.id) return this.restrict_access ()
+                
+                let elapsed_ms = (new Date () - new Date (r.ts))
+                let threshold_ms = 60000 * (this.o.timeout - 1)
+                if (elapsed_ms > threshold_ms) this.keep_alive ()
 
                 return {
                     id: r ['users.id'], 
