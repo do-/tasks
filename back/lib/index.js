@@ -16,7 +16,7 @@ class WebUiHandler extends Dia.HTTP.Handler {
             
                 super.start ()
                 
-                await this.h.db.do ("DELETE FROM sessions WHERE id_user = ?", this.user.id)
+                await this.h.db.do ("DELETE FROM sessions WHERE id_user = ?", [this.user.id])
 
                 return this.h.db.insert ('sessions', {
                     id_user       : this.user.id,
@@ -28,7 +28,7 @@ class WebUiHandler extends Dia.HTTP.Handler {
             
             async finish () {            
                 super.finish ()                
-                return this.h.db.do ('DELETE FROM sessions WHERE client_cookie = ?', this.id)                
+                return this.h.db.do ('DELETE FROM sessions WHERE client_cookie = ?', [this.id])                
             }
             
             async get_user () {
@@ -74,7 +74,7 @@ class TasksModel extends Dia.DB.Model {
         
         cols.id   = 'int'
         cols.fake = 'int'
-        if (table.name != 'task_users' && table.name != 'roles' && table.name != 'user_users' && table.name != 'voc_user_options') cols.uuid = "uuid=uuid_generate_v4()"
+        if (table.name != 'sessions' && table.name != 'task_users' && table.name != 'roles' && table.name != 'user_users' && table.name != 'voc_user_options') cols.uuid = "uuid=uuid_generate_v4()"
 
         table.pk = 'id'
 

@@ -1,32 +1,34 @@
 module.exports = {
 
-////////////
-  create: //
-////////////  
+///////////////
+  do_create: //
+///////////////  
 
     async function () {
     
-        let user = await this.db.get (users: {
+        let user = await this.db.get ([{users: {
             login: this.q.data.login,
             fake : 0,
-        }, 'roles(name)')
+        }}, 'roles(name)'])
         
         if (!user.id) return {}
         
         this.session.user = user
         await this.session.start ()
         
-        return {user, timeout: 30}
+        user.role = user ['roles.name']
+        let data = {user, timeout: 30}
 
-    }
+        return data
+
+    },
     
-////////////
-  delete: //
-////////////  
+///////////////
+  do_delete: //
+///////////////  
 
     function () {
         return this.session.finish ()
-    }
-
+    },
 
 }
