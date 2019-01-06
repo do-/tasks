@@ -11,7 +11,7 @@ module.exports = {
         return this.db.add_all_cnt (data, [
 
             {tasks : {
-                id_user: 1
+                id_user: this.user.id
             }}, 
 
             'task_notes ON id_last_task_note',
@@ -58,8 +58,6 @@ module.exports = {
             }
             
         })
-
-        this.user = {id: 1}    
 
         data.peers = await this.db.list ([
 

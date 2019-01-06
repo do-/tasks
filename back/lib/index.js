@@ -35,18 +35,18 @@ class WebUiHandler extends Dia.HTTP.Handler {
 
                 if (!this.id) return undefined
 
-                let r = this.h.db.get ([                
+                let r = await this.h.db.get ([                
                     {sessions: {client_cookie: this.id}},
-                    'users', 
-                    'roles'
+                    'users (id, label)', 
+                    'roles (name)'
                 ])
-                
+
                 if (!r.id) return undefined
 
                 return {
-                    id: r.users.id, 
-                    label: r.users.label, 
-                    role: r.roles.label
+                    id: r ['users.id'], 
+                    label: r ['users.label'], 
+                    role: r ['roles.name']
                 }
 
             }
