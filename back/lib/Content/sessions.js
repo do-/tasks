@@ -17,7 +17,7 @@ module.exports = {
         await this.session.start ()
         
         user.role = user ['roles.name']
-        let data = {user, timeout: 30}
+        let data = {user, timeout: this.session.o.timeout}
 
         return data
 

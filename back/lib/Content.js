@@ -58,7 +58,8 @@ module.exports = class extends Dia.HTTP.Handler {
             }
 
         } ({
-            cookie_name: $_CONF.auth.cookie_name || 'sid',
+            cookie_name: $_CONF.auth.sessions.cookie_name || 'sid',
+            timeout: $_CONF.auth.sessions.timeout || 10,
         })
         
     }
