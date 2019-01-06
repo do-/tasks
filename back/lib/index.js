@@ -31,17 +31,23 @@ class WebUiHandler extends Dia.HTTP.Handler {
                 return this.h.db.do ('DELETE FROM sessions WHERE client_cookie = ?', [this.id])                
             }
             
+            restrict_access () {
+                let q = this.h.q
+                if (q.type != 'sessions' && q.action != 'create') throw '401 Authenticate first'
+                return undefined
+            }
+            
             async get_user () {
 
-                if (!this.id) return undefined
+                if (!this.id) return this.restrict_access ()
 
                 let r = await this.h.db.get ([                
-                    {sessions: {client_cookie: this.id}},
+                    {sessions: {client_cookie: this.id || null}},
                     'users (id, label)', 
                     'roles (name)'
                 ])
 
-                if (!r.id) return undefined
+                if (!r.id) return this.restrict_access ()
 
                 return {
                     id: r ['users.id'], 
