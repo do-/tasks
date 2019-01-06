@@ -62,7 +62,7 @@ module.exports = class extends Dia.HTTP.Handler {
                 if (!r.id) return this.restrict_access ()
                 
                 let elapsed_ms = (new Date () - new Date (r.ts))
-                let threshold_ms = 60000 * (this.o.timeout - 1)
+                let threshold_ms = 30000 * (this.o.timeout)
                 if (elapsed_ms > threshold_ms) this.keep_alive ()
 
                 return {
