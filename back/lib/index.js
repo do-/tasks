@@ -2,6 +2,61 @@ const Dia = require ('./Ext/Dia/Dia.js')
 
 class WebUiHandler extends Dia.HTTP.Handler {
 
+    check () {
+        super.check ()
+        let m = this.http_request.method
+        if (m != 'POST') throw '405 No ' + m + 's please'
+    }
+    
+    get_session () {
+
+        return new class extends this.CookieSession {
+        
+            async start () {
+            
+                super.start ()
+                
+                await this.h.db.do ("DELETE FROM sessions WHERE id_user = ?", this.user.id)
+
+                return this.h.db.insert ('sessions', {
+                    id_user       : this.user.id,
+                    ts            : new Date (),
+                    client_cookie : this.id,                    
+                })
+                
+            }
+            
+            async finish () {            
+                super.finish ()                
+                return this.h.db.do ('DELETE FROM sessions WHERE client_cookie = ?', this.id)                
+            }
+            
+            async get_user () {
+
+                if (!this.id) return undefined
+
+                let r = this.h.db.get ([                
+                    {sessions: {client_cookie: this.id}},
+                    'users', 
+                    'roles'
+                ])
+                
+                if (!r.id) return undefined
+
+                return {
+                    id: r.users.id, 
+                    label: r.users.label, 
+                    role: r.roles.label
+                }
+
+            }
+
+        } ({
+            cookie_name: $_CONF.auth.cookie_name || 'sid',
+        })
+        
+    }
+    
     get_method_name () {
         let q = this.q
         if (q.part)   return 'get_' + q.part
@@ -36,6 +91,6 @@ Dia.HTTP.listen ((rq, rp) => {
         db_pools     : {db: db_pool},
         http_request : rq, 
         http_response: rp
-    })
+    }).run ()
 
 })
