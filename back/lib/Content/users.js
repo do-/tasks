@@ -68,6 +68,47 @@ module.exports = {
         
     },
 
+///////////////////////
+  do_set_own_option: //
+///////////////////////
+
+    async function () {
+
+        let voc_user_option = this.db.get ([{voc_user_options: {id: this.q.data.id_voc_user_option}}]);
+
+        if (!voc_user_option.is_own) throw '#foo#:Доступ запрещён'
+
+        let d = {
+            fake: 0,
+            id_user: this.user.id
+        }
+
+        for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.q.data [k]
+
+        return this.db.upsert ('user_options', d, ['id_user', 'id_voc_user_option'])
+
+    },
+    
+/////////////////////
+  get_own_options: //
+/////////////////////
+
+    async function () {
+
+        let filter = this.w2ui_filter ()
+
+        filter ['roles... LIKE'] = "% $_USER->{role}->{name} %"
+        filter.is_own = 1
+        
+        return this.db.add ({}, [{voc_user_options: filter},
+            {'user_options(is_on)': {
+                fake: 0,
+                id_user: this.user.id,
+            }}
+        ])
+
+    },
+    
 /////////////////////
   do_set_password: //
 /////////////////////
