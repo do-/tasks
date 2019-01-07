@@ -10,8 +10,25 @@ module.exports = {
             login: this.q.data.login,
             fake : 0,
         }}, 'roles(name)'])
+                
+        if (user.id) {
+
+            darn (user)
+            darn (user.salt)
+            darn (this.q)
+            darn (await this.session.password_hash (user.salt, this.q.password))
+
+        }
+        else if ($_CONF.auth.allow_test_admin && this.q.data.login == 'test' && this.q.password == 'test') {
+
+            user = await this.db.get ([{users: {id : -1}}, 'roles(name)'])
+
+        }
+        else {
         
-        if (!user.id) return {}
+            return {}
+            
+        }
         
         this.session.user = user
         await this.session.start ()

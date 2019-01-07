@@ -28,7 +28,7 @@ module.exports = class extends Dia.HTTP.Handler {
             
             async finish () {            
                 super.finish ()                
-                return this.h.db.do ('DELETE FROM sessions WHERE client_cookie = ?', [this.id])
+                return this.h.db.do ('DELETE FROM sessions WHERE client_cookie = ?', [this.old_id])
             }
             
             restrict_access () {
@@ -70,6 +70,29 @@ module.exports = class extends Dia.HTTP.Handler {
                     label: r ['users.label'], 
                     role: r ['roles.name']
                 }
+
+            }
+            
+            async password_hash (salt, password) {
+            
+                const fs     = require ('fs')
+                const crypto = require ('crypto')
+                const hash   = crypto.createHash ('sha256')
+                const input  = fs.createReadStream ($_CONF.auth.salt_file)
+
+                return new Promise ((resolve, reject) => {
+
+                    input.on ('error', reject)
+
+                    input.on ('end', () => {
+                        hash.update (salt, 'utf8')
+                        hash.update (password, 'utf8')
+                        resolve (hash.digest ('hex'))
+                    })
+
+                    input.pipe (hash, {end: false})
+
+                })
 
             }
 
