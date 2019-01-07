@@ -25,9 +25,20 @@ module.exports = {
         await this.session.start ()
         
         user.role = user ['roles.name']
-        let data = {user, timeout: this.session.o.timeout}
+        
+        user.opt = await this.db.fold ([
 
-        return data
+            {'user_options()': {
+                fake: 0,
+                is_on: 1,
+                id_user: user.id
+            }},
+
+            'voc_user_options(name)'
+
+        ], (i, d) => {d [i ['voc_user_options.name']] = 1}, {})
+
+        return {user, timeout: this.session.o.timeout}
 
     },
     
