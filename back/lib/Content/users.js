@@ -77,14 +77,14 @@ module.exports = {
         if (this.q.p1 == undefined) throw '#p1#: Получено пустое значение пароля'
         if (this.q.p1 != this.q.p2) throw '#p2#: Повторное значение пароля не сходится'
 
-        let id = this.user.role == 'admin' ? 
-            await this.db.get ([{'users(id)': {uuid: this.q.id}}]) :
-            this.user.id
+        let uuid = 
+                   this.user.role == 'admin' ? this.q.id : 
+                   this.user.uuid
 
         let salt     = await this.session.password_hash (Math.random (), new Date ().toJSON ())
         let password = await this.session.password_hash (salt, this.q.p1)
 
-        return this.db.update ('users', {id, salt, password})
+        return this.db.update ('users', {uuid, salt, password}, ['uuid'])
 
     },
 

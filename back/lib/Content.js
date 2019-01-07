@@ -55,7 +55,7 @@ module.exports = class extends Dia.HTTP.Handler {
                         client_cookie: this.id,
                         'ts >=':       ts,
                     }},
-                    'users (id, label)', 
+                    'users (id, uuid, label)', 
                     'roles (name)'
                 ])
 
@@ -67,6 +67,7 @@ module.exports = class extends Dia.HTTP.Handler {
 
                 return {
                     id: r ['users.id'], 
+                    uuid: r ['users.uuid'], 
                     label: r ['users.label'], 
                     role: r ['roles.name']
                 }
