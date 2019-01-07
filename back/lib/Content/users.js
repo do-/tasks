@@ -88,4 +88,32 @@ module.exports = {
 
     },
 
+///////////////
+  do_update: //
+///////////////
+
+    async function () {
+    
+        let data = this.q.data
+            
+        if (!/^[А-ЯЁ][А-ЯЁа-яё\- ]+[а-яё]$/.test (data.label)) throw '#label#: Проверьте, пожалуйста, правильность заполнения ФИО'
+
+        if (!/^[A-Za-z0-9_\.]+$/.test (data.login)) throw '#login#: Недопустимый login'
+        
+        let uuid = this.q.id
+        
+        if (await this.db.get ([{'users(uuid)': {
+            login     : data.login,
+            fake      : 0,
+            'uuid <>' : uuid
+        }}])) throw '#login#: Этот login уже занят'
+        
+        let d = {uuid}
+
+        for (let k of ['login', 'label', 'mail']) d [k] = data [k]
+
+        return this.db.update ('users', d, ['uuid'])
+
+    }
+
 }
