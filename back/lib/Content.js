@@ -110,5 +110,9 @@ module.exports = class extends Dia.HTTP.Handler {
         if (q.action) return 'do_'  + q.action
         return q.id ? 'get': 'select'
     }
+    
+    w2ui_filter () {
+        return new (require ('./Ext/DiaW2ui/Filter.js')) (this.q)
+    }
 
 }
