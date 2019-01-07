@@ -85,8 +85,8 @@ module.exports = class extends Dia.HTTP.Handler {
                     input.on ('error', reject)
 
                     input.on ('end', () => {
-                        hash.update (salt, 'utf8')
-                        hash.update (password, 'utf8')
+                        hash.update (String (salt))
+                        hash.update (String (password), 'utf8')
                         resolve (hash.digest ('hex'))
                     })
 
