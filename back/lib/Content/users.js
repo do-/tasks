@@ -7,8 +7,25 @@ module.exports = {
 ////////////
 
     function () {
+   
+        this.q.sort = this.q.sort || [{field: "label", direction: "asc"}]
 
-        return this.db.add ({}, [{users: {'id >': 0}}, 'roles AS role'])
+        if (this.q.searchLogic == 'OR') {
+
+            let $q = this.q.search [0].value
+
+            this.q.search = [
+                {field: 'label', operator: 'contains', value: q},
+                {field: 'login', operator: 'contains', value: q},
+                {field: 'mail',  operator: 'contains', value: q},
+            ]
+
+        }
+    
+        let filter = this.w2ui_filter ()
+        filter ['id >'] = 0
+
+        return this.db.add ({}, [{users: filter}, 'roles AS role'])
 
     },
 
@@ -108,6 +125,43 @@ module.exports = {
         ])
 
     },
+    
+///////////////
+  get_peers: //
+///////////////
+
+    async function () {
+        
+        return this.db.add ({}, [
+            {users: {
+                'id > ': 0,
+                'id <> ': this.user.id,                
+            }},
+            {'user_users AS user_user ON user_user.id_user_ref = users.id': {
+                is_on: 1,
+                id_user: this.user.id,
+            }}
+        ])
+
+    },
+    
+//////////////////
+  do_set_peers: //
+//////////////////
+
+    async function () {
+        
+        await this.db.do ('UPDATE user_users SET is_on = 0 WHERE id_user = ?', [this.user.id])
+
+        await this.db.upsert ('user_users', this.q.data.ids.map ((i) => {return {
+            fake               : 0,
+            is_on              : 1,
+            id_user            : this.user.id,
+            id_user_ref        : i,            
+        }}), ['id_user', 'id_user_ref'])
+
+    },
+        
     
 /////////////////////
   do_set_password: //
