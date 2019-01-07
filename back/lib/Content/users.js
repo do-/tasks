@@ -114,6 +114,36 @@ module.exports = {
 
         return this.db.update ('users', d, ['uuid'])
 
-    }
+    },
+
+///////////////
+  do_create: //
+///////////////
+
+    async function () {
+    
+        let data = this.q.data
+            
+        if (!data.id_role) throw '#id_role#: Не указана роль'
+
+        if (!/^[А-ЯЁ][А-ЯЁа-яё\- ]+[а-яё]$/.test (data.label)) throw '#label#: Проверьте, пожалуйста, правильность заполнения ФИО'
+
+        if (!/^[A-Za-z0-9_\.]+$/.test (data.login)) throw '#login#: Недопустимый login'
+        
+        let uuid = this.q.id
+        
+        if (await this.db.get ([{'users(uuid)': {
+            login     : data.login,
+            fake      : 0,
+            'uuid <>' : uuid
+        }}])) throw '#login#: Этот login уже занят'
+        
+        let d = {}
+
+        for (let k of ['login', 'label', 'id_role']) d [k] = data [k]
+        
+        return this.db.get ([{users: {id: await this.db.insert ('users', d)}}])
+
+    },
 
 }
