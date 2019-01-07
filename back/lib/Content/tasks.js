@@ -11,7 +11,8 @@ module.exports = {
         return this.db.add_all_cnt (data, [
 
             {tasks : {
-                id_user: this.user.id
+                id_user: this.user.id,
+                ORDER: 'tasks.id',
             }}, 
 
             'task_notes ON id_last_task_note',
