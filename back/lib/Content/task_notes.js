@@ -17,8 +17,6 @@ module.exports = {
 ////////////
 
     function () {
-
-        let data = {portion: 100}
         
         let note
         let status
@@ -52,7 +50,7 @@ module.exports = {
         
         if (note) filter ['label ILIKE %?% OR body ILIKE %?%'] = [note, note]
 
-        return this.db.add_all_cnt (data, [
+        return this.db.add_all_cnt ({}, [
 
             {task_notes: filter}, 
 
@@ -62,7 +60,7 @@ module.exports = {
                 {}
             }
 
-        ], data.portion)
+        ])
         
     },
     

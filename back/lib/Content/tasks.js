@@ -6,18 +6,15 @@ module.exports = {
 
     function () {
     
-        let data = {portion: 100}
+        this.q.sort = [{field: "id", direction: "asc"}];
+darn (this.q)
+        let filter = this.w2ui_filter ()
+darn (filter)
 
-        return this.db.add_all_cnt (data, [
-
-            {tasks : {
-                id_user: this.user.id,
-                ORDER: 'tasks.id',
-            }}, 
-
+        return this.db.add_all_cnt ({}, [
+            {tasks : filter}, 
             'task_notes ON id_last_task_note',
-
-        ], data.portion)
+        ])
 
     },
     

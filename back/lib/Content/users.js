@@ -25,7 +25,7 @@ module.exports = {
         let filter = this.w2ui_filter ()
         filter ['id >'] = 0
 
-        return this.db.add ({}, [{users: filter}, 'roles AS role'])
+        return this.db.add_all_cnt ({}, [{users: filter}, 'roles AS role'])
 
     },
 
