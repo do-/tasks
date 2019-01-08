@@ -6,10 +6,45 @@ module.exports = {
 
     function () {
     
-        this.q.sort = [{field: "id", direction: "asc"}];
-darn (this.q)
+        this.q.sort = [{field: "id", direction: "asc"}]
+        
+        let x = {}
+        
+        if (this.q.searchLogic == 'OR') {
+            x.note = this.q.search [0].value
+            this.q.search = []
+        }
+        else if (this.q.searchLogic == 'AND') {            
+
+            let r = []
+
+            for (let s of this.q.search) switch (s.field) {
+                case 'note':
+                case 'status':
+                case 'id_other_user':
+                case 'is_author':
+                    x [s.field] = s.value
+                    break
+                default:
+                    r.push (s)
+            }
+            
+            if (x.is_author != undefined) x.is_author = (x.is_author == 1) ? 1 : 0
+            
+            this.q.search = r
+        
+        }
+        
         let filter = this.w2ui_filter ()
-darn (filter)
+        
+        if (x.status != undefined) filter ['id_user ' + (x.status ? '<>' : '=')] = null
+
+        if (x.note != undefined) filter.id = this.db.query ([{'task_notes(id_task)': {'label ILIKE %?% OR body ILIKE %?%': [x.note, x.note]}}]) 
+
+        if (x.id_other_user) filter ['id IN'] = this.db.query ([{'task_users(id_task)': {
+            id_user   : x.id_other_user.map ((i) => i.id),
+            is_author : x.is_author,
+        }}])
 
         return this.db.add_all_cnt ({}, [
             {tasks : filter}, 
@@ -17,7 +52,7 @@ darn (filter)
         ])
 
     },
-    
+
 //////////////
   get_vocs: //
 //////////////
