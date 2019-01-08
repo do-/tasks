@@ -104,6 +104,13 @@ module.exports = class extends Dia.HTTP.Handler {
         
     }
     
+    async get_user () {
+        let user = await super.get_user ()
+        if (!this.is_transactional () || !user) return user
+        await this.db.do ("SELECT set_config ('tasks.id_user', ?, true)", [user.id])
+        return user
+    }
+    
     get_method_name () {
         let q = this.q
         if (q.part)   return 'get_' + q.part
