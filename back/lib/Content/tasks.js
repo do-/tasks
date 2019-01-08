@@ -4,16 +4,19 @@ class Note {
         
         this.fake = 0
         
-        for (let k of ['id_user_to'
+        for (let k of ['id_user_to', 'body'
 //            , 'img', 'ext'              TODO img, mail
         ]) this [k] = data [k]
         
         if (this.id_user_to <= 0) this.id_user_to = null
         
-        let lines  = data.label.trim ().split (/[\n\r]+/)
-
-        this.label = lines.shift ()
-        this.body  = lines.join ("\n")
+        this.label = data.label.trim ()
+        
+        if (this.body === undefined) {
+            let lines  = this.label.split (/[\n\r]+/)
+            this.label = lines.shift ()
+            this.body  = lines.join ("\n")
+        }
 
     }
 
@@ -34,6 +37,35 @@ module.exports = {
         return this.db.insert ('task_notes', note)
     
     },
+    
+///////////////
+  do_create: //
+///////////////
+
+    async function () {        
+    
+        let note = new Note (this.q.data)        
+        
+        note.id_user_to = this.user.id
+        
+        note.id_task = await this.db.insert ('tasks', {
+            fake: 0,
+            id_user: this.user.id,
+            label: this.q.data.label,
+        })
+        
+        let id_task_note = await this.db.insert ('task_notes', note)
+        
+        await this.db.insert ('task_users', [0, 1].map ((i) => {return {
+            fake       : 0,
+            id_task    : note.id_task,
+            id_user    : this.user.id,
+            is_author  : i,
+        }}))
+        
+        return this.db.get ([{tasks: {id: note.id_task}}])
+            
+    },    
 
 ////////////
   select: //
