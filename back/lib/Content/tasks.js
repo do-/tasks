@@ -1,10 +1,21 @@
-function get_note (d) {
+class Note {
 
-    let lines = d.label.trim ().split (/[\n\r]+/)
+    constructor (data) {
+        
+        this.fake = 0
+        
+        for (let k of ['id_user_to'
+//            , 'img', 'ext'              TODO img, mail
+        ]) this [k] = data [k]
+        
+        if (this.id_user_to <= 0) this.id_user_to = null
+        
+        let lines  = data.label.trim ().split (/[\n\r]+/)
 
-    d.label = lines.shift ()
+        this.label = lines.shift ()
+        this.body  = lines.join ("\n")
 
-    return lines.join ("\n")
+    }
 
 }
 
@@ -14,22 +25,14 @@ module.exports = {
   do_comment: //
 ////////////////
 
-    async function () {
+    async function () {        
     
-        let d = {fake: 0}
-        
-        d.id_task = await this.db.get ([{'tasks(id)': {uuid: this.q.id}}])
-        
-        for (let k of ['label', 'id_user_to', 'img', 'ext']) d [k] = this.q.data [k] || null
-        
-        if (d.id_user_to <= 0) d.id_user_to = null
-
-        d.body = get_note (d)
-        
-        delete d.img // TODO img, mail
-        
-        return this.db.insert ('task_notes', d)
-
+        let note = new Note (this.q.data)
+    
+        note.id_task = await this.db.get ([{'tasks(id)': {uuid: this.q.id}}])
+    
+        return this.db.insert ('task_notes', note)
+    
     },
 
 ////////////
