@@ -12,7 +12,7 @@ module.exports = {
 
         if (this.q.searchLogic == 'OR') {
 
-            let $q = this.q.search [0].value
+            let q = this.q.search [0].value
 
             this.q.search = [
                 {field: 'label', operator: 'contains', value: q},

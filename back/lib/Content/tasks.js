@@ -19,6 +19,10 @@ class Note {
         }
 
     }
+    
+    async fetch_id_task (db, uuid) {
+        this.id_task = await db.get ([{'tasks(id)': {uuid}}])
+    }
 
 }
 
@@ -31,9 +35,9 @@ module.exports = {
     async function () {        
     
         let note = new Note (this.q.data)
-    
-        note.id_task = await this.db.get ([{'tasks(id)': {uuid: this.q.id}}])
-    
+        
+        await note.fetch_id_task (this.db, this.q.id)
+        
         return this.db.insert ('task_notes', note)
     
     },
@@ -66,6 +70,26 @@ module.exports = {
         return this.db.get ([{tasks: {id: note.id_task}}])
             
     },    
+    
+///////////////
+  do_assign: //
+///////////////
+
+    async function () {
+    
+        let note = new Note (this.q.data)        
+        
+        if (!note.id_user_to) throw '#id_user_to#:Не указан адресат'
+        
+        await note.fetch_id_task (this.db, this.q.id)
+        
+        return Promise.all ([        
+            this.db.do ('UPDATE task_users SET id_user = ?    WHERE id_task = ? AND is_author = 0', [note.id_user_to, note.id_task]),
+            this.db.do ('UPDATE task_notes SET id_user_to = ? WHERE id_task = ?', [note.id_user_to, note.id_task]),
+            this.db.insert ('task_notes', note)
+        ])
+
+    },
 
 ////////////
   select: //
