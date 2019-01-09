@@ -38,11 +38,11 @@ define ([], function () {
             columns: [
 
                 {field: 'uuid',              caption: 'ID',        size: 87, hidden: true},
-                {field: 'ts',                caption: 'Дата',      size: 40, render: function (i) {return i.ts.substring (0,19)}},
+                {field: 'ts',                caption: 'Дата',      size: 40, render: function (i) {return (i.ts || '').substring (0,19)}},
                 {field: 'label',             caption: 'Тема',      size: 100},
                 {field: 'id_user',           caption: 'На ком сейчас',    size: 40, hidden: true, render: function (i) {return !i.id_user ? '' : data.users [i.id_user]}},
 
-                {field: 'task_notes.ts',           caption: 'Дата',    size: 40, render: function (i) {return i.task_notes.ts.substring (0,19)}},
+                {field: 'task_notes.ts',           caption: 'Дата',    size: 40, render: function (i) {return (i ['task_notes.ts']||'').substring (0,19)}},
                 {field: 'task_notes.label',        caption: 'Текст',   size: 100},
                 {field: 'task_notes.id_user_from', caption: 'Автор',   size: 30, voc: data.users},
                 {field: '_',                       caption: ' ',       size: 5, render: function () {return '&rarr;'}},

@@ -28,10 +28,7 @@ class Note {
     }
     
     async store_image () {
-            
-        this.is_illustrated = 1
-        this.ext = this.ext || 'png'
-        
+                    
         let path = $_CONF.pics
         for (let i of new Date ().toJSON ().substr (0, 10).split ('-')) {
             path += `/${i}`
@@ -40,11 +37,13 @@ class Note {
         
         return new Promise ((resolve, reject) => {
         
-            fs.writeFile (`${path}/${this.uuid}.${this.ext}`, Buffer.from (this.img, 'base64'), (err) => {
+            let fn = `${path}/${this.uuid}.${this.ext}`
+        
+            fs.writeFile (fn, Buffer.from (this.img, 'base64'), (err) => {
                 
                 if (err) return reject (err)
                 
-                resolve ()
+                resolve (fn)
                 
             })
         
@@ -52,13 +51,29 @@ class Note {
 
     }
     
-    async store_and_get_id (db) {
+    async store (db) {
 
         this.uuid = Dia.new_uuid ()
+                
+        let wishes = []
 
-        if (this.img) await this.store_image ()
+        if (this.img) {
+            this.is_illustrated = 1
+            this.ext = this.ext || 'png'
+            wishes.push (this.store_image ())
+        }
+        
+        wishes.unshift (db.insert ('task_notes', this))        
+darn (wishes)
+        return Promise.all (wishes)
 
-        return await db.insert ('task_notes', this)        
+    }    
+
+    async store_and_get_id (db) {
+
+        let result = await this.store (db)
+darn (result)
+        return result [0]
 
     }
 
