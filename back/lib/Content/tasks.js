@@ -1,12 +1,15 @@
+const Dia = require ('../Ext/Dia/Dia.js')
+const fs = require ('fs')
+
 class Note {
 
     constructor (data) {
         
         this.fake = 0
-        
-        for (let k of ['id_user_to', 'body'
-//            , 'img', 'ext'              TODO img, mail
-        ]) this [k] = data [k]
+
+//                                                  TODO mail
+
+        for (let k of ['id_user_to', 'body', 'img', 'ext']) this [k] = data [k]
         
         if (this.id_user_to <= 0) this.id_user_to = null
         
@@ -24,8 +27,39 @@ class Note {
         this.id_task = await db.get ([{'tasks(id)': {uuid}}])
     }
     
-    async store_and_get_id (db) {    
+    async store_image () {
+            
+        this.is_illustrated = 1
+        this.ext = this.ext || 'png'
+        
+        let path = $_CONF.pics
+        for (let i of new Date ().toJSON ().substr (0, 10).split ('-')) {
+            path += `/${i}`
+            if (!fs.existsSync (path)) fs.mkdirSync (path)
+        }
+        
+        return new Promise ((resolve, reject) => {
+        
+            fs.writeFile (`${path}/${this.uuid}.${this.ext}`, Buffer.from (this.img, 'base64'), (err) => {
+                
+                if (err) return reject (err)
+                
+                resolve ()
+                
+            })
+        
+        })
+
+    }
+    
+    async store_and_get_id (db) {
+
+        this.uuid = Dia.new_uuid ()
+
+        if (this.img) await this.store_image ()
+
         return await db.insert ('task_notes', this)        
+
     }
 
 }
