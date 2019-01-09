@@ -63,8 +63,8 @@ class Note {
             wishes.push (this.store_image ())
         }
         
-        wishes.unshift (db.insert ('task_notes', this))        
-darn (wishes)
+        wishes.unshift (db.insert ('task_notes', this))
+
         return Promise.all (wishes)
 
     }    
@@ -72,7 +72,7 @@ darn (wishes)
     async store_and_get_id (db) {
 
         let result = await this.store (db)
-darn (result)
+
         return result [0]
 
     }
