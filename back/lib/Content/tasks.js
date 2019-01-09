@@ -23,6 +23,10 @@ class Note {
     async fetch_id_task (db, uuid) {
         this.id_task = await db.get ([{'tasks(id)': {uuid}}])
     }
+    
+    async store_and_get_id (db) {    
+        return await db.insert ('task_notes', this)        
+    }
 
 }
 
@@ -38,8 +42,8 @@ module.exports = {
         
         await note.fetch_id_task (this.db, this.q.id)
         
-        return this.db.insert ('task_notes', note)
-    
+        return note.store_and_get_id (this.db)
+
     },
     
 ///////////////
@@ -58,7 +62,7 @@ module.exports = {
             label: this.q.data.label,
         })
         
-        let id_task_note = await this.db.insert ('task_notes', note)
+        let id_task_note = note.store_and_get_id (this.db)
         
         await this.db.insert ('task_users', [0, 1].map ((i) => {return {
             fake       : 0,
@@ -86,7 +90,7 @@ module.exports = {
         return Promise.all ([        
             this.db.do ('UPDATE task_users SET id_user = ?    WHERE id_task = ? AND is_author = 0', [note.id_user_to, note.id_task]),
             this.db.do ('UPDATE task_notes SET id_user_to = ? WHERE id_task = ?', [note.id_user_to, note.id_task]),
-            this.db.insert ('task_notes', note)
+            note.store_and_get_id (this.db)
         ])
 
     },
