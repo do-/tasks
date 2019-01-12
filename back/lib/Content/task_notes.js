@@ -25,7 +25,7 @@ module.exports = {
             'users(label, mail) ON id_user_to',
         ])
 darn (data)
-        transporter.sendMail ({
+        let msg = {
             to: {
                 name:    data ['users.label'],
                 address: data ['users.mail'],
@@ -33,7 +33,11 @@ darn (data)
             text: `${data.label}
             ${data.body}
             `
-        }, darn)                
+        }
+        
+        if (data.ext) msg.attachments = [{path: `${this.conf.pics}/${data.ts.toJSON().substr(0,10).replace(/-/g, '/')}/${data.uuid}.${data.ext}`}]
+darn (msg)
+        transporter.sendMail (msg, darn)                
 
     },
 
