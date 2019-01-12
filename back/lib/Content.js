@@ -11,7 +11,7 @@ module.exports = class extends Dia.HTTP.Handler {
     get_session () {
 
         return new class extends this.CookieSession {
-        
+
             async start () {
             
                 super.start ()
@@ -79,7 +79,7 @@ module.exports = class extends Dia.HTTP.Handler {
                 const fs     = require ('fs')
                 const crypto = require ('crypto')
                 const hash   = crypto.createHash ('sha256')
-                const input  = fs.createReadStream ($_CONF.auth.salt_file)
+                const input  = fs.createReadStream (this.h.conf.auth.salt_file)
 
                 return new Promise ((resolve, reject) => {
 
@@ -98,8 +98,8 @@ module.exports = class extends Dia.HTTP.Handler {
             }
 
         } ({
-            cookie_name: $_CONF.auth.sessions.cookie_name || 'sid',
-            timeout: $_CONF.auth.sessions.timeout || 10,
+            cookie_name: this.conf.auth.sessions.cookie_name || 'sid',
+            timeout: this.conf.auth.sessions.timeout || 10,
         })
         
     }

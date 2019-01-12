@@ -28,9 +28,8 @@ class Note {
         this.id_task = await db.get ([{'tasks(id)': {uuid}}])
     }
     
-    async store_image () {
-                    
-        let path = $_CONF.pics
+    async store_image (path) {
+
         for (let i of new Date ().toJSON ().substr (0, 10).split ('-')) {
             path += `/${i}`
             if (!fs.existsSync (path)) fs.mkdirSync (path)
@@ -52,7 +51,7 @@ class Note {
 
     }
     
-    async store (db) {
+    async store (db, path) {
 
         this.uuid = Dia.new_uuid ()
                 
@@ -61,7 +60,7 @@ class Note {
         if (this.img) {
             this.is_illustrated = 1
             this.ext = this.ext || 'png'
-            wishes.push (this.store_image ())
+            wishes.push (this.store_image (path))
         }
         
         wishes.unshift (db.insert ('task_notes', this))
@@ -70,9 +69,8 @@ class Note {
 
     }
     
-    async send_mail (db) {
+    async send_mail (db, conf) {
 
-        let conf = $_CONF.mail
         if (!conf.port) {
             conf.port = 25
             conf.secure = false
@@ -94,11 +92,11 @@ class Note {
         
     }
 
-    async store_and_get_id (db) {
+    async store_and_get_id (db, path, mail) {
 
-        let result = await this.store (db)
+        let result = await this.store (db, path)
 
-        setImmediate (() => this.send_mail (db))
+        setImmediate (() => this.send_mail (db, mail))
 
         return result [0]
 
@@ -118,7 +116,7 @@ module.exports = {
         
         await note.fetch_id_task (this.db, this.q.id)
         
-        return note.store_and_get_id (this.db)
+        return note.store_and_get_id (this.db, this.conf.pics, this.conf.mail)
 
     },
     
@@ -138,7 +136,7 @@ module.exports = {
             label: this.q.data.label,
         })
         
-        let id_task_note = note.store_and_get_id (this.db)
+        let id_task_note = note.store_and_get_id (this.db, this.conf.pics, this.conf.mail)
         
         await this.db.insert ('task_users', [0, 1].map ((i) => {return {
             fake       : 0,
@@ -166,7 +164,7 @@ module.exports = {
         return Promise.all ([        
             this.db.do ('UPDATE task_users SET id_user = ?    WHERE id_task = ? AND is_author = 0', [note.id_user_to, note.id_task]),
             this.db.do ('UPDATE task_notes SET id_user_to = ? WHERE id_task = ?', [note.id_user_to, note.id_task]),
-            note.store_and_get_id (this.db)
+            note.store_and_get_id (this.db, this.conf.pics, this.conf.mail)
         ])
 
     },

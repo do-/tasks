@@ -2,25 +2,28 @@ const fs   = require ('fs')
 const http = require ('http')
 const Dia  = require ('./Ext/Dia/Dia.js')
 
-const Content = require ('./Content.js')
-const model   = new (require ('./Model.js')) ({path: './Model'})
-const db_pool = Dia.DB.Pool ($_CONF.db, model)
+const conf = JSON.parse (fs.readFileSync ('../conf/elud.json', 'utf8'))
+darn (conf)
+const Content  = require ('./Content.js')
+const model    = new (require ('./Model.js')) ({path: './Model'})
+const db_pools = {db: Dia.DB.Pool (conf.db, model)}
 
-if (!$_CONF.pics) throw '$_CONF.pics is not defined'
-if (!fs.statSync ($_CONF.pics).isDirectory ()) throw $_CONF.pics + 'is not a direcory'
+if (!conf.pics) throw 'conf.pics is not defined'
+if (!fs.statSync (conf.pics).isDirectory ()) throw conf.pics + 'is not a direcory'
 
 http.createServer (
 
     (rq, rp) => {
 
         new Content ({
-            db_pools     : {db: db_pool},
+            conf,
+            db_pools,
             http_request : rq, 
             http_response: rp
         }).run ()
 
     }
 
-).listen ($_CONF.listen, function () {
+).listen (conf.listen, function () {
     darn ('tasks app is listening to HTTP at ' + this._connectionKey)
 })
