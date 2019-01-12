@@ -1,5 +1,6 @@
 const Dia = require ('../Ext/Dia/Dia.js')
 const fs = require ('fs')
+const nodemailer = require ('nodemailer')
 
 class Note {
 
@@ -67,11 +68,37 @@ class Note {
 
         return Promise.all (wishes)
 
-    }    
+    }
+    
+    async send_mail (db) {
+
+        let conf = $_CONF.mail
+        if (!conf.port) {
+            conf.port = 25
+            conf.secure = false
+        }
+        
+        let from = conf.from
+        from.name = from.label
+
+        let transporter = nodemailer.createTransport (conf, {from: from})
+
+        let to = await db.get ([{users: {id: this.id_user_to}}])
+
+        transporter.sendMail ({
+            to: await db.get ([{'users(label AS name, mail AS address)': {id: this.id_user_to}}]),
+            text: `${this.label}
+            ${this.body}
+            `
+        }, darn)                
+        
+    }
 
     async store_and_get_id (db) {
 
         let result = await this.store (db)
+
+        setImmediate (() => this.send_mail (db))
 
         return result [0]
 
