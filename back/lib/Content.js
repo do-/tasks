@@ -4,7 +4,7 @@ module.exports = class extends Dia.HTTP.Handler {
 
     check () {
         super.check ()
-        let m = this.http_request.method
+        let m = this.http.request.method
         if (m != 'POST') throw '405 No ' + m + 's please'
     }
     

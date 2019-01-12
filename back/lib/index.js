@@ -13,13 +13,12 @@ if (!fs.statSync (conf.pics).isDirectory ()) throw conf.pics + 'is not a direcor
 
 http.createServer (
 
-    (rq, rp) => {
+    (request, response) => {
 
         new Content ({
             conf,
             db_pools,
-            http_request : rq, 
-            http_response: rp
+            http: {request, response}, 
         }).run ()
 
     }
