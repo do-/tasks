@@ -1,4 +1,41 @@
+const nodemailer = require ('nodemailer')
+
 module.exports = {
+
+////////////
+  notify: //
+////////////
+
+    async function () {
+    
+        let conf = this.conf.mail
+
+        if (!conf.port) {
+            conf.port = 25
+            conf.secure = false
+        }
+        
+        let from = conf.from
+        from.name = from.label
+
+        let transporter = nodemailer.createTransport (conf, {from})
+        
+        let data = await this.db.get ([
+            {task_notes: {id: this.q.id}},
+            'users(label, mail) ON id_user_to',
+        ])
+darn (data)
+        transporter.sendMail ({
+            to: {
+                name:    data ['users.label'],
+                address: data ['users.mail'],
+            },
+            text: `${data.label}
+            ${data.body}
+            `
+        }, darn)                
+
+    },
 
 //////////////
   get_vocs: //

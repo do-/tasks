@@ -1,14 +1,11 @@
 const Dia = require ('../Ext/Dia/Dia.js')
 const fs = require ('fs')
-const nodemailer = require ('nodemailer')
 
 class Note {
 
     constructor (data) {
         
         this.fake = 0
-
-//                                                  TODO mail
 
         for (let k of ['id_user_to', 'body', 'img', 'ext']) this [k] = data [k]
         
@@ -69,36 +66,13 @@ class Note {
 
     }
     
-    async send_mail (db, conf) {
+    async store_and_get_id (db, path) {
 
-        if (!conf.port) {
-            conf.port = 25
-            conf.secure = false
-        }
-        
-        let from = conf.from
-        from.name = from.label
+        let [id] = await this.store (db, path)
 
-        let transporter = nodemailer.createTransport (conf, {from: from})
+        $_Q.publish ('task_notes', 'notify', {id})
 
-        let to = await db.get ([{users: {id: this.id_user_to}}])
-
-        transporter.sendMail ({
-            to: await db.get ([{'users(label AS name, mail AS address)': {id: this.id_user_to}}]),
-            text: `${this.label}
-            ${this.body}
-            `
-        }, darn)                
-        
-    }
-
-    async store_and_get_id (db, path, mail) {
-
-        let result = await this.store (db, path)
-
-        setImmediate (() => this.send_mail (db, mail))
-
-        return result [0]
+        return id
 
     }
 
@@ -116,7 +90,7 @@ module.exports = {
         
         await note.fetch_id_task (this.db, this.q.id)
         
-        return note.store_and_get_id (this.db, this.conf.pics, this.conf.mail)
+        return note.store_and_get_id (this.db, this.conf.pics)
 
     },
     
@@ -136,7 +110,7 @@ module.exports = {
             label: this.q.data.label,
         })
         
-        let id_task_note = note.store_and_get_id (this.db, this.conf.pics, this.conf.mail)
+        let id_task_note = note.store_and_get_id (this.db, this.conf.pics)
         
         await this.db.insert ('task_users', [0, 1].map ((i) => {return {
             fake       : 0,
@@ -164,7 +138,7 @@ module.exports = {
         return Promise.all ([        
             this.db.do ('UPDATE task_users SET id_user = ?    WHERE id_task = ? AND is_author = 0', [note.id_user_to, note.id_task]),
             this.db.do ('UPDATE task_notes SET id_user_to = ? WHERE id_task = ?', [note.id_user_to, note.id_task]),
-            note.store_and_get_id (this.db, this.conf.pics, this.conf.mail)
+            note.store_and_get_id (this.db, this.conf.pics)
         ])
 
     },
