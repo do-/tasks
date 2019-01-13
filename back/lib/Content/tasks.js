@@ -24,24 +24,35 @@ class Note {
     async fetch_id_task (db, uuid) {
         this.id_task = await db.get ([{'tasks(id)': {uuid}}])
     }
-    
-    async store_image (path) {
+
+    assert_path (root) {
+
+        this.path = ''
 
         for (let i of new Date ().toJSON ().substr (0, 10).split ('-')) {
-            path += `/${i}`
-            if (!fs.existsSync (path)) fs.mkdirSync (path)
+            this.path += `/${i}`
+            let p = root + this.path
+            if (!fs.existsSync (p)) fs.mkdirSync (p)
         }
         
+        this.path += `/${this.uuid}.${this.ext}`
+
+    }
+
+    async store_image (root) {
+    
+        let fn = root + this.path
+        
         return new Promise ((resolve, reject) => {
-        
-            let fn = `${path}/${this.uuid}.${this.ext}`
-        
-            fs.writeFile (fn, Buffer.from (this.img, 'base64'), (err) => {
+
+            fs.writeFile (root + this.path, Buffer.from (this.img, 'base64'), (err) => {
                 
                 if (err) return reject (err)
                 
-                resolve (fn)
+                darn ('wrote ' + fn)
                 
+                resolve (fn)
+
             })
         
         })
@@ -57,6 +68,7 @@ class Note {
         if (this.img) {
             this.is_illustrated = 1
             this.ext = this.ext || 'png'
+            this.assert_path (path)
             wishes.push (this.store_image (path))
         }
         
@@ -98,12 +110,12 @@ module.exports = {
   do_create: //
 ///////////////
 
-    async function () {        
+    async function () {
     
-        let note = new Note (this.q.data)        
-        
-        note.id_user_to = this.user.id
-        
+        this.q.data.id_user_to = this.user.id
+
+        let note = new Note (this.q.data)
+                
         note.id_task = await this.db.insert ('tasks', {
             fake: 0,
             id_user: this.user.id,

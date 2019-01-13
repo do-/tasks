@@ -47,5 +47,13 @@ module.exports = {
         `,
 
     },
+    
+    on_after_add_column: {
+    
+        path: [
+            {sql: "UPDATE task_notes SET path = TO_CHAR(ts, 'YYYY/MM/DD/') || uuid || '.' || COALESCE (ext, 'png') WHERE is_illustrated = 1", params: []}
+        ],
+    
+    }
 
 }

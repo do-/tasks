@@ -12,7 +12,7 @@ module.exports = {
             {task_notes: {id: this.q.id}},
             'users(label, mail) ON id_user_to',
         ])
-darn (data)
+
         let msg = {
             to: {
                 name:    data ['users.label'],
@@ -23,8 +23,8 @@ darn (data)
             `
         }
         
-        if (data.ext) msg.attachments = [{path: `${this.conf.pics}/${data.ts.toJSON().substr(0,10).replace(/-/g, '/')}/${data.uuid}.${data.ext}`}]
-darn (msg)
+        if (data.ext) msg.attachments = [{path: `${this.conf.pics}${data.path}`}]
+
         this.mail.sendMail (msg, darn)
 
     },
