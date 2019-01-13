@@ -20,6 +20,7 @@ module.exports = {
 
         is_illustrated     : 'int=0 // Есть ли картинка', 
         ext                : "text // Расширение файла",
+        path               : "text // Путь к файлу",
 
     },
 

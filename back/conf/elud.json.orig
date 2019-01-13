@@ -13,8 +13,9 @@
 		
 	"mail": {
 
+		"pool": true,
+		"port": 25,
 		"host": "127.0.0.1",
-		"options": {"Debug": 1},
 		"from": {
 			"address": "foo@bar.ru",
 			"label": "tasks"
@@ -36,6 +37,8 @@
 		"allow_test_admin": 1,
 		"sessions": {"timeout": 30},
 		"salt_file" : "/etc/tasks.salt"		
-	}
+	},
+	
+	"pics": "/var/projects/tasks/front/root/_pics"
 
 }

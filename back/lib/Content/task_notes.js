@@ -7,19 +7,7 @@ module.exports = {
 ////////////
 
     async function () {
-    
-        let conf = this.conf.mail
-
-        if (!conf.port) {
-            conf.port = 25
-            conf.secure = false
-        }
-        
-        let from = conf.from
-        from.name = from.label
-
-        let transporter = nodemailer.createTransport (conf, {from})
-        
+            
         let data = await this.db.get ([
             {task_notes: {id: this.q.id}},
             'users(label, mail) ON id_user_to',
@@ -37,7 +25,7 @@ darn (data)
         
         if (data.ext) msg.attachments = [{path: `${this.conf.pics}/${data.ts.toJSON().substr(0,10).replace(/-/g, '/')}/${data.uuid}.${data.ext}`}]
 darn (msg)
-        transporter.sendMail (msg, darn)                
+        this.mail.sendMail (msg, darn)
 
     },
 
