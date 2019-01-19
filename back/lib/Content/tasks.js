@@ -78,11 +78,11 @@ class Note {
 
     }
     
-    async store_and_get_id (db, path) {
+    async store_and_get_id (db, path, uri) {
 
         let [id] = await this.store (db, path)
 
-        $_Q.publish ('task_notes', 'notify', {id})
+        $_Q.publish ('task_notes', 'notify', {id, uri})
 
         return id
 
@@ -102,7 +102,7 @@ module.exports = {
         
         await note.fetch_id_task (this.db, this.q.id)
         
-        return note.store_and_get_id (this.db, this.conf.pics)
+        return note.store_and_get_id (this.db, this.conf.pics, this.uri)
 
     },
     
@@ -122,7 +122,7 @@ module.exports = {
             label: this.q.data.label,
         })
         
-        let id_task_note = note.store_and_get_id (this.db, this.conf.pics)
+        let id_task_note = note.store_and_get_id (this.db, this.conf.pics, this.uri)
         
         await this.db.insert ('task_users', [0, 1].map ((i) => {return {
             fake       : 0,
@@ -150,7 +150,7 @@ module.exports = {
         return Promise.all ([        
             this.db.do ('UPDATE task_users SET id_user = ?    WHERE id_task = ? AND is_author = 0', [note.id_user_to, note.id_task]),
             this.db.do ('UPDATE task_notes SET id_user_to = ? WHERE id_task = ?', [note.id_user_to, note.id_task]),
-            note.store_and_get_id (this.db, this.conf.pics)
+            note.store_and_get_id (this.db, this.conf.pics, this.uri)
         ])
 
     },

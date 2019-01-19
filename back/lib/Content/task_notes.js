@@ -7,7 +7,7 @@ module.exports = {
 ////////////
 
     async function () {
-            
+
         let data = await this.db.get ([
             {task_notes: {id: this.q.id}},
             'users(label, mail) ON id_user_to',
@@ -19,8 +19,11 @@ module.exports = {
                 address: data ['users.mail'],
             },
             text: `${data.label}
-            ${data.body}
-            `
+
+${data.body}
+            
+${this.q.uri}`
+
         }
         
         if (data.ext) msg.attachments = [{path: `${this.conf.pics}${data.path}`}]

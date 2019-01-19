@@ -8,6 +8,14 @@ module.exports = class extends Dia.HTTP.Handler {
         if (m != 'POST') throw '405 No ' + m + 's please'
     }
     
+    check_params () {
+        super.check ()
+        let h = this.http.request.headers
+        let q = this.q
+        this.uri = `${h.scheme}://${h.host}/${q.type}/`
+        if (q.id) this.uri += q.id
+    }
+
     get_session () {
 
         return new class extends this.CookieSession {
