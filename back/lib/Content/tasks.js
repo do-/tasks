@@ -80,13 +80,11 @@ class Note {
 
 }
 
-async function store_and_get_id (note) {
+async function store_and_notify (note, action) {
 
     let [id] = await note.store (this.db, this.conf.pics)
 
-    $_Q.publish ('task_notes', 'notify', {id, uri: this.uri})
-
-    return id
+    if (action) $_Q.publish ('task_notes', action, {id, uri: this.uri})
 
 }
 
@@ -102,7 +100,9 @@ module.exports = {
         
         await note.fetch_id_task (this.db, this.q.id)
         
-        return store_and_get_id.call (this, note)
+        let u = note.id_user_to
+
+        store_and_notify.call (this, note, !u && u == this.user.id ? null : 'notify')
 
     },
     
@@ -122,7 +122,7 @@ module.exports = {
             label: this.q.data.label,
         })
         
-        let id_task_note = store_and_get_id.call (this, note)
+        let [id_task_note] = await note.store (this.db, this.conf.pics)
         
         await this.db.insert ('task_users', [0, 1].map ((i) => {return {
             fake       : 0,
@@ -150,7 +150,7 @@ module.exports = {
         return Promise.all ([        
             this.db.do ('UPDATE task_users SET id_user = ?    WHERE id_task = ? AND is_author = 0', [note.id_user_to, note.id_task]),
             this.db.do ('UPDATE task_notes SET id_user_to = ? WHERE id_task = ?', [note.id_user_to, note.id_task]),
-            store_and_get_id.call (this, note)
+            store_and_notify.call (this, note, 'notify_assign')
         ])
 
     },

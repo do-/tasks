@@ -14,19 +14,60 @@ module.exports = {
         ])
 
         let msg = {
+        
             to: {
                 name:    data ['users.label'],
                 address: data ['users.mail'],
             },
-            text: `${data.label}
-
-${data.body}
-            
-${this.q.uri}`
+        
+            subject: data.label,
+        
+            text: `${data.body}\n\n${this.q.uri}`
 
         }
         
         if (data.ext) msg.attachments = [{path: `${this.conf.pics}${data.path}`}]
+
+        this.mail.sendMail (msg, darn)
+
+    },
+
+///////////////////
+  notify_assign: //
+///////////////////
+
+    async function () {
+
+        let data = await this.db.get ([
+            {task_notes: {id: this.q.id}},
+            'users(label, mail) ON id_user_to',
+        ])
+
+        let msg = {        
+            to: {
+                name:    data ['users.label'],
+                address: data ['users.mail'],
+            },        
+            subject: data.label,        
+            text: '',            
+            attachments: [],
+        }
+
+        let notes = await this.db.select_all ('SELECT * FROM task_notes WHERE id_task = ? ORDER BY id', [data.id_task])
+
+        for (let note of notes) {
+
+            if (msg.subject) {
+                msg.text += `${note.label}\n${note.body}`
+            }
+            else {
+                msg.subject = note.label
+                msg.text += `\n${note.body}`
+            }
+
+            if (note.ext) msg.attachments.push ({path: `${this.conf.pics}${note.path}`})
+
+        }
 
         this.mail.sendMail (msg, darn)
 
