@@ -1,5 +1,6 @@
-const fs = require ('fs')
+const fs         = require ('fs')
 const nodemailer = require ('nodemailer')
+const Dia        = require ('./Ext/Dia/Dia.js')
 
 module.exports = class {
 
@@ -11,6 +12,7 @@ module.exports = class {
         
         this.check_pics () 
         this.setup_mail () 
+        this.setup_db   () 
         
     }
     
@@ -32,6 +34,14 @@ module.exports = class {
         
         this.mail_pools = {mail: nodemailer.createTransport (mail, {from})}
     
+    }
+
+    setup_db () {
+    
+        let model = new (require ('./Model.js')) ({path: './Model'})
+
+        this.db_pools = {db: Dia.DB.Pool (this.db, model)}
+
     }
 
 }

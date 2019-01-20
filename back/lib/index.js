@@ -9,12 +9,9 @@ async function _ () {
     const conf = new (require ('./Config.js'))
     
     const mail_pools = conf.mail_pools
+    const db_pools   = conf.db_pools
 
-    const model    = new (require ('./Model.js')) ({path: './Model'})
-    const db       = Dia.DB.Pool (conf.db, model)
-    const db_pools = {db}
-
-    await db.update_model ()
+    await conf.db_pools.db.update_model ()
 
     global.$_Q = {
 
