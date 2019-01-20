@@ -10,10 +10,13 @@ module.exports = class {
 
         for (let k in conf) this [k] = conf [k]
         
-        this.check_pics () 
-        this.setup_mail () 
-        this.setup_db   () 
+        this.check_pics ()
         
+        this.pools = {
+            mail: this.setup_mail (),
+            db  : this.setup_db (),
+        }
+
     }
     
     check_pics () {
@@ -32,7 +35,7 @@ module.exports = class {
         
         from.name = from.label
         
-        this.mail_pools = {mail: nodemailer.createTransport (mail, {from})}
+        return nodemailer.createTransport (mail, {from})
     
     }
 
@@ -40,7 +43,7 @@ module.exports = class {
     
         let model = new (require ('./Model.js')) ({path: './Model'})
 
-        this.db_pools = {db: Dia.DB.Pool (this.db, model)}
+        return Dia.DB.Pool (this.db, model)
 
     }
 

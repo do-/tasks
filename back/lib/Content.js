@@ -1,6 +1,6 @@
 const Dia = require ('./Ext/Dia/Dia.js')
 
-module.exports = class extends Dia.HTTP.Handler {
+let HTTP_handler = class extends Dia.HTTP.Handler {
 
     check () {
         super.check ()
@@ -131,3 +131,14 @@ module.exports = class extends Dia.HTTP.Handler {
     }
 
 }
+
+module.exports.http_listener = function (conf) {
+
+    return (request, response) => {new HTTP_handler ({
+        conf, 
+        pools: {db: conf.pools.db}, 
+        http: {request, response}}
+    ).run ()}
+
+}
+
