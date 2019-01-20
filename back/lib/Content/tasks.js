@@ -83,8 +83,9 @@ class Note {
 async function store_and_notify (note, action) {
 
     let [id] = await note.store (this.db, this.conf.pics)
-
-    if (action) $_Q.publish ('task_notes', action, {id, uri: this.uri})
+darn (action)
+darn (this.queue)
+    if (action) this.queue.publish ('task_notes', action, {id, uri: this.uri})
 
 }
 

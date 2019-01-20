@@ -134,9 +134,12 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
 
 function http_listener (conf) {
 
-    return (request, response) => {new HTTP_handler ({
+    (request, response) => {new HTTP_handler ({
         conf, 
-        pools: {db: conf.pools.db}, 
+        pools: {
+            db: conf.pools.db,
+            queue: conf.pools.queue,
+        }, 
         http: {request, response}}
     ).run ()}
 
@@ -145,8 +148,31 @@ function http_listener (conf) {
 module.exports.create_http_server = function (conf) {
 
     require ('http')
-        .createServer (http_listener (conf))
-        .listen       (conf.listen, () => darn ('tasks app is listening to HTTP at ' + this._connectionKey))
+    
+        .createServer (
+        
+            (request, response) => {new HTTP_handler ({
+            
+                conf, 
+                
+                pools: {
+                    db: conf.pools.db,
+                    queue: conf.pools.queue,
+                }, 
+                
+                http: {request, response}}
+                
+            ).run ()}
+
+        )
+        
+        .listen (
+        
+            conf.listen, 
+            
+            () => darn ('tasks app is listening to HTTP at ' + this._connectionKey)
+        
+        )
 
 }
 
@@ -155,10 +181,13 @@ module.exports.create_queue = function (conf) {
     return {
     
         publish: (module_name, method_name, q) => {
-            
+        
             let h = new Dia.Handler ({
                 conf, 
-                pools: conf.pools, 
+                pools: {
+                    db: conf.pools.db,
+                    mail: conf.pools.mail,
+                }, 
                 module_name, 
                 method_name, 
                 q
