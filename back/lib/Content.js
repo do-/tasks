@@ -132,7 +132,7 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
 
 }
 
-module.exports.http_listener = function (conf) {
+function http_listener (conf) {
 
     return (request, response) => {new HTTP_handler ({
         conf, 
@@ -142,3 +142,32 @@ module.exports.http_listener = function (conf) {
 
 }
 
+module.exports.create_http_server = function (conf) {
+
+    require ('http')
+        .createServer (http_listener (conf))
+        .listen       (conf.listen, () => darn ('tasks app is listening to HTTP at ' + this._connectionKey))
+
+}
+
+module.exports.create_queue = function (conf) {
+
+    return {
+    
+        publish: (module_name, method_name, q) => {
+            
+            let h = new Dia.Handler ({
+                conf, 
+                pools: conf.pools, 
+                module_name, 
+                method_name, 
+                q
+            })
+
+            setImmediate (() => h.run ())
+
+        }
+
+    }
+
+}
