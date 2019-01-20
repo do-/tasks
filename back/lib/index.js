@@ -1,4 +1,3 @@
-const fs         = require ('fs')
 const http       = require ('http')
 const nodemailer = require ('nodemailer')
 const Dia        = require ('./Ext/Dia/Dia.js')
@@ -8,9 +7,7 @@ _ ()
 
 async function _ () {
 
-    const conf = JSON.parse (fs.readFileSync ('../conf/elud.json', 'utf8'))
-    if (!conf.pics) throw 'conf.pics is not defined'
-    if (!fs.statSync (conf.pics).isDirectory ()) throw conf.pics + 'is not a direcory'
+    const conf = new (require ('./Config.js'))
 
     const model    = new (require ('./Model.js')) ({path: './Model'})
     const db       = Dia.DB.Pool (conf.db, model)
