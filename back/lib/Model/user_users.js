@@ -9,7 +9,8 @@ module.exports = {
     },
 
     keys : {
-        id_user    : 'id_user,id_user_ref!',
+//        id_user    : 'id_user,id_user_ref!',
+        id_user    : 'id_user,id_user_ref',
     },
 
 }
