@@ -1,5 +1,4 @@
 const http       = require ('http')
-const nodemailer = require ('nodemailer')
 const Dia        = require ('./Ext/Dia/Dia.js')
 const Content    = require ('./Content.js')
 
@@ -8,16 +7,14 @@ _ ()
 async function _ () {
 
     const conf = new (require ('./Config.js'))
+    
+    const mail_pools = conf.mail_pools
 
     const model    = new (require ('./Model.js')) ({path: './Model'})
     const db       = Dia.DB.Pool (conf.db, model)
     const db_pools = {db}
 
     await db.update_model ()
-
-    let from = conf.mail.from
-    from.name = from.label
-    let mail_pools = {mail: nodemailer.createTransport (conf.mail, {from})}
 
     global.$_Q = {
 
