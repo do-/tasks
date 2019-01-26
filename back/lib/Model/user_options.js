@@ -9,8 +9,7 @@ module.exports = {
     },
 
     keys : {
-//        id_user    : 'id_user,id_voc_user_option!',
-        id_user    : 'id_user,id_voc_user_option',
+        id_user    : 'UNIQUE (id_user,id_voc_user_option) WHERE fake = 0',
     },
 
 }
