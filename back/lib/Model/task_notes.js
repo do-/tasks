@@ -9,7 +9,7 @@ module.exports = {
         uuid               : 'uuid=uuid_generate_v4()',
 
         id_task            : "(tasks) // Дело",
-        ts                 : 'timestamp=current_timestamp() // Дата/время',
+        ts                 : 'timestamp=now() // Дата/время',
 
         id_user_from       : "(users)=current_setting('tasks.id_user')::int // Автор",
         id_user_to         : "(users) // Адресат",
@@ -25,7 +25,7 @@ module.exports = {
 
     keys : {
         uuid    : 'uuid',
-        id_task : 'id_task,id',
+        id_task : 'id_task,ts',
         id_user : 'id_user_from,ts',
     },
 

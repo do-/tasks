@@ -8,7 +8,7 @@ module.exports = {
 
         label              : "text // Тема", 
 
-        ts                 : "timestamp=current_timestamp() // Когда оформлено",
+        ts                 : "timestamp=now() // Когда оформлено",
 
         id_last_task_note  : "(task_notes) // Последняя реплика",
 
