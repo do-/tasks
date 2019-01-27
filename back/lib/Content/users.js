@@ -196,18 +196,17 @@ module.exports = {
         if (!/^[A-Za-z0-9_\.]+$/.test (data.login)) throw '#login#: Недопустимый login'
         
         let uuid = this.q.id
-        
-        if (await this.db.get ([{'users(uuid)': {
-            login     : data.login,
-            fake      : 0,
-            'uuid <>' : uuid
-        }}])) throw '#login#: Этот login уже занят'
-        
+
         let d = {uuid}
 
         for (let k of ['login', 'label', 'mail']) d [k] = data [k]
-
-        return this.db.update ('users', d, ['uuid'])
+        
+        try {
+            await this.db.update ('users', d, ['uuid'])
+        }
+        catch (x) {
+            throw x.constraint == 'ix_users_login' ? '#login#: Этот login уже занят' : x
+        }
 
     },
 
