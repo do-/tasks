@@ -5,8 +5,13 @@ _ ()
 async function _ () {
 
     let conf = new (require ('./Config.js'))
-
-    migrate (conf.pools.db)
+    
+    try {
+        await migrate (conf.pools.db)
+    }
+    catch (x) {
+        return darn (['DB MIGRATION FAILED', x])
+    }
 
     conf.pools.queue = Content.create_queue (conf)
 
@@ -17,25 +22,6 @@ async function _ () {
 async function migrate (db) {
 
     await db.load_schema ()
-/*
-    let tables = db.model.tables
-    let is_old = tables.users.existing.pk == 'id'
-
-    let to_uuid = ['users']
-    
-    if (is_old) for (let tn of to_uuid) {
-        let d = clone (tables [tn])
-        d.name += '_'
-        d.pk = 'uuid'
-        delete d.columns.id
-        delete d.existing
-        tables [d.name] = d
-    }
-*/
-    let patch = db.gen_sql_patch ()
-
-//    if (is_old) for (let tn of to_uuid) patch.unshift ({sql: `DROP TABLE IF EXISTS ${tn}_`, params: []})
-
-    await db.run (patch)
+    await db.update_model ()
 
 }
