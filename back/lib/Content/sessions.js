@@ -15,7 +15,7 @@ module.exports = {
             if (user.password != await this.session.password_hash (user.salt, this.q.password)) return {}
         }
         else if (this.conf.auth.allow_test_admin && this.q.data.login == 'test' && this.q.password == 'test') {
-            user = await this.db.get ([{users: {id : -1}}, 'roles(name)'])
+            user = await this.db.get ([{users: {uuid: '00000000-0000-0000-0000-000000000000'}}, 'roles(name)'])
         }
         else {
             return {}

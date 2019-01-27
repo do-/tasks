@@ -23,7 +23,7 @@ module.exports = {
         }
     
         let filter = this.w2ui_filter ()
-        filter ['id >'] = 0
+        filter ['uuid <>'] = '00000000-0000-0000-0000-000000000000'
 
         return this.db.add_all_cnt ({}, [{users: filter}, 'roles AS role'])
 
