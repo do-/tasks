@@ -72,7 +72,7 @@ define ([], function () {
         $('body').data ('data', data)
 
         data._can = {
-            comment: data.id_user > 0 && data.users [$_USER.id],
+            comment: data.id_user && data.users [$_USER.id],
         }
 
         data._can.close = data._can.comment && data.author.id == $_USER.id
