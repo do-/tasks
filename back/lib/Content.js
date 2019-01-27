@@ -24,10 +24,10 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
             
                 super.start ()
                 
-                await this.h.db.do ("DELETE FROM sessions WHERE id_user = ?", [this.user.id])
+                await this.h.db.do ("DELETE FROM sessions WHERE id_user = ?", [this.user.uuid])
 
                 return this.h.db.insert ('sessions', {
-                    id_user       : this.user.id,
+                    id_user       : this.user.uuid,
                     ts            : new Date (),
                     client_cookie : this.id,                    
                 })
@@ -115,7 +115,7 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
     async get_user () {
         let user = await super.get_user ()
         if (!this.is_transactional () || !user) return user
-        await this.db.do ("SELECT set_config ('tasks.id_user', ?, true)", [user.id])
+        await this.db.do ("SELECT set_config ('tasks.id_user', ?, true)", [user.uuid])
         return user
     }
     

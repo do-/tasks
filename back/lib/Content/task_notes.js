@@ -9,7 +9,7 @@ module.exports = {
     async function () {
 
         let data = await this.db.get ([
-            {task_notes: {id: this.q.id}},
+            {task_notes: {uuid: this.q.id}},
             'users(label, mail) ON id_user_to',
         ])
 
@@ -39,7 +39,7 @@ module.exports = {
     async function () {
 
         let data = await this.db.get ([
-            {task_notes: {id: this.q.id}},
+            {task_notes: {uuid: this.q.id}},
             'users(label, mail) ON id_user_to',
         ])
 
@@ -80,7 +80,7 @@ module.exports = {
     function () {
 
         return this.db.add_vocabularies ({}, {
-            users: {filter: 'id > 0'}
+            users: {filter: 'login IS NOT NULL'}
         })
 
     },
@@ -117,7 +117,7 @@ module.exports = {
         
         }
 
-        this.q.sort = [{field: "id", direction: "desc"}];
+        this.q.sort = [{field: "ts", direction: "desc"}];
 
         let filter = this.w2ui_filter ()
         

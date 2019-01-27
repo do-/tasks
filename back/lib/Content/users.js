@@ -59,7 +59,7 @@ module.exports = {
             
             {'user_options(is_on)': {
                 fake: 0,
-                id_user: user.id,
+                id_user: user.uuid,
             }}
 
         ])
@@ -76,7 +76,7 @@ module.exports = {
 
         let d = {
             fake: 0,
-            id_user: await this.db.get ({'users(id)': {uuid: this.q.id}})
+            id_user: this.q.id
         }
         
         for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.q.data [k]
@@ -134,12 +134,12 @@ module.exports = {
         
         return this.db.add ({}, [
             {users: {
-                'id > ': 0,
-                'id <> ': this.user.id,                
+                'login <>': null,
+                'id <> ': this.user.uuid,
             }},
             {'user_users AS user_user ON user_user.id_user_ref = users.id': {
                 is_on: 1,
-                id_user: this.user.id,
+                id_user: this.user.uuid,
             }}
         ])
 
@@ -151,12 +151,12 @@ module.exports = {
 
     async function () {
         
-        await this.db.do ('UPDATE user_users SET is_on = 0 WHERE id_user = ?', [this.user.id])
+        await this.db.do ('UPDATE user_users SET is_on = 0 WHERE id_user = ?', [this.user.uuid])
 
         await this.db.upsert ('user_users', this.q.data.ids.map ((i) => {return {
             fake               : 0,
             is_on              : 1,
-            id_user            : this.user.id,
+            id_user            : this.user.uuid,
             id_user_ref        : i,            
         }}), ['id_user', 'id_user_ref'])
 
@@ -179,7 +179,7 @@ module.exports = {
         let salt     = await this.session.password_hash (Math.random (), new Date ().toJSON ())
         let password = await this.session.password_hash (salt, this.q.p1)
 
-        return this.db.update ('users', {uuid, salt, password}, ['uuid'])
+        return this.db.update ('users', {uuid, salt, password})
 
     },
 
@@ -202,7 +202,7 @@ module.exports = {
         for (let k of ['login', 'label', 'mail']) d [k] = data [k]
         
         try {
-            await this.db.update ('users', d, ['uuid'])
+            await this.db.update ('users', d)
         }
         catch (x) {
             throw x.constraint == 'ix_users_login' ? '#login#: Этот login уже занят' : x

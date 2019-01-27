@@ -11,7 +11,7 @@ module.exports = {
         id_task            : "(tasks) // Дело",
         ts                 : 'timestamp=now() // Дата/время',
 
-        id_user_from       : "(users)=current_setting('tasks.id_user')::int // Автор",
+        id_user_from       : "(users)=current_setting('tasks.id_user')::uuid // Автор",
         id_user_to         : "(users) // Адресат",
 
         label              : "text // Заголовок",

@@ -31,7 +31,7 @@ module.exports = {
             {'user_options()': {
                 fake: 0,
                 is_on: 1,
-                id_user: user.id
+                id_user: user.uuid
             }},
 
             'voc_user_options(name)'

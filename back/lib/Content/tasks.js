@@ -22,7 +22,7 @@ class Note {
     }
     
     async fetch_id_task (db, uuid) {
-        this.id_task = await db.get ([{'tasks(id)': {uuid}}])
+        this.id_task = await db.get ([{'tasks(uuid)': {uuid}}])
     }
 
     assert_path (root) {
@@ -83,8 +83,7 @@ class Note {
 async function store_and_notify (note, action) {
 
     let [id] = await note.store (this.db, this.conf.pics)
-darn (action)
-darn (this.queue)
+
     if (action) this.queue.publish ('task_notes', action, {id, uri: this.uri})
 
 }
@@ -103,7 +102,7 @@ module.exports = {
         
         let u = note.id_user_to
 
-        store_and_notify.call (this, note, !u && u == this.user.id ? null : 'notify')
+        store_and_notify.call (this, note, !u && u == this.user.uuid ? null : 'notify')
 
     },
     
@@ -113,13 +112,13 @@ module.exports = {
 
     async function () {
     
-        this.q.data.id_user_to = this.user.id
+        this.q.data.id_user_to = this.user.uuid
 
         let note = new Note (this.q.data)
                 
         note.id_task = await this.db.insert ('tasks', {
             fake: 0,
-            id_user: this.user.id,
+            id_user: this.user.uuid,
             label: this.q.data.label,
         })
         
@@ -128,11 +127,11 @@ module.exports = {
         await this.db.insert ('task_users', [0, 1].map ((i) => {return {
             fake       : 0,
             id_task    : note.id_task,
-            id_user    : this.user.id,
+            id_user    : this.user.uuid,
             is_author  : i,
         }}))
         
-        return this.db.get ([{tasks: {id: note.id_task}}])
+        return this.db.get ([{tasks: {uuid: note.id_task}}])
             
     },    
     
@@ -162,7 +161,7 @@ module.exports = {
 
     function () {
     
-        this.q.sort = [{field: "id", direction: "asc"}]
+        this.q.sort = [{field: "ts", direction: "asc"}]
         
         let x = {}
         
@@ -195,10 +194,10 @@ module.exports = {
         
         if (x.status != undefined) filter ['id_user ' + (x.status ? '<>' : '=')] = null
 
-        if (x.note != undefined) filter.id = this.db.query ([{'task_notes(id_task)': {'label ILIKE %?% OR body ILIKE %?%': [x.note, x.note]}}]) 
+        if (x.note != undefined) filter.uuid = this.db.query ([{'task_notes(id_task)': {'label ILIKE %?% OR body ILIKE %?%': [x.note, x.note]}}]) 
 
-        if (x.id_other_user) filter ['id IN'] = this.db.query ([{'task_users(id_task)': {
-            id_user   : x.id_other_user.map ((i) => i.id),
+        if (x.id_other_user) filter ['uuid IN'] = this.db.query ([{'task_users(id_task)': {
+            id_user   : x.id_other_user.map ((i) => i.uuid),
             is_author : x.is_author,
         }}])
 
@@ -216,7 +215,7 @@ module.exports = {
     function () {
 
         return this.db.add_vocabularies ({}, {
-            users: {filter: 'id > 0'}
+            users: {filter: 'login IS NOT NULL'}
         })
 
     },
@@ -231,7 +230,7 @@ module.exports = {
 
         data.users = Object.values (await this.db.fold ([{task_users: {id_task: data.id}}, '$users'], (i, idx) => {
 
-            let user = {id: i ['users.id'], label: i ['users.label']}
+            let user = {id: i ['users.uuid'], label: i ['users.label']}
 
             data [i.is_author ? 'author' : 'executor'] = user
 
@@ -251,11 +250,11 @@ module.exports = {
         data.peers = await this.db.list ([
 
             {users: {
-                'id >'  : 0,
-                'id <>' : this.user.id,
+                'uuid >'  : 0,
+                'uuid <>' : this.user.uuid,
             }},
-            {'$user_users ON user_users.id_user_ref = users.id' : {
-                id_user : this.user.id,
+            {'$user_users ON user_users.id_user_ref = users.uuid' : {
+                id_user : this.user.uuid,
                 is_on   : 1,
             }}
 
