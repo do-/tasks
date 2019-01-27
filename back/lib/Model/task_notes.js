@@ -36,10 +36,10 @@ module.exports = {
             UPDATE 
                 tasks 
             SET 
-                id_last_task_note = NEW.id,
+                id_last_task_note = NEW.uuid,
                 id_user = NEW.id_user_to
             WHERE 
-                id = NEW.id_task;
+                uuid = NEW.id_task;
 
             RETURN NEW;
 
