@@ -4,7 +4,6 @@ module.exports = {
 
     columns : {
 
-        id                 : "int",
         fake               : "int",
 
         uuid               : 'uuid=uuid_generate_v4()',

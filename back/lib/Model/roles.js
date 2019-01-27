@@ -3,6 +3,7 @@ module.exports = {
     label: 'Роли',
 
     columns: {
+        id       : 'int',
         name     : 'string // Символическое имя',
         label    : 'string // Наименование',
     },

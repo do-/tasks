@@ -12,14 +12,12 @@ module.exports = {
         salt     : 'string // "Соль" пароля',
     },
     
-    pk: 'uuid',
-
     keys : {
         login    : 'UNIQUE (login)',
     },
 
-    data : [
-        {uuid: '00000000-0000-0000-0000-000000000000', id_role: 1},
-    ]
+//    data : [
+//        {uuid: '00000000-0000-0000-0000-000000000000', id_role: 1},
+//    ]
 
 }
