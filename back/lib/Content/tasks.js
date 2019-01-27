@@ -228,7 +228,7 @@ module.exports = {
 
         let data = await this.db.get ([{tasks: {uuid: this.q.id}}])
 
-        data.users = Object.values (await this.db.fold ([{task_users: {id_task: data.id}}, '$users'], (i, idx) => {
+        data.users = Object.values (await this.db.fold ([{task_users: {id_task: data.uuid}}, '$users'], (i, idx) => {
 
             let user = {id: i ['users.uuid'], label: i ['users.label']}
 
@@ -241,7 +241,7 @@ module.exports = {
         await this.db.add (data, {
         
             task_notes: {
-                id_task: data.id,
+                id_task: data.uuid,
                 ORDER:   'ts',
             }
             
