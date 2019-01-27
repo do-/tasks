@@ -191,13 +191,13 @@ module.exports = {
         }
         
         let filter = this.w2ui_filter ()
-        
+
         if (x.status != undefined) filter ['id_user ' + (x.status ? '<>' : '=')] = null
 
         if (x.note != undefined) filter.uuid = this.db.query ([{'task_notes(id_task)': {'label ILIKE %?% OR body ILIKE %?%': [x.note, x.note]}}]) 
 
         if (x.id_other_user) filter ['uuid IN'] = this.db.query ([{'task_users(id_task)': {
-            id_user   : x.id_other_user.map ((i) => i.uuid),
+            id_user   : x.id_other_user.map ((i) => i.id),
             is_author : x.is_author,
         }}])
 
@@ -242,7 +242,7 @@ module.exports = {
         
             task_notes: {
                 id_task: data.id,
-                ORDER:   'id',
+                ORDER:   'ts',
             }
             
         })
@@ -250,7 +250,7 @@ module.exports = {
         data.peers = await this.db.list ([
 
             {users: {
-                'uuid >'  : 0,
+                'login<>' : null,
                 'uuid <>' : this.user.uuid,
             }},
             {'$user_users ON user_users.id_user_ref = users.uuid' : {

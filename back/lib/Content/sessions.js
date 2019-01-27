@@ -24,6 +24,7 @@ module.exports = {
         await this.session.start ()
         
         user.role = user ['roles.name']
+        user.id = user.uuid
         
         user.opt = await this.db.fold ([
 
