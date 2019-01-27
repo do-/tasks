@@ -10,12 +10,7 @@ module.exports = {
 
     keys: {
         id_user         : 'id_user',
-        ts              : 'ts',
-        client_cookie   : 'client_cookie',
+        client_cookie   : 'UNIQUE (client_cookie)',
     },
-
-    data: [
-        {id : 1, fake : 0, id_user : -2},
-    ],
 
 }
