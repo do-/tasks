@@ -63,18 +63,17 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
                         client_cookie: this.id,
                         'ts >=':       ts,
                     }},
-                    'users (id, uuid, label)', 
+                    'users (uuid, label)', 
                     'roles (name)'
                 ])
 
-                if (!r.id) return this.restrict_access ()
+                if (!r.uuid) return this.restrict_access ()
                 
                 let elapsed_ms = (new Date () - new Date (r.ts))
                 let threshold_ms = 30000 * (this.o.timeout)
                 if (elapsed_ms > threshold_ms) this.keep_alive ()
 
                 return {
-                    id: r ['users.id'], 
                     uuid: r ['users.uuid'], 
                     label: r ['users.label'], 
                     role: r ['roles.name']

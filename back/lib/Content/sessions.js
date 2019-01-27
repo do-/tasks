@@ -8,10 +8,9 @@ module.exports = {
     
         let user = await this.db.get ([{users: {
             login: this.q.data.login,
-            fake : 0,
         }}, 'roles(name)'])
                 
-        if (user.id) {
+        if (user.uuid) {
             if (user.password != await this.session.password_hash (user.salt, this.q.password)) return {}
         }
         else if (this.conf.auth.allow_test_admin && this.q.data.login == 'test' && this.q.password == 'test') {
