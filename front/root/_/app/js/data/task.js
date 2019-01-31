@@ -17,8 +17,8 @@ define ([], function () {
     $_DO.assign_task = function (e) {
 
         var $b = $(e.target)
-        
-        if ($b.hasClass ('peer')) $_SESSION.set ('id_user_to', $b.data ('data').id)
+
+        if ($b.hasClass ('peer')) $_SESSION.set ('id_user_to', $b.data ('data').uuid)
     
         $_SESSION.set ('assign', 1)
     
@@ -38,7 +38,7 @@ define ([], function () {
 
             $.each (data.peers, function () {
 
-                this.peer_id = 'peer_' + this.id
+                this.peer_id = 'peer_' + this.uuid
 
                 var p = this.label.split (/\s+/)
                 this.nick = p.length == 1 ? ucfirst (p [0]) : ucfirst (p [1]) + ucfirst (p [0])

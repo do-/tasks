@@ -7,7 +7,7 @@ module.exports = {
 ////////////
 
     async function () {
-
+darn (this)
         let data = await this.db.get ([
             {task_notes: {uuid: this.q.id}},
             'users(label, mail) ON id_user_to',
@@ -53,7 +53,7 @@ module.exports = {
             attachments: [],
         }
 
-        let notes = await this.db.select_all ('SELECT * FROM task_notes WHERE id_task = ? ORDER BY id', [data.id_task])
+        let notes = await this.db.select_all ('SELECT * FROM task_notes WHERE id_task = ? ORDER BY ts', [data.id_task])
 
         for (let note of notes) {
 

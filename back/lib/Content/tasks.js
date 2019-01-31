@@ -3,9 +3,10 @@ const fs = require ('fs')
 
 class Note {
 
-    constructor (data) {
+    constructor (data, id_task) {
         
         this.fake = 0
+        this.id_task = id_task
 
         for (let k of ['id_user_to', 'body', 'img', 'ext']) this [k] = data [k]
         
@@ -21,10 +22,6 @@ class Note {
 
     }
     
-    async fetch_id_task (db, uuid) {
-        this.id_task = await db.get ([{'tasks(uuid)': {uuid}}])
-    }
-
     assert_path (root) {
 
         this.path = ''
@@ -82,9 +79,9 @@ class Note {
 
 async function store_and_notify (note, action) {
 
-    let [id] = await note.store (this.db, this.conf.pics)
+    await note.store (this.db, this.conf.pics)
 
-    if (action) this.queue.publish ('task_notes', action, {id, uri: this.uri})
+    if (action) this.queue.publish ('task_notes', action, {id: note.uuid, uri: this.uri})
 
 }
 
@@ -96,10 +93,8 @@ module.exports = {
 
     async function () {        
     
-        let note = new Note (this.q.data)
-        
-        await note.fetch_id_task (this.db, this.q.id)
-        
+        let note = new Note (this.q.data, this.q.id)
+                
         let u = note.id_user_to
 
         store_and_notify.call (this, note, !u && u == this.user.uuid ? null : 'notify')
@@ -140,13 +135,11 @@ module.exports = {
 ///////////////
 
     async function () {
-    
-        let note = new Note (this.q.data)        
-        
+
+        let note = new Note (this.q.data, this.q.id)        
+
         if (!note.id_user_to) throw '#id_user_to#:Не указан адресат'
-        
-        await note.fetch_id_task (this.db, this.q.id)
-        
+
         return Promise.all ([        
             this.db.do ('UPDATE task_users SET id_user = ?    WHERE id_task = ? AND is_author = 0', [note.id_user_to, note.id_task]),
             this.db.do ('UPDATE task_notes SET id_user_to = ? WHERE id_task = ?', [note.id_user_to, note.id_task]),

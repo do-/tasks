@@ -41,12 +41,12 @@ define ([], function () {
 
         if (data.record.is_assigning) {
         
-            query ({type: 'users', id: undefined}, {search: [{field: "id", operator: "not in", value: [{id: $_USER.id}]}], searchLogic: 'AND', limit: 100, offset: 0}, function (d) {
-            
-                add_vocabularies (d, {users: 1})
+            query ({type: 'users', id: undefined}, {search: [{field: "uuid", operator: "not in", value: [{id: $_USER.uuid}]}], searchLogic: 'AND', limit: 100, offset: 0}, function (d) {
+                            
+                data.users = d.users.map (function (i) {return {id: i.uuid, label: i.label}})
                 
-                data.users = d.users
-            
+                add_vocabularies (data, {users: 1})
+                            
                 done (data)
 
             })
@@ -54,7 +54,18 @@ define ([], function () {
         }
         else {
 
-            data.record.id_user_to = $_SESSION.delete ('close') ? "0" : parseInt (data.author.id) + parseInt (data.executor.id) - $_USER.id
+            if ($_SESSION.delete ('close')) {
+            
+                data.record.id_user_to = 0
+            
+            }
+            else {
+
+                data.record.id_user_to = data.executor.uuid
+
+                if (data.record.id_user_to == $_USER.uuid) data.record.id_user_to = data.author.uuid
+
+            }
 
             done (data)
 
