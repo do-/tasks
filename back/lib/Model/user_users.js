@@ -9,7 +9,7 @@ module.exports = {
     },
 
     keys : {
-        id_user    : 'UNIQUE (id_user,id_user_ref) WHERE fake = 0',
+        id_user    : 'UNIQUE (id_user,id_user_ref)',
     },
 
 }

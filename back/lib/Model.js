@@ -5,8 +5,6 @@ module.exports = class extends Dia.DB.Model {
     on_before_parse_table_columns (table) {
 
         let cols = table.columns
-
-        cols.fake = 'int'
         
         if (cols.id) {
             table.pk = 'id'

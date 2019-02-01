@@ -15,7 +15,7 @@ module.exports = {
     },
 
     data: [
-        {id: 1, is_own: 1, fake: 0, name: 'no_tabs', label: 'Не открывать новые вкладки при переходах'},
+        {id: 1, is_own: 1, name: 'no_tabs', label: 'Не открывать новые вкладки при переходах'},
     ],
 
 }

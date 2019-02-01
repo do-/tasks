@@ -4,8 +4,6 @@ module.exports = {
 
     columns : {
 
-        fake               : "int",
-
         uuid               : 'uuid=uuid_generate_v4()',
 
         id_task            : "(tasks) // Дело",

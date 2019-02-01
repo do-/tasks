@@ -29,7 +29,6 @@ module.exports = {
         user.opt = await this.db.fold ([
 
             {'user_options()': {
-                fake: 0,
                 is_on: 1,
                 id_user: user.uuid
             }},

@@ -58,7 +58,6 @@ module.exports = {
             {voc_user_options: filter},
             
             {'user_options(is_on)': {
-                fake: 0,
                 id_user: user.uuid,
             }}
 
@@ -75,7 +74,6 @@ module.exports = {
         if (this.user.role != 'admin') throw '#foo#:Доступ запрещён'
 
         let d = {
-            fake: 0,
             id_user: this.q.id
         }
         
@@ -96,7 +94,6 @@ module.exports = {
         if (!voc_user_option.is_own) throw '#foo#:Доступ запрещён'
 
         let d = {
-            fake: 0,
             id_user: this.user.id
         }
 
@@ -119,7 +116,6 @@ module.exports = {
         
         return this.db.add ({}, [{voc_user_options: filter},
             {'user_options(is_on)': {
-                fake: 0,
                 id_user: this.user.id,
             }}
         ])
@@ -154,7 +150,6 @@ module.exports = {
         await this.db.do ('UPDATE user_users SET is_on = 0 WHERE id_user = ?', [this.user.uuid])
 
         await this.db.upsert ('user_users', this.q.data.ids.map ((i) => {return {
-            fake               : 0,
             is_on              : 1,
             id_user            : this.user.uuid,
             id_user_ref        : i,            

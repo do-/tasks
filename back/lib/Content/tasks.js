@@ -5,7 +5,6 @@ class Note {
 
     constructor (data, id_task) {
         
-        this.fake = 0
         this.id_task = id_task
 
         for (let k of ['id_user_to', 'body', 'img', 'ext']) this [k] = data [k]
@@ -112,7 +111,6 @@ module.exports = {
         let note = new Note (this.q.data)
                 
         note.id_task = await this.db.insert ('tasks', {
-            fake: 0,
             id_user: this.user.uuid,
             label: this.q.data.label,
         })
@@ -120,7 +118,6 @@ module.exports = {
         let [id_task_note] = await note.store (this.db, this.conf.pics)
         
         await this.db.insert ('task_users', [0, 1].map ((i) => {return {
-            fake       : 0,
             id_task    : note.id_task,
             id_user    : this.user.uuid,
             is_author  : i,
