@@ -7,7 +7,7 @@ module.exports = {
 ////////////
 
     async function () {
-darn (this)
+
         let data = await this.db.get ([
             {task_notes: {uuid: this.q.id}},
             'users(label, mail) ON id_user_to',
@@ -48,7 +48,6 @@ darn (this)
                 name:    data ['users.label'],
                 address: data ['users.mail'],
             },        
-            subject: data.label,        
             text: '',            
             attachments: [],
         }
@@ -58,7 +57,7 @@ darn (this)
         for (let note of notes) {
 
             if (msg.subject) {
-                msg.text += `${note.label}\n${note.body}`
+                msg.text += `\n${note.label}\n${note.body}`
             }
             else {
                 msg.subject = note.label
