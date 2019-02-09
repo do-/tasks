@@ -3,7 +3,7 @@ define ([], function () {
     return function (data, view) {
 
         $(view).w2uppop ({}, function () {
-darn (data)
+
             var users = clone (data.users.items)
 
             if (!data.record.is_assigning) {

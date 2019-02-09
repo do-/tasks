@@ -61,9 +61,9 @@ define ([], function () {
             }
             else {
 
-                data.record.id_user_to = data.executor.uuid
+                data.record.id_user_to = data.executor.id
 
-                if (data.record.id_user_to == $_USER.uuid) data.record.id_user_to = data.author.uuid
+                if (data.record.id_user_to == $_USER.uuid) data.record.id_user_to = data.author.id
 
             }
 
