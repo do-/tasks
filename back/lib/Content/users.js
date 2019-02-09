@@ -2,10 +2,10 @@ const Dia = require ('../Ext/Dia/Dia.js')
 
 module.exports = {
 
-////////////
-  select: //
-////////////
+////////////////////////////////////////////////////////////////////////////////
 
+select_users: 
+    
     function () {
    
         this.rq.sort = this.rq.sort || [{field: "label", direction: "asc"}]
@@ -23,15 +23,16 @@ module.exports = {
         }
     
         let filter = this.w2ui_filter ()
+        
         filter ['uuid <>'] = '00000000-0000-0000-0000-000000000000'
 
         return this.db.add_all_cnt ({}, [{users: filter}, 'roles AS role'])
 
     },
 
-/////////
-  get: //
-/////////
+////////////////////////////////////////////////////////////////////////////////
+    
+get_item_of_users: 
 
     function () {
         
@@ -43,9 +44,9 @@ module.exports = {
 
     },
     
-/////////////////
-  get_options: //
-/////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+get_options_of_users: 
 
     async function () {
     
@@ -65,10 +66,10 @@ module.exports = {
 
     },
     
-///////////////////
-  do_set_option: //
-///////////////////
-    
+////////////////////////////////////////////////////////////////////////////////
+
+do_set_option_users: 
+
     async function () {
     
         if (this.user.role != 'admin') throw '#foo#:Доступ запрещён'
@@ -83,9 +84,9 @@ module.exports = {
         
     },
 
-///////////////////////
-  do_set_own_option: //
-///////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+do_set_own_option_users: 
 
     async function () {
 
@@ -103,9 +104,9 @@ module.exports = {
 
     },
     
-/////////////////////
-  get_own_options: //
-/////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+get_own_options_of_users: 
 
     async function () {
 
@@ -122,10 +123,10 @@ module.exports = {
 
     },
     
-///////////////
-  get_peers: //
-///////////////
+////////////////////////////////////////////////////////////////////////////////
 
+get_peers_of_users: 
+      
     async function () {
         
         return this.db.add ({}, [
@@ -141,10 +142,10 @@ module.exports = {
 
     },
     
-//////////////////
-  do_set_peers: //
-//////////////////
+////////////////////////////////////////////////////////////////////////////////
 
+do_set_peers_users:
+  
     async function () {
         
         await this.db.do ('UPDATE user_users SET is_on = 0 WHERE id_user = ?', [this.user.uuid])
@@ -157,10 +158,9 @@ module.exports = {
 
     },
         
-    
-/////////////////////
-  do_set_password: //
-/////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+do_set_password_users: 
 
     async function () {
 
@@ -178,9 +178,9 @@ module.exports = {
 
     },
 
-///////////////
-  do_update: //
-///////////////
+////////////////////////////////////////////////////////////////////////////////
+
+do_update_users: 
 
     async function () {
     
@@ -205,9 +205,9 @@ module.exports = {
 
     },
 
-///////////////
-  do_create: //
-///////////////
+////////////////////////////////////////////////////////////////////////////////
+
+do_create_users:
 
     async function () {
     

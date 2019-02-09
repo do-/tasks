@@ -120,9 +120,9 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
     
     get_method_name () {
         let rq = this.rq
-        if (rq.part)   return 'get_' + rq.part
-        if (rq.action) return 'do_'  + rq.action
-        return rq.id ? 'get': 'select'
+        if (rq.part)   return 'get_' + rq.part + '_of_' + rq.type
+        if (rq.action) return 'do_'  + rq.action + '_' + rq.type
+        return (rq.id ? 'get_item_of_' : 'select_') + rq.type
     }
     
     w2ui_filter () {
