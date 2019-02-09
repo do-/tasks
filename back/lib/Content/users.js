@@ -110,13 +110,13 @@ module.exports = {
     async function () {
 
         let filter = this.w2ui_filter ()
-
-        filter ['roles... LIKE'] = "% $_USER->{role}->{name} %"
+        delete filter.LIMIT
+        filter ['roles... LIKE'] = `% ${this.user.role} %`
         filter.is_own = 1
         
-        return this.db.add ({}, [{voc_user_options: filter},
+        return await this.db.add ({}, [{voc_user_options: filter},
             {'user_options(is_on)': {
-                id_user: this.user.id,
+                id_user: this.user.uuid,
             }}
         ])
 
@@ -131,9 +131,9 @@ module.exports = {
         return this.db.add ({}, [
             {users: {
                 'login <>': null,
-                'id <> ': this.user.uuid,
+                'uuid  <>': this.user.uuid,
             }},
-            {'user_users AS user_user ON user_user.id_user_ref = users.id': {
+            {'user_users AS user_user ON user_user.id_user_ref = users.uuid': {
                 is_on: 1,
                 id_user: this.user.uuid,
             }}

@@ -41,7 +41,7 @@ define ([], function () {
 
                         $.each (data.users, function () {
 
-                            if (this ['user_user.id']) grid.select (this.recid)
+                            if (this ['user_user.uuid']) grid.select (this.recid)
 
                         })
 

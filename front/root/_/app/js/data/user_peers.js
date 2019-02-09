@@ -8,7 +8,7 @@ define ([], function () {
 
     return function (done) {
     
-        query ({type: 'users', id: undefined, part: 'peers'}, {search: [{field: "id", operator: "not in", value: [{id: $_USER.id}]}], searchLogic: 'AND', limit: 100, offset: 0}, function (data) {
+        query ({type: 'users', id: undefined, part: 'peers'}, {}, function (data) {
 
             done ({users: dia2w2uiRecords (data.users)})
 
