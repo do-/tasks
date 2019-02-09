@@ -11,9 +11,9 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
     check_params () {
         super.check ()
         let h = this.http.request.headers
-        let q = this.q
-        this.uri = `${h.scheme}://${h.host}/${q.type}/`
-        if (q.id) this.uri += q.id
+        let rq = this.rq
+        this.uri = `${h.scheme}://${h.host}/${rq.type}/`
+        if (rq.id) this.uri += rq.id
     }
 
     get_session () {
@@ -40,8 +40,8 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
             }
             
             restrict_access () {
-                let q = this.h.q
-                if (q.type != 'sessions' && q.action != 'create') throw '401 Authenticate first'
+                let rq = this.h.rq
+                if (rq.type != 'sessions' && rq.action != 'create') throw '401 Authenticate first'
                 return undefined
             }
             
@@ -119,14 +119,14 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
     }
     
     get_method_name () {
-        let q = this.q
-        if (q.part)   return 'get_' + q.part
-        if (q.action) return 'do_'  + q.action
-        return q.id ? 'get': 'select'
+        let rq = this.rq
+        if (rq.part)   return 'get_' + rq.part
+        if (rq.action) return 'do_'  + rq.action
+        return rq.id ? 'get': 'select'
     }
     
     w2ui_filter () {
-        return new (require ('./Ext/DiaW2ui/Filter.js')) (this.q)
+        return new (require ('./Ext/DiaW2ui/Filter.js')) (this.rq)
     }
 
 }
@@ -179,7 +179,7 @@ module.exports.create_queue = function (conf) {
 
     return {
     
-        publish: (module_name, method_name, q) => {
+        publish: (module_name, method_name, rq) => {
         
             let h = new Dia.Handler ({
                 conf, 
@@ -189,7 +189,7 @@ module.exports.create_queue = function (conf) {
                 }, 
                 module_name, 
                 method_name, 
-                q
+                rq
             })
 
             setImmediate (() => h.run ())

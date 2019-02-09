@@ -8,13 +8,13 @@ module.exports = {
 
     function () {
    
-        this.q.sort = this.q.sort || [{field: "label", direction: "asc"}]
+        this.rq.sort = this.rq.sort || [{field: "label", direction: "asc"}]
 
-        if (this.q.searchLogic == 'OR') {
+        if (this.rq.searchLogic == 'OR') {
 
-            let q = this.q.search [0].value
+            let q = this.rq.search [0].value
 
-            this.q.search = [
+            this.rq.search = [
                 {field: 'label', operator: 'contains', value: q},
                 {field: 'login', operator: 'contains', value: q},
                 {field: 'mail',  operator: 'contains', value: q},
@@ -37,7 +37,7 @@ module.exports = {
         
         return this.db.get ([{users: 
 
-            {uuid: this.q.id},
+            {uuid: this.rq.id},
 
         }, 'roles AS role'])
 
@@ -49,7 +49,7 @@ module.exports = {
 
     async function () {
     
-        let user = await this.db.get ([{users: {uuid: this.q.id}}, 'roles'])
+        let user = await this.db.get ([{users: {uuid: this.rq.id}}, 'roles'])
         
         let filter = {'roles... LIKE': `% ${user['roles.name']} %`}
         
@@ -74,10 +74,10 @@ module.exports = {
         if (this.user.role != 'admin') throw '#foo#:Доступ запрещён'
 
         let d = {
-            id_user: this.q.id
+            id_user: this.rq.id
         }
         
-        for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.q.data [k]
+        for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.rq.data [k]
         
         return this.db.upsert ('user_options', d, ['id_user', 'id_voc_user_option'])
         
@@ -89,7 +89,7 @@ module.exports = {
 
     async function () {
 
-        let voc_user_option = this.db.get ([{voc_user_options: {id: this.q.data.id_voc_user_option}}]);
+        let voc_user_option = this.db.get ([{voc_user_options: {id: this.rq.data.id_voc_user_option}}]);
 
         if (!voc_user_option.is_own) throw '#foo#:Доступ запрещён'
 
@@ -97,7 +97,7 @@ module.exports = {
             id_user: this.user.id
         }
 
-        for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.q.data [k]
+        for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.rq.data [k]
 
         return this.db.upsert ('user_options', d, ['id_user', 'id_voc_user_option'])
 
@@ -149,7 +149,7 @@ module.exports = {
         
         await this.db.do ('UPDATE user_users SET is_on = 0 WHERE id_user = ?', [this.user.uuid])
 
-        await this.db.upsert ('user_users', this.q.data.ids.map ((i) => {return {
+        await this.db.upsert ('user_users', this.rq.data.ids.map ((i) => {return {
             is_on              : 1,
             id_user            : this.user.uuid,
             id_user_ref        : i,            
@@ -164,15 +164,15 @@ module.exports = {
 
     async function () {
 
-        if (this.q.p1 == undefined) throw '#p1#: Получено пустое значение пароля'
-        if (this.q.p1 != this.q.p2) throw '#p2#: Повторное значение пароля не сходится'
+        if (this.rq.p1 == undefined) throw '#p1#: Получено пустое значение пароля'
+        if (this.rq.p1 != this.rq.p2) throw '#p2#: Повторное значение пароля не сходится'
 
         let uuid = 
-                   this.user.role == 'admin' ? this.q.id : 
+                   this.user.role == 'admin' ? this.rq.id : 
                    this.user.uuid
 
         let salt     = await this.session.password_hash (Math.random (), new Date ().toJSON ())
-        let password = await this.session.password_hash (salt, this.q.p1)
+        let password = await this.session.password_hash (salt, this.rq.p1)
 
         return this.db.update ('users', {uuid, salt, password})
 
@@ -184,13 +184,13 @@ module.exports = {
 
     async function () {
     
-        let data = this.q.data
+        let data = this.rq.data
             
         if (!/^[А-ЯЁ][А-ЯЁа-яё\- ]+[а-яё]$/.test (data.label)) throw '#label#: Проверьте, пожалуйста, правильность заполнения ФИО'
 
         if (!/^[A-Za-z0-9_\.]+$/.test (data.login)) throw '#login#: Недопустимый login'
         
-        let uuid = this.q.id
+        let uuid = this.rq.id
 
         let d = {uuid}
 
@@ -211,7 +211,7 @@ module.exports = {
 
     async function () {
     
-        let data = this.q.data
+        let data = this.rq.data
             
         if (!data.id_role) throw '#id_role#: Не указана роль'
 

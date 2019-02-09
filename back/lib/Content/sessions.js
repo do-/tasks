@@ -7,13 +7,13 @@ module.exports = {
     async function () {
     
         let user = await this.db.get ([{users: {
-            login: this.q.data.login,
+            login: this.rq.data.login,
         }}, 'roles(name)'])
                 
         if (user.uuid) {
-            if (user.password != await this.session.password_hash (user.salt, this.q.password)) return {}
+            if (user.password != await this.session.password_hash (user.salt, this.rq.password)) return {}
         }
-        else if (this.conf.auth.allow_test_admin && this.q.data.login == 'test' && this.q.password == 'test') {
+        else if (this.conf.auth.allow_test_admin && this.rq.data.login == 'test' && this.rq.password == 'test') {
             user = await this.db.get ([{users: {uuid: '00000000-0000-0000-0000-000000000000'}}, 'roles(name)'])
         }
         else {

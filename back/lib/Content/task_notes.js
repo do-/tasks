@@ -9,7 +9,7 @@ module.exports = {
     async function () {
 
         let data = await this.db.get ([
-            {task_notes: {uuid: this.q.id}},
+            {task_notes: {uuid: this.rq.id}},
             'users(label, mail) ON id_user_to',
         ])
 
@@ -22,7 +22,7 @@ module.exports = {
         
             subject: data.label,
         
-            text: `${data.body}\n\n${this.q.uri}`
+            text: `${data.body}\n\n${this.rq.uri}`
 
         }
         
@@ -39,7 +39,7 @@ module.exports = {
     async function () {
 
         let data = await this.db.get ([
-            {task_notes: {uuid: this.q.id}},
+            {task_notes: {uuid: this.rq.id}},
             'users(label, mail) ON id_user_to',
         ])
 
@@ -93,30 +93,32 @@ module.exports = {
         let note
         let status
 
-        if (this.q.searchLogic == 'OR') {
+        if (this.rq.searchLogic == 'OR') {
         
-            note = this.q.search [0].value
-            this.q.search = []
+            note = this.rq.search [0].value
+            this.rq.search = []
             
         }
-        else if (this.q.searchLogic == 'AND') {
+        else if (this.rq.searchLogic == 'AND') {
         
             let r = []
 
-            for (let s of this.q.search) switch (s.field) {
+            for (let s of this.rq.search) switch (darn(s).field) {
                 case 'note':
                     note = s.value
+                    break
                 case 'status':
                     status = s.value
+                    break
                 default:
                     r.push (s)
             }
             
-            this.q.search = r
+            this.rq.search = r
         
         }
 
-        this.q.sort = [{field: "ts", direction: "desc"}];
+        this.rq.sort = [{field: "ts", direction: "desc"}];
 
         let filter = this.w2ui_filter ()
         

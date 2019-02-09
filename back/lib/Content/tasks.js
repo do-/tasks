@@ -92,7 +92,7 @@ module.exports = {
 
     async function () {        
     
-        let note = new Note (this.q.data, this.q.id)
+        let note = new Note (this.rq.data, this.rq.id)
                 
         let u = note.id_user_to
 
@@ -106,13 +106,13 @@ module.exports = {
 
     async function () {
     
-        this.q.data.id_user_to = this.user.uuid
+        this.rq.data.id_user_to = this.user.uuid
 
-        let note = new Note (this.q.data)
+        let note = new Note (this.rq.data)
                 
         note.id_task = await this.db.insert ('tasks', {
             id_user: this.user.uuid,
-            label: this.q.data.label,
+            label: this.rq.data.label,
         })
         
         let [id_task_note] = await note.store (this.db, this.conf.pics)
@@ -133,7 +133,7 @@ module.exports = {
 
     async function () {
 
-        let note = new Note (this.q.data, this.q.id)        
+        let note = new Note (this.rq.data, this.rq.id)        
 
         if (!note.id_user_to) throw '#id_user_to#:Не указан адресат'
 
@@ -151,19 +151,19 @@ module.exports = {
 
     function () {
     
-        this.q.sort = [{field: "ts", direction: "asc"}]
+        this.rq.sort = [{field: "ts", direction: "asc"}]
         
         let x = {}
         
-        if (this.q.searchLogic == 'OR') {
-            x.note = this.q.search [0].value
-            this.q.search = []
+        if (this.rq.searchLogic == 'OR') {
+            x.note = this.rq.search [0].value
+            this.rq.search = []
         }
-        else if (this.q.searchLogic == 'AND') {            
+        else if (this.rq.searchLogic == 'AND') {            
 
             let r = []
 
-            for (let s of this.q.search) switch (s.field) {
+            for (let s of this.rq.search) switch (s.field) {
                 case 'note':
                 case 'status':
                 case 'id_other_user':
@@ -176,7 +176,7 @@ module.exports = {
             
             if (x.is_author != undefined) x.is_author = (x.is_author == 1) ? 1 : 0
             
-            this.q.search = r
+            this.rq.search = r
         
         }
         
@@ -216,7 +216,7 @@ module.exports = {
 
     async function () {
 
-        let data = await this.db.get ([{tasks: {uuid: this.q.id}}])
+        let data = await this.db.get ([{tasks: {uuid: this.rq.id}}])
 
         data.users = Object.values (await this.db.fold ([{task_users: {id_task: data.uuid}}, '$users'], (i, idx) => {
 
