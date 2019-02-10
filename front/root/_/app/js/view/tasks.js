@@ -38,7 +38,7 @@ define ([], function () {
             columns: [
 
                 {field: 'uuid',              caption: 'ID',        size: 87, hidden: true},
-                {field: 'ts',                caption: 'Дата',      size: 40, render: function (i) {return (i.ts || '').substring (0,19)}},
+                {field: 'ts',                caption: 'Дата',      size: 40, render: _ts},
                 {field: 'label',             caption: 'Тема',      size: 100},
                 {field: 'id_user',           caption: 'На ком сейчас',    size: 40, hidden: true, render: function (i) {return !i.id_user ? '' : data.users [i.id_user]}},
 

@@ -167,6 +167,11 @@ function not_off (i) {return !i.off}
 
 function reload_page () { location.reload () }
 
+function _ts (record, ind, col_ind, data) {
+    if (!data) return ''
+    return data.slice (0, 10) + ' ' + data.slice (11, 19)
+}
+
 requirejs (['elu/elu', 'elu_w2ui/elu_w2ui'], function (elu, elu_w2ui) {
 
     clearTimeout (window.alarm)
