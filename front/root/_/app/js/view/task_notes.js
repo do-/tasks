@@ -34,7 +34,7 @@ define ([], function () {
             url: '_back/?type=task_notes',
             
             onDblClick: function (e) {
-                openTab ('/tasks/' + this.get (e.recid) ['task'] ['uuid'])
+                openTab ('/tasks/' + this.get (e.recid) ['id_task'])
             }
             
         }).refresh ();
