@@ -11,7 +11,7 @@ class Note {
         
         if (this.id_user_to <= 0) this.id_user_to = null
         
-        this.label = data.label.trim ()
+        this.label = (data.label || '').trim ()
         
         if (this.body === undefined) {
             let lines  = this.label.split (/[\n\r]+/)
