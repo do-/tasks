@@ -1,44 +1,35 @@
 {
-		
-	"listen": {
-		"host"    : "127.0.0.1",
-		"port"    : 8000
-	},
 
-	"fcgi": {
-		"name"    : "tasks",
-		"pidfile" : "/var/run/tasks.pid",
-		"port"    : ...
-	},
-		
-	"mail": {
+        "listen": {
+                "host"    : "127.0.0.1",
+                "port"    : 8000
+        },
 
-		"pool": true,
-		"port": 25,
-		"host": "127.0.0.1",
-		"from": {
-			"address": "foo@bar.ru",
-			"label": "tasks"
-		}
+        "mail": {
 
-	},
+                "pool": true,
+                "host": "127.0.0.1",
+                "port": "25",
+                "tls": {
+                    "rejectUnauthorized": false
+                },
+                "from": {
+                        "address": "noreply@some.org",
+                        "label": "tasks"
+                }
 
-	"pics": "/var/projects/tasks/front/root/_pics",
+        },
 
-	"db": {
-		"dsn"      : "DBI:Pg:database=tasks;host=localhost",
-		"user"     : "tasks",
-		"password" : "..."
-	},		
+        "pics": "/var/projects/tasks/front/root/_pics",
 
-	"core_debug_profiling": 1,
-	
-	"auth": {
-		"allow_test_admin": 1,
-		"sessions": {"timeout": 30},
-		"salt_file" : "/etc/tasks.salt"		
-	},
-	
-	"pics": "/var/projects/tasks/front/root/_pics"
+        "db": {
+                "connectionString": "postgresql://tasks:XXXXXX@localhost:5432/tasks"
+        },
+
+        "auth": {
+                "allow_test_admin": 0,
+                "sessions": {"timeout": 30},
+                "salt_file": "/etc/tasks.salt"
+        }
 
 }
