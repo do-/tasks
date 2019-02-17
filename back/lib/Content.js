@@ -169,7 +169,9 @@ module.exports.create_http_server = function (conf) {
         
             conf.listen, 
             
-            () => darn ('tasks app is listening to HTTP at ' + this._connectionKey)
+            function () {
+                darn ('tasks app is listening to HTTP at ' + this._connectionKey)
+            }
         
         )
 
