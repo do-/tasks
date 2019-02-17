@@ -1,0 +1,12 @@
+{
+  "name": "back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "pg": "^7.0.0",
+    "nodemailer": "^5.0.0"
+  }
+}
