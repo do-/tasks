@@ -69,9 +69,7 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
 
                 if (!r.uuid) return this.restrict_access ()
                 
-                let elapsed_ms = (new Date () - new Date (r.ts))
-                let threshold_ms = 30000 * (this.o.timeout)
-                if (elapsed_ms > threshold_ms) this.keep_alive ()
+                this.keep_alive ()
 
                 return {
                     uuid: r ['users.uuid'], 
