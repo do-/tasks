@@ -29,14 +29,14 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
                 return this.h.db.insert ('sessions', {
                     id_user       : this.user.uuid,
                     ts            : new Date (),
-                    client_cookie : this.id,                    
+                    uuid          : this.id,                    
                 })
                 
             }
             
             async finish () {            
                 super.finish ()                
-                return this.h.db.do ('DELETE FROM sessions WHERE client_cookie = ?', [this.old_id])
+                return this.h.db.do ('DELETE FROM sessions WHERE uuid = ?', [this.old_id])
             }
             
             restrict_access () {
@@ -47,7 +47,7 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
             
             keep_alive () {            
                 setImmediate (() => 
-                    this.h.db.do ('UPDATE sessions SET ts = ? WHERE client_cookie = ?', [new Date (), this.id])
+                    this.h.db.do ('UPDATE sessions SET ts = ? WHERE uuid = ?', [new Date (), this.id])
                 )
             }
 
@@ -60,8 +60,8 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
 
                 let r = await this.h.db.get ([                
                     {sessions: {
-                        client_cookie: this.id,
-                        'ts >=':       ts,
+                        uuid:    this.id,
+                        'ts >=': ts,
                     }},
                     'users (uuid, label)', 
                     'roles (name)'

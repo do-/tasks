@@ -4,13 +4,11 @@ module.exports = {
 
     columns: {
         id_user : '(users)',
-        ts          : 'datetime',
-        client_cookie   : 'string [255]',
+        ts      : 'datetime',
     },
 
     keys: {
-        id_user         : 'id_user',
-        client_cookie   : 'UNIQUE (client_cookie)',
+        id_user : 'id_user',
     },
 
 }
