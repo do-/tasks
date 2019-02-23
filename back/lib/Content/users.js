@@ -133,6 +133,7 @@ get_peers_of_users:
             {users: {
                 'login <>': null,
                 'uuid  <>': this.user.uuid,
+                ORDER     : 'label',
             }},
             {'user_users AS user_user ON user_user.id_user_ref = users.uuid': {
                 is_on: 1,
