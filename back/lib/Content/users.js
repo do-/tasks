@@ -25,6 +25,7 @@ select_users:
         let filter = this.w2ui_filter ()
         
         filter ['uuid <>'] = '00000000-0000-0000-0000-000000000000'
+        filter.is_deleted  = 0
 
         return this.db.add_all_cnt ({}, [{users: filter}, 'roles AS role'])
 
@@ -131,9 +132,10 @@ get_peers_of_users:
         
         return this.db.add ({}, [
             {users: {
-                'login <>': null,
-                'uuid  <>': this.user.uuid,
-                ORDER     : 'label',
+                'login <>' : null,
+                'uuid  <>' : this.user.uuid,
+                is_deleted : 0,
+                ORDER      : 'label',
             }},
             {'user_users AS user_user ON user_user.id_user_ref = users.uuid': {
                 is_on: 1,
@@ -176,6 +178,28 @@ do_set_password_users:
         let password = await this.session.password_hash (salt, this.rq.p1)
 
         return this.db.update ('users', {uuid, salt, password})
+
+    },
+
+////////////////////////////////////////////////////////////////////////////////
+
+do_delete_users: 
+
+    async function () {
+    
+        return Promise.all ([
+
+            this.db.update ('user_users', {
+                id_user_ref : this.rq.id,
+                is_on       : 0,
+            }, ['id_user_ref']),
+
+            this.db.update ('users', {
+                uuid        : this.rq.id, 
+                is_deleted  : 1, 
+            }),
+
+        ])
 
     },
 

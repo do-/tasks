@@ -63,7 +63,7 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
                         uuid:    this.id,
                         'ts >=': ts,
                     }},
-                    'users (uuid, label)', 
+                    {'$users (uuid, label)': {is_deleted: 0}}, 
                     'roles (name)'
                 ])
 

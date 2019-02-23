@@ -9,6 +9,8 @@ do_create_sessions:
         let user = await this.db.get ([{users: {
             login: this.rq.data.login,
         }}, 'roles(name)'])
+        
+        if (user.is_deleted) throw '#foo#: Вас пускать не велено'
                 
         if (user.uuid) {
             if (user.password != await this.session.password_hash (user.salt, this.rq.password)) return {}

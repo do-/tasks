@@ -13,6 +13,20 @@ define ([], function () {
         })
         
     }
+    
+    $_DO.delete_user = function (e) {
+        
+        if (!confirm ('Серьёзно?')) return
+        
+        query ({action: 'delete'}, {}, function (data) {
+
+            refreshOpener ()
+            
+            window.close ()
+
+        })
+        
+    }
 
     $_DO.pass_user = function (e) {
 
