@@ -13,10 +13,14 @@ define ([], function () {
         f.lock ()
 
         query ({action: 'create'}, {data: v}, function (data) {
-
-            openTab ('/users/' + data.uuid)
             
             w2popup.close ()
+            
+            var grid = w2ui ['usersGrid']
+            
+            grid.reload (grid.refresh)
+
+            w2confirm ('Пользователь зарегистрирован. Открыть его карточку?').yes (function () {openTab ('/users/' + data.uuid)})
         
         })
     
