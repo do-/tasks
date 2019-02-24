@@ -1,5 +1,6 @@
 const fs         = require ('fs')
 const nodemailer = require ('nodemailer')
+const memcached  = require ('memcached')
 const Dia        = require ('./Ext/Dia/Dia.js')
 
 module.exports = class {
@@ -13,8 +14,9 @@ module.exports = class {
         this.check_pics ()
         
         this.pools = {
-            mail: this.setup_mail (),
-            db  : this.setup_db (),
+            mail      : this.setup_mail (),
+            db        : this.setup_db (),
+            memcached : this.setup_memcached (),
         }
 
     }
@@ -44,6 +46,12 @@ module.exports = class {
         let model = new (require ('./Model.js')) ({path: './Model'})
 
         return Dia.DB.Pool (this.db, model)
+
+    }
+    
+    setup_memcached () {
+
+        return new memcached (this.auth.sessions.memcached)
 
     }
 

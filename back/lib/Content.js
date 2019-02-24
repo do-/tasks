@@ -17,63 +17,78 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
     }
 
     get_session () {
+    
+        function carp (e) {if (e) darn (e)}    
 
         return new class extends this.CookieSession {
+                
+            keep_alive () {
+                this.h.memcached.set (this.id, this.user.uuid, this.o.timeout * 60, carp)
+            }
 
-            async start () {
-            
+            async start () {            
                 super.start ()
-                
-                await this.h.db.do ("DELETE FROM sessions WHERE id_user = ?", [this.user.uuid])
-
-                return this.h.db.insert ('sessions', {
-                    id_user       : this.user.uuid,
-                    ts            : new Date (),
-                    uuid          : this.id,                    
-                })
-                
+                this.keep_alive ()
             }
             
             async finish () {            
-                super.finish ()                
-                return this.h.db.do ('DELETE FROM sessions WHERE uuid = ?', [this.old_id])
+                super.finish ()
+                this.h.memcached.del (this.id, carp)
+            }
+            
+            async get_user_uuid () {
+
+                let m = this.h.memcached
+                
+                return new Promise ((resolve, reject) => {
+
+                    m.get (this.id, function (err, data) {
+
+                        if (err) {
+                            reject (err)
+                        }
+                        else {
+                            resolve (data)
+                        }
+
+                    })
+                
+                })
+                
             }
             
             restrict_access () {
                 let rq = this.h.rq
                 if (rq.type != 'sessions' && rq.action != 'create') throw '401 Authenticate first'
                 return undefined
-            }
-            
-            keep_alive () {            
-                setImmediate (() => 
-                    this.h.db.do ('UPDATE sessions SET ts = ? WHERE uuid = ?', [new Date (), this.id])
-                )
-            }
+            }            
 
             async get_user () {
 
                 if (!this.id) return this.restrict_access ()
                 
-                let ts = new Date ()
-                ts.setMinutes (ts.getMinutes () - this.o.timeout - 1)
+                this.user = {is_deleted: 0}
 
+                try {
+                    if (!(this.user.uuid = await this.get_user_uuid ())) return restrict_access ()
+                }
+                catch (e) {
+                    darn (e)
+                    return this.restrict_access ()
+                }
+                                                
                 let r = await this.h.db.get ([                
-                    {sessions: {
-                        uuid:    this.id,
-                        'ts >=': ts,
-                    }},
-                    {'$users (uuid, label)': {is_deleted: 0}}, 
+                    {'users (uuid, label)': this.user},
                     'roles (name)'
                 ])
 
-                if (!r.uuid) return this.restrict_access ()
-                
+                if (!r.uuid) return this.restrict_access ()                
+
                 this.keep_alive ()
 
                 return {
-                    uuid: r ['users.uuid'], 
-                    label: r ['users.label'], 
+                    uuid: r.uuid, 
+                    label: r.label, 
                     role: r ['roles.name']
                 }
 
@@ -129,19 +144,6 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
 
 }
 
-function http_listener (conf) {
-
-    (request, response) => {new HTTP_handler ({
-        conf, 
-        pools: {
-            db: conf.pools.db,
-            queue: conf.pools.queue,
-        }, 
-        http: {request, response}}
-    ).run ()}
-
-}
-
 module.exports.create_http_server = function (conf) {
 
     require ('http')
@@ -155,6 +157,7 @@ module.exports.create_http_server = function (conf) {
                 pools: {
                     db: conf.pools.db,
                     queue: conf.pools.queue,
+                    memcached: conf.pools.memcached,
                 }, 
                 
                 http: {request, response}}
