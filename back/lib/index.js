@@ -22,6 +22,11 @@ async function _ () {
 async function migrate (db) {
 
     await db.load_schema ()
-    await db.update_model ()
+    
+    let patch = db.gen_sql_patch ()
+    
+    patch.unshift ({sql: "SELECT set_config ('tasks.id_user', ?, true)", params: [null]})
+        
+    await db.run (patch)
 
 }
