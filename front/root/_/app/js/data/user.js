@@ -64,7 +64,7 @@ define ([], function () {
 
         localStorage.setItem ('user.active_tab', e.tab.id)
 
-        use.block (e.tab.id)
+        show_block (e.tab.id)
 
     }
 

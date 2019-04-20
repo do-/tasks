@@ -4,6 +4,6 @@ $_GET.users = async function (o) {
     
     add_vocabularies (data, {roles: 1})
             
-    $('body').data ('data', data)
+    return data
 
 }
