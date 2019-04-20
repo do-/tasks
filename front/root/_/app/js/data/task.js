@@ -2,30 +2,26 @@ define ([], function () {
     
     $_DO.comment_task = function () {
     
-        use.block ('task_comment')
+        show_block ('task_comment')
     
     }
 
     $_DO.close_task = function () {
-    
-        $_SESSION.set ('close', 1)
-    
-        use.block ('task_comment')
-    
+
+        show_block ('task_comment', {close: 1})
+
     }
     
     $_DO.assign_task = function (e) {
+    
+        let o = {is_assigning: 1}
 
-        var $b = $(e.target)
+        let $b = $(e.target); if ($b.hasClass ('peer')) o.id_user_to = $b.data ('data').uuid
 
-        if ($b.hasClass ('peer')) $_SESSION.set ('id_user_to', $b.data ('data').uuid)
-    
-        $_SESSION.set ('assign', 1)
-    
-        use.block ('task_comment')
-    
+        show_block ('task_comment', o)
+
     }
-    
+
     function ucfirst (s) {
         return s.charAt (0).toUpperCase ()
     }

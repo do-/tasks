@@ -1,46 +1,42 @@
-define ([], function () {
+$_DRAW.task_comment = async function (data) {
 
-    return function (data, view) {
+    (await use.jq ('task_comment')).w2uppop ({}, function () {
 
-        $(view).w2uppop ({}, function () {
+        var users = clone (data.users.items)
 
-            var users = clone (data.users.items)
+        if (!data.record.is_assigning) {
+        
+            if ($_USER.id == data.author.id) users.push ({id: "0", text: 'Никто. Дело окончно.'})
 
-            if (!data.record.is_assigning) {
+            $.each (users, function () {if (this.id == $_USER.id) this.text = 'Я, ' + this.text})
+
+        }
+
+        $('#w2ui-popup .w2ui-form').w2reform ({
+        
+            name: 'task_comment_form',
+
+            record: data.record,
+
+            fields : [                
+                {name: 'label',   type: 'text'},
+                {name: 'id_user_to', type: 'list', options: {items: users}},
+            ],
             
-                if ($_USER.id == data.author.id) users.push ({id: "0", text: 'Никто. Дело окончно.'})
+            focus: data.record.id_user_to ? 1 : 0,
+            
+            onRefresh: function (e) {
+            
+                e.done (function () {
 
-                $.each (users, function () {if (this.id == $_USER.id) this.text = 'Я, ' + this.text})
+                    $('#img').show_block ('img')
 
+                })
+            
             }
-
-            $('#w2ui-popup .w2ui-form').w2reform ({
-            
-                name: 'task_comment_form',
-
-                record: data.record,
-
-                fields : [                
-                    {name: 'label',   type: 'text'},
-                    {name: 'id_user_to', type: 'list', options: {items: users}},
-                ],
-                
-                focus: data.record.id_user_to ? 1 : 0,
-                
-                onRefresh: function (e) {
-                
-                    e.done (function () {
-
-                        $('#img').show_block ('img')
-
-                    })
-                
-                }
-                
-            })
             
         })
+        
+    })
 
-    }
-    
-})
+}
