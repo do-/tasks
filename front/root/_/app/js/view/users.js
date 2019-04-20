@@ -21,7 +21,7 @@ $_DRAW.users = async function (data) {
                     
         url: '_back/?type=users',
 
-        onAdd: function (e) {use.block ('users_new')},
+        onAdd: function (e) {show_block ('user_new')},
 
     }).refresh ();
     
