@@ -1,17 +1,9 @@
-define ([], function () {
+$_GET.task_notes = async function (o) {
 
-    return function (done) {
-
-        query ({part: 'vocs'}, {}, function (data) {
-        
-            add_vocabularies (data, {users: 1})
-
-            $('body').data ('data', data)
-                        
-            done (data)
-        
-        })
-        
-    }
+    let data = await response ({part: 'vocs'})
     
-})
+    add_vocabularies (data, {users: 1})
+            
+    return data
+
+}
