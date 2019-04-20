@@ -19,7 +19,7 @@ $_DO.open_settings_nav = function () {
 }
 
 $_DO.open_users_select_nav = function () {
-    use.block ('user_peers')
+    show_block ('user_peers')
 }
 
 $_DO.logout_nav = function () {
