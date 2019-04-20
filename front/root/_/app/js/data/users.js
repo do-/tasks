@@ -1,17 +1,9 @@
-define ([], function () {
+$_GET.users = async function (o) {
 
-    return function (done) {
+    let data = await response ({type: 'roles'})
     
-        query ({type: 'roles'}, {}, function (data) {
-        
-            add_vocabularies (data, {roles: 1})
+    add_vocabularies (data, {roles: 1})
             
-            $('body').data ('data', data)
-            
-            done (data)
-        
-        })                   
-        
-    }
-    
-})
+    $('body').data ('data', data)
+
+}
