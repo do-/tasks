@@ -11,7 +11,7 @@ $_DO.open_users_nav = function () {
 }
 
 $_DO.open_user_password_nav = function () {
-    use.block ('user_password')
+    show_block ('user_password')
 }
     
 $_DO.open_settings_nav = function () {

@@ -30,7 +30,7 @@ define ([], function () {
 
     $_DO.pass_user = function (e) {
 
-        use.block ('user_password')
+        show_block ('user_password')
 
     }
     
