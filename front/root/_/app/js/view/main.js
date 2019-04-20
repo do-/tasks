@@ -6,6 +6,7 @@ $_DRAW.main = async function (data) {
     
     switch (type) {
         case 'task_notes':
+        case 'tasks':
         case 'users':
             show_block (type)
             break

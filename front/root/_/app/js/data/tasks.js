@@ -1,43 +1,35 @@
-define ([], function () {
+$_DO.show_required_tasks = function () {
 
-    $_DO.show_required_tasks = function () {
+    var grid = w2ui ['tasksGrid'] || this
+
+    grid.search ([
+
+        {field: "id_user", type: "enum", operator: "in", value: [{"id": $_USER.id, "text": $_USER.label}]}
+
+    ], 'AND')
     
-        var grid = w2ui ['tasksGrid'] || this
+}    
 
-        grid.search ([
+$_DO.show_created_tasks = function () {
 
-            {field: "id_user", type: "enum", operator: "in", value: [{"id": $_USER.id, "text": $_USER.label}]}
+    var grid = w2ui ['tasksGrid']
 
-        ], 'AND')
-        
-    }    
+    grid.search ([
+
+        {field: "id_other_user", type: "enum", operator: "in", value: [{"id": $_USER.id, "text": $_USER.label}]},
+        {field: "is_author", type: "list", operator: "is", value: 1, "text": "Автор"},
+        {field: "status", type: "list", operator: "is", value: 1, "text": "В работе"}
+
+    ], 'AND')
     
-    $_DO.show_created_tasks = function () {
-    
-        var grid = w2ui ['tasksGrid']
+}
 
-        grid.search ([
+$_GET.tasks = async function (o) {
 
-            {field: "id_other_user", type: "enum", operator: "in", value: [{"id": $_USER.id, "text": $_USER.label}]},
-            {field: "is_author", type: "list", operator: "is", value: 1, "text": "Автор"},
-            {field: "status", type: "list", operator: "is", value: 1, "text": "В работе"}
+    let data = await response ({part: 'vocs'})
 
-        ], 'AND')
-        
-    }
+    add_vocabularies (data, {users: 1})
 
-    return function (done) {
+    return data
 
-        query ({part: 'vocs'}, {}, function (data) {
-        
-            add_vocabularies (data, {users: 1})
-
-            $('body').data ('data', data)
-                        
-            done (data)
-        
-        })
-        
-    }
-    
-})
+}
