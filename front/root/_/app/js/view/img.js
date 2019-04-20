@@ -1,8 +1,25 @@
 define ([], function () {
 
-    return function (data, view) {
+    return function (data) {
 
-        fill (view, {}, $('#img'))
+        $('#img').html (`
+            <span>
+
+                <input name=img type=hidden>
+                <input name=ext type=hidden>
+                <input name=file type=file style="display:none">
+
+                <img id=png title=
+                    "Чтобы проиллюстрировать текст,
+                     скопируйте PNG (например, инструментом 'ножницы')
+                     и вставьте из буфера (Ctrl-V, Shift-Insert) прямо в текстовую область"
+                >
+
+                <video id=mp4 autoplay loop>
+                </video>
+
+            </span>
+        `)
 
         $('textarea').on ('paste', $_DO.paste_img)
 
