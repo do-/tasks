@@ -1,5 +1,1 @@
-define ([], function () {
-
-    return function (done) {done ({})}
-
-})
+$_GET.main = async function (o) {}

@@ -187,6 +187,6 @@ requirejs (['elu/elu', 'elu_w2ui/elu_w2ui'], function (elu, elu_w2ui) {
 
     setup_request ()
 
-    use.block ($_USER ? 'main' : 'login')
+    show_block ($_USER ? 'main' : 'login')
 
 })

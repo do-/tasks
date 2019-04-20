@@ -1,14 +1,11 @@
+$_DRAW.main = async function (data) {
 
-define ([], function () {
+    let $main = $('body').html ('<main/>')
 
-    return function () {           
+    use.block ($_REQUEST.id ? en_unplural ($_REQUEST.type) : $_REQUEST.type)
 
-        $('body').html ('<main/>')
+    show_block ('nav')
+    
+    return $main
 
-        use.block ($_REQUEST.id ? en_unplural ($_REQUEST.type) : $_REQUEST.type)
-
-        use.block ('nav')        
-
-    }
-
-})
+}
