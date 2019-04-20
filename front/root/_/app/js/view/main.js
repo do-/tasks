@@ -16,15 +16,17 @@ define ([], function () {
         return $_REQUEST.id ? get_single ($_REQUEST.type) : $_REQUEST.type
         
     }
+    
+    return function () {           
 
-    $_F5 = function () {
+        $('body').html (`
+            <nav class="left-sidebar"></nav>
+            <main></main>
+        `)
+        
         use.block (getBlockType ())
         use.block ('nav')
-    }
-    
-    return function (data, view) {           
-        fill (view, {}, $('body'))
-        $_F5 ()
+        
     }
 
 });
