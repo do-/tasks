@@ -50,7 +50,7 @@ $_DRAW.tasks = async function (data) {
                     
         url: '_back/?type=tasks',
 
-        onAdd: function (e) {use.block ('tasks_new')},
+        onAdd: function (e) {show_block ('tasks_new')},
         
         onRender: $_DO.show_required_tasks,
 

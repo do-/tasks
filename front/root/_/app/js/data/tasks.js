@@ -29,6 +29,8 @@ $_GET.tasks = async function (o) {
     let data = await response ({part: 'vocs'})
 
     add_vocabularies (data, {users: 1})
+    
+    $('body').data ('data', data)
 
     return data
 
