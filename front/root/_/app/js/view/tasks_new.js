@@ -23,7 +23,7 @@ define ([], function () {
                 
                     e.done (function () {
 
-                        use.block ('img')
+                        show_block ('img')
 
                     })
                 

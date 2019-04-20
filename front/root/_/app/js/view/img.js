@@ -1,38 +1,34 @@
-define ([], function () {
+$_DRAW.img = async function (data) {
 
-    return function (data) {
+    $('#img').html (`
+        <span>
 
-        $('#img').html (`
-            <span>
+            <input name=img type=hidden>
+            <input name=ext type=hidden>
+            <input name=file type=file style="display:none">
 
-                <input name=img type=hidden>
-                <input name=ext type=hidden>
-                <input name=file type=file style="display:none">
+            <img id=png title=
+                "Чтобы проиллюстрировать текст,
+                 скопируйте PNG (например, инструментом 'ножницы')
+                 и вставьте из буфера (Ctrl-V, Shift-Insert) прямо в текстовую область"
+            >
 
-                <img id=png title=
-                    "Чтобы проиллюстрировать текст,
-                     скопируйте PNG (например, инструментом 'ножницы')
-                     и вставьте из буфера (Ctrl-V, Shift-Insert) прямо в текстовую область"
-                >
+            <video id=mp4 autoplay loop>
+            </video>
 
-                <video id=mp4 autoplay loop>
-                </video>
+        </span>
+    `)
 
-            </span>
-        `)
+    $('textarea').on ('paste', $_DO.paste_img)
 
-        $('textarea').on ('paste', $_DO.paste_img)
+    $('#png')
+        .on ("dragover",  blockEvent)
+        .on ("dragleave", blockEvent)
+        .on ("drop",      $_DO.drop_img)
+        .on ("click",     $_DO.click_img)
 
-        $('#png')
-            .on ("dragover",  blockEvent)
-            .on ("dragleave", blockEvent)
-            .on ("drop",      $_DO.drop_img)
-            .on ("click",     $_DO.click_img)
+    $('video').on ("click", $_DO.click_img)
 
-        $('video').on ("click", $_DO.click_img)
+    $('input[name=file]').change ($_DO.open_img)
 
-        $('input[name=file]').change ($_DO.open_img)
-
-    }
-
-})
+}
