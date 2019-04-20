@@ -1,11 +1,5 @@
 define ([], function () {
 
-    return function (done) {
-    
-        var data = {}
-                
-        done (data)
-        
-    }
-    
+    return function (done) {done ({})}
+
 })

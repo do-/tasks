@@ -4,8 +4,8 @@ define ([], function () {
     
         $('nav').hide ()
         
-        $('main').html (`
-        
+        $('body').html (`
+            <main>
             <div class=login-outer style="height: 100%; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch;">
 
                 <div class="login-inner w2ui-reset w2ui-form" style="height: 175px; width: 400px;">
@@ -35,7 +35,7 @@ define ([], function () {
 
                 </div>
             </div>
-            
+            </main>
         `)
 
         $('div.login-inner').w2form ({

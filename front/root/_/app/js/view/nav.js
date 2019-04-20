@@ -4,9 +4,9 @@ define ([], function () {
 
         if (!$_USER) return
 
-        var $nav = $('nav')
+        var $nav = $(`
         
-        $nav.html (`
+            <nav class="left-sidebar">
             <header>
                 <button name=open_tasks title="Дела" class="svg-menu"></button>
                 <button name=open_task_notes title="Всеобщая переписка" class="svg-xchg"></button>
@@ -20,7 +20,9 @@ define ([], function () {
                 <button name=open_settings title="Настройки" class="svg-settings"></button>
                 <button name=logout title="Выход" class="logout svg-logout" data-question="Завершить работу в системе?"></button>
             </footer>
-        `)
+            </nav>
+            
+        `).insertBefore ($('main'))
         
         $('button', $nav).each (function () {
         
@@ -38,8 +40,6 @@ define ([], function () {
         
         $('body > nav header button').after ('<hr>')
         $('body > nav footer button').before ('<hr>')
-        
-        $nav.show ()
 
     }
 
