@@ -31,7 +31,7 @@ define ([], function () {
                 
                     e.done (function () {
 
-                        show_block ('img')
+                        $('#img').show_block ('img')
 
                     })
                 

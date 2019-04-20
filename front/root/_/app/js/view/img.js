@@ -1,6 +1,6 @@
 $_DRAW.img = async function (data) {
 
-    $('#img').html (`
+    let $img = $(`
         <span>
 
             <input name=img type=hidden>
@@ -21,14 +21,16 @@ $_DRAW.img = async function (data) {
 
     $('textarea').on ('paste', $_DO.paste_img)
 
-    $('#png')
+    $('#png', $img)
         .on ("dragover",  blockEvent)
         .on ("dragleave", blockEvent)
         .on ("drop",      $_DO.drop_img)
         .on ("click",     $_DO.click_img)
 
-    $('video').on ("click", $_DO.click_img)
+    $('video', $img).on ("click", $_DO.click_img)
 
-    $('input[name=file]').change ($_DO.open_img)
+    $('input[name=file]', $img).change ($_DO.open_img)
+    
+    return $img
 
 }
