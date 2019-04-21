@@ -113,9 +113,7 @@ define ([], function () {
         window.scrollTo (0, document.body.scrollHeight);
         
         $('main footer').show_block ('task_footer')
-        
-//        if (data._can.comment) document.onpaste = $_DO.paste_task
-        
+
     }
 
 });
