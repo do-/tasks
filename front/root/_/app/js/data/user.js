@@ -1,85 +1,55 @@
-define ([], function () {
-
-    $_DO.cancel_user = function (e) {
-        
-        if (!confirm ('Отменить несохранённые правки?')) return
-        
-        query ({}, {}, function (data) {
-
-            data.__read_only = true
-
-            $_F5 (data)
-
-        })
-        
-    }
+$_DO.delete_user = function (e) {
     
-    $_DO.delete_user = function (e) {
-        
-        if (!confirm ('Серьёзно?')) return
-        
-        query ({action: 'delete'}, {}, function (data) {
-
-            refreshOpener ()
-            
-            window.close ()
-
-        })
-        
-    }
-
-    $_DO.pass_user = function (e) {
-
-        show_block ('user_password')
-
-    }
+    if (!confirm ('Серьёзно?')) return
     
-    $_DO.edit_user = function (e) {
+    query ({action: 'delete'}, {}, function (data) {
 
-        var data = w2ui ['form'].record
-
-        data.__read_only = false
-                
-        $_F5 (data)
-
-    }
-
-    $_DO.update_user = function (e) {
-    
-        if (!confirm ('Сохранить изменения?')) return
+        refreshOpener ()
         
-        var d = w2ui ['form'].values ()
-         
-        w2ui ['form'].lock ();
+        window.close ()
+
+    })
     
-        query ({action: 'update'}, {data: d}, function (data) {
-                  
-           location.reload ()
-       
-        })
-        
-    }
+}
 
-    $_DO.choose_tab_user = function (e) {
+$_DO.pass_user = function (e) {
 
-        localStorage.setItem ('user.active_tab', e.tab.id)
+    show_block ('user_password')
 
-        show_block (e.tab.id)
+}
 
-    }
+$_DO.update_user = function (e) {
 
-    return function (done) {
+    if (!confirm ('Сохранить изменения?')) return
     
-        query ({}, {}, function (data) {
-        
-            data.active_tab = localStorage.getItem ('user.active_tab') || 'user_options'
-            
-            data.__read_only = true
-            
-            done (data)
+    var d = w2ui ['form'].values ()
+     
+    w2ui ['form'].lock ();
 
-        })
-        
-    }
+    query ({action: 'update'}, {data: d}, function (data) {
+              
+       location.reload ()
+   
+    })
     
-})
+}
+
+$_DO.choose_tab_user = function (e) {
+
+    localStorage.setItem ('user.active_tab', e.tab.id)
+
+    show_block (e.tab.id)
+
+}
+
+$_GET.user = async function (o) {
+
+    let data = await response ({})
+    
+    data.active_tab = localStorage.getItem ('user.active_tab') || 'user_options'
+
+    $('body').data ('data', data)
+
+    return data
+
+}

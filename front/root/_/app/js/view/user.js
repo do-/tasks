@@ -1,71 +1,126 @@
-define ([], function () {
+$_DRAW.user = async function (data) {
 
-    $_F5 = function (data) {
-    
-        var f = w2ui ['form']
+    var __read_only = 1
 
-        f.record = data
+    $('title').text (data.label)
 
-        $('main input').prop ({disabled: data.__read_only})
+    var layout = $('main').w2layout ({
 
-        f.refresh ()
+        name: 'main',
 
-    }
+        panels: [
+            { type: 'top', size: 230},
+            { type: 'main', size: 400,
 
-    return function (data, view) {
-    
-        $('body').data ('data', data)
+                tabs: {
 
-        $('title').text (data.label)
+                    tabs: [
+                        { id: 'user_options', caption: 'Опции'},
+                    ],
 
-        var layout = $('main').w2layout ({
+                    onClick: $_DO.choose_tab_user
 
-            name: 'main',
+                }                
 
-            panels: [
-                { type: 'top', size: 230},
-                { type: 'main', size: 400,
-
-                    tabs: {
-
-                        tabs: [
-                            { id: 'user_options', caption: 'Опции'},
-                        ],
-
-                        onClick: $_DO.choose_tab_user
-
-                    }                
-
-                },
-            ],
-            
-            onRender: function (e) {
-                this.get ('main').tabs.click (data.active_tab)
-            }
-            
-            
-        });
-
-        var $panel = $(layout.el ('top'))
+            },
+        ],
         
-        fill (view, data, $panel)
+        onRender: function (e) {
+            this.get ('main').tabs.click (data.active_tab)
+        }
+        
+        
+    });
+
+    $(layout.el ('top')).html (`
+    
+        <div>
+
+            <div class="w2ui-page page-0">
+
+                <header>
+                    ${data ['role.label']} ${data.label}
+                </header>
+
+                <div class="w2ui-field">
+                    <label>ФИО</label>
+                    <div>
+                        <input name="label" style="width:300px" />
+                    </div>
+                </div>
+
+                <div class="w2ui-field">
+                    <label>login</label>
+                    <div>
+                        <input name="login" style="width:300px" />
+                    </div>
+                </div>
+
+                <div class="w2ui-field">
+                    <label>E-mail</label>
+                    <div>
+                        <input name="mail" style="width:300px" />
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="w2ui-buttons">
+                <span>
                 
-        $panel.w2reform ({
+                    <button class=w2ui-btn name=edit   >Редактировать</button>
+                    <button class=w2ui-btn name=pass   >Установить пароль</button>
+                    <button class=w2ui-btn name=delete >Удалить</button>
 
-                name   : 'form',
-                
-                fields : [
-                
-                    { name: 'label', type: 'text', required: true},
-                    { name: 'login', type: 'text', required: true},
-                    { name: 'mail',  type: 'text'},
-//                    { name: 'is_read_only', type: 'checkbox'},
-                ],            
+                    <button class=w2ui-btn name=update data-edit>Сохранить</button>
+                    <button class=w2ui-btn name=cancel data-edit>Отменить</button>
 
-        })
-                        
-        $_F5 (data)
+                </span>
+            </div>
 
-    }
+        </div>        
+    
+    `).w2reform ({
 
-})
+        name: 'form',
+        
+        record: data,
+        
+        fields: [                
+            {name: 'label', type: 'text'},
+            {name: 'login', type: 'text'},
+            {name: 'mail',  type: 'text'},
+        ],            
+        
+        actions: {
+        
+            pass:   $_DO.pass_user,                
+            delete: $_DO.delete_user,
+            update: $_DO.update_user,
+
+            edit:   function () {__read_only = 0; this.refresh ()},
+            
+            cancel: function () {
+                if (!confirm ('Отменить несохранённые правки?')) return
+                __read_only = 1; 
+                this.record = clone (data)
+                this.refresh ()
+            },
+            
+        },
+        
+        onRefresh: function (e) {
+        
+            $('main input').prop ({disabled: __read_only})
+            
+            $('.w2ui-buttons button').each (function () {
+                let $this = $(this)
+                let is_ro = $this.is ('[data-edit]') ? 0 : 1
+                $this.css ({display: is_ro == __read_only ? 'inline-block' : 'none'})
+            })
+
+        }
+
+    })
+
+}
