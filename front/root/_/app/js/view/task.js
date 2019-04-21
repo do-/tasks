@@ -69,18 +69,6 @@ define ([], function () {
         
     return function (data, view) {
     
-        $('body').data ('data', data)
-
-        data._can = {
-            comment: data.id_user && data.users [$_USER.id],
-        }
-
-        data._can.close = data._can.comment && data.author.id == $_USER.id
-
-        data._can.assign = data._can.close && data.author.id == data.executor.id
-        
-        if (!data._can.assign) data.peers = []
-
         $('title').text (data.label + ' (' + from_to (data, data.author.id) + ')')
                         
         $.each (data.task_notes, function () {
@@ -124,25 +112,10 @@ define ([], function () {
         
         window.scrollTo (0, document.body.scrollHeight);
         
-        if (data._can.comment) document.onpaste = $_DO.paste_task
+        $('main footer').show_block ('task_footer')
         
-        $('button.peer').each (function () {
+//        if (data._can.comment) document.onpaste = $_DO.paste_task
         
-            var $this = $(this)
-        
-            var data = $this.data ('data')
-            
-            var label = data.label
-            var s = 0; for (var i = 0; i < label.length; i ++) s += 513 * label.charCodeAt (i)
-            var hsl = 'hsl(' + (s % 360) + ',50%,40%)'
-            
-            clickOn ($this.attr ({title: label}).css  ({
-                'background-color': hsl,
-                'border-color': hsl,
-            }), $_DO.assign_task)
-        
-        })
-
     }
 
 });
