@@ -1,3 +1,5 @@
+////////////////////////////////////////////////////////////////////////////////
+
 $_DO.toggle_user_own_options = function (e) {
 
     var g = w2ui ['user_own_options_grid']
@@ -27,5 +29,7 @@ $_DO.toggle_user_own_options = function (e) {
     })
 
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 $_GET.user_own_options = async function (o) {return {}}

@@ -1,3 +1,5 @@
+////////////////////////////////////////////////////////////////////////////////
+
 $_DO.show_required_tasks = function () {
 
     var grid = w2ui ['tasksGrid'] || this
@@ -9,6 +11,8 @@ $_DO.show_required_tasks = function () {
     ], 'AND')
     
 }    
+
+////////////////////////////////////////////////////////////////////////////////
 
 $_DO.show_created_tasks = function () {
 
@@ -23,6 +27,8 @@ $_DO.show_created_tasks = function () {
     ], 'AND')
     
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 $_GET.tasks = async function (o) {
 

@@ -1,3 +1,5 @@
+////////////////////////////////////////////////////////////////////////////////
+
 $_DO.toggle_user_options = function (e) {
 
     var g = w2ui ['options_grid']
@@ -13,6 +15,8 @@ $_DO.toggle_user_options = function (e) {
     query ({action: 'set_option'}, {data: data}, function () {g.request ('get')})
 
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 $_GET.user_options = async function (o) {
 

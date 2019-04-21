@@ -1,3 +1,5 @@
+////////////////////////////////////////////////////////////////////////////////
+
 $_DO.update_user_password = function (e) {
 
     var data = w2ui ['passwordForm'].record
@@ -20,6 +22,8 @@ $_DO.update_user_password = function (e) {
     })
 
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 $_GET.user_password = async function (o) {
                     
