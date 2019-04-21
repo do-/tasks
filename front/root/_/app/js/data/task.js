@@ -1,17 +1,11 @@
-define ([], function () {
+$_GET.task = async function (o) {
 
-    return function (done) {
-
-        query ({}, {}, function (data) {
-
-            add_vocabularies (data, {users: 1})
+    let data = await response ({})
+    
+    add_vocabularies (data, {users: 1})
             
-            $('body').data ('data', data)
+    $('body').data ('data', data)
 
-            done (data)
+    return data
 
-        })
-
-    }
-
-})
+}
