@@ -23,8 +23,10 @@ $_DRAW.task = async function (data) {
 
                     line = line
                         .replace (/[<>]/g, "")
-                        .replace (/\*\*([^\*]*?)\*\*/g, "<b>$1</b>")
+                        .replace (/\*\*([^\*]*?)\*\*/, "<b>$1</b>")
                         .replace (/https?:\/\/\S+/g, function (url) {
+                        
+                            url = url.replace (/[\.\,\!\?]+$/g, "")
 
                             var txt = 'URL'
 
@@ -39,6 +41,7 @@ $_DRAW.task = async function (data) {
                             }
                             else {
 
+                                url = url.replace (/[\(\)]+$/, "")
                                 txt = url.split ('/') [2] + '/...'
 
                             }
