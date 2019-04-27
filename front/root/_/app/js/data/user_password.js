@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.update_user_password = function (e) {
+$_DO.update_user_password = async function (e) {
 
     var data = w2ui ['passwordForm'].record
     
@@ -13,13 +13,11 @@ $_DO.update_user_password = function (e) {
     
     if ($_USER.role != 'admin') delete data.id
     
-    query ({type: 'users', id: $_REQUEST.id, action: 'set_password'}, {data: data}, function (data) {
+    await response ({type: 'users', id: $_REQUEST.id, action: 'set_password'}, {data: data})
     
-        alert ('Пароль установлен')
+    alert ('Пароль установлен')
 
-        w2popup.close ()
-    
-    })
+    w2popup.close ()
 
 }
 
