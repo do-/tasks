@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.update_user_new = function (e) {
+$_DO.update_user_new = async function (e) {
 
-    var f = w2ui ['users_new_form']
+    let f = w2ui ['users_new_form']
 
-    var v = f.values ()
+    let v = f.values ()
     
     if (!v.id_role) die ('id_role', 'Укажите, пожалуйста, роль')
     if (!v.label)   die ('label', 'Укажите, пожалуйста, ФИО пользователя')
@@ -12,17 +12,15 @@ $_DO.update_user_new = function (e) {
     
     f.lock ()
 
-    query ({action: 'create'}, {data: v}, function (data) {
-        
-        w2popup.close ()
-        
-        var grid = w2ui ['usersGrid']
-        
-        grid.reload (grid.refresh)
+    let data = await response ({action: 'create'}, {data: v})
 
-        w2confirm ('Пользователь зарегистрирован. Открыть его карточку?').yes (function () {openTab ('/users/' + data.uuid)})
+    w2popup.close ()
+        
+    let grid = w2ui ['usersGrid']
     
-    })
+    grid.reload (grid.refresh)
+
+    w2confirm ('Пользователь зарегистрирован. Открыть его карточку?').yes (function () {openTab ('/users/' + data.uuid)})
 
 }
 
