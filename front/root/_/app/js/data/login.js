@@ -1,22 +1,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.execute_login = function (e) {
+$_DO.execute_login = async function (e) {
+        
+    let form = w2ui ['form']
     
-    var param = values ($('main'))
-    
-    w2ui ['form'].lock ()
+    form.lock ()
 
-    query ({type: 'sessions', action: 'create'}, {data: param}, function (data) {
+    let data = await response ({type: 'sessions', action: 'create'}, {data: values ($('main'))})
 
-        w2ui ['form'].unlock ()
+    form.unlock ()
 
-        if (!data || !data.user) return alert ('Ошибка аутентификации')
+    if (!data || !data.user) return alert ('Ошибка аутентификации')
 
-        $_SESSION.start (data.user, data.timeout)
-                    
-        location.reload ()
-
-    })
+    $_SESSION.start (data.user, data.timeout)
+                
+    location.reload ()
 
 }
 
