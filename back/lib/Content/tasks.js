@@ -7,7 +7,7 @@ class Note {
         
         this.id_task = id_task
 
-        for (let k of ['id_user_to', 'body', 'img', 'ext']) this [k] = data [k]
+        for (let k of ['uuid', 'id_user_to', 'body', 'img', 'ext']) this [k] = data [k]
         
         if (this.id_user_to <= 0) this.id_user_to = null
         
@@ -57,8 +57,6 @@ class Note {
     
     async store (db, path) {
 
-        this.uuid = Dia.new_uuid ()
-                
         let wishes = []
 
         if (this.img) {
@@ -78,9 +76,20 @@ class Note {
 
 async function store_and_notify (note, action) {
 
-    await note.store (this.db, this.conf.pics)
+    try {
+    
+        await note.store (this.db, this.conf.pics)
 
-    if (action) this.queue.publish ('task_notes', action, {id: note.uuid, uri: this.uri})
+        if (action) this.queue.publish ('task_notes', action, {id: note.uuid, uri: this.uri})
+        
+    }
+    catch (e) {
+        
+        if (this.db.is_pk_violation (e)) return darn (`Same uuid ${note.uuid} used twice`)
+        
+        throw e
+    
+    }
 
 }
 
@@ -106,14 +115,26 @@ do_create_tasks:
 
     async function () {
     
+        let result = {uuid: this.rq.id}
+        
+        try {
+        
+            await this.db.insert ('tasks', {
+                uuid:    this.rq.id,
+                id_user: this.user.uuid,
+                label:   this.rq.data.label,
+            })
+            
+        }
+        catch (e) {
+
+            if (this.db.is_pk_violation (e)) return result; else throw e
+
+        }            
+        
         this.rq.data.id_user_to = this.user.uuid
 
-        let note = new Note (this.rq.data)
-                
-        note.id_task = await this.db.insert ('tasks', {
-            id_user: this.user.uuid,
-            label: this.rq.data.label,
-        })
+        let note = new Note (this.rq.data, this.rq.id)
         
         let [id_task_note] = await note.store (this.db, this.conf.pics)
         
@@ -123,7 +144,7 @@ do_create_tasks:
             is_author  : i,
         }}))
         
-        return this.db.get ([{tasks: {uuid: note.id_task}}])
+        return result
             
     },    
     

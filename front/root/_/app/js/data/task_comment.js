@@ -10,6 +10,7 @@ $_DO.update_task_comment = function (e) {
     
     v.img = $('input[name=img]').val ()
     v.ext = $('input[name=ext]').val ()
+    v.uuid = new_uuid ()
 
     if (tia.action == 'assign') {
 

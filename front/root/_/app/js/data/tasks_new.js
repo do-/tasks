@@ -13,7 +13,7 @@ $_DO.update_tasks_new = async function (e) {
 
     f.lock ()
 
-    let data = await response ({action: 'create'}, {data: v}) 
+    let data = await response ({action: 'create', id: new_uuid ()}, {data: v})
     
     w2ui ['tasksGrid'].reload ()
 

@@ -9,6 +9,7 @@ $_DO.update_user_new = async function (e) {
     if (!v.id_role) die ('id_role', 'Укажите, пожалуйста, роль')
     if (!v.label)   die ('label', 'Укажите, пожалуйста, ФИО пользователя')
     if (!v.login)   die ('login', 'Укажите, пожалуйста, login пользователя')
+    v.uuid = new_uuid ()
     
     f.lock ()
 
