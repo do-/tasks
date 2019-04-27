@@ -1,16 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.delete_user = function (e) {
+$_DO.delete_user = async function (e) {
     
     if (!confirm ('Серьёзно?')) return
     
-    query ({action: 'delete'}, {}, function (data) {
+    await response ({action: 'delete'})
 
-        refreshOpener ()
+    refreshOpener ()
         
-        window.close ()
-
-    })
+    window.close ()
     
 }
 
@@ -24,20 +22,18 @@ $_DO.pass_user = function (e) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.update_user = function (e) {
+$_DO.update_user = async function (e) {
 
     if (!confirm ('Сохранить изменения?')) return
-    
-    var d = w2ui ['form'].values ()
-     
-    w2ui ['form'].lock ();
 
-    query ({action: 'update'}, {data: d}, function (data) {
-              
-       location.reload ()
-   
-    })
-    
+    let form = w2ui ['form']
+
+    form.lock ()
+
+    await response ({action: 'update'}, {data: form.values ()})
+
+    location.reload ()
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
