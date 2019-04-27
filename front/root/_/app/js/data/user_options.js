@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.toggle_user_options = function (e) {
+$_DO.toggle_user_options = async function (e) {
 
     var g = w2ui ['options_grid']
     
@@ -12,7 +12,9 @@ $_DO.toggle_user_options = function (e) {
 
     if (!confirm ((data.is_on ? 'Установить' : 'Снять') + ' опцию "' + r.label + '"?')) return
 
-    query ({action: 'set_option'}, {data: data}, function () {g.request ('get')})
+    await response ({action: 'set_option'}, {data: data})
+
+    g.request ('get')
 
 }
 
