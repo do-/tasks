@@ -1,10 +1,5 @@
 if (window.__LOGOUT__) delete window.__LOGOUT__
 
-requirejs.config ({
-    baseUrl: sessionStorage.getItem ('staticRoot') + '/libs',
-    paths: {app: '../app/js'}
-});
-
 function get_default_url () {
 
     return '/tasks'
@@ -172,21 +167,17 @@ function _ts (record, ind, col_ind, data) {
     return data.slice (0, 10) + ' ' + data.slice (11, 19)
 }
 
-requirejs (['elu/elu', 'elu_w2ui/elu_w2ui'], function (elu, elu_w2ui) {
+clearTimeout (window.alarm)
 
-    clearTimeout (window.alarm)
+$_SESSION.beforeExpiry ($_SESSION.keepAlive)
 
-    $_SESSION.beforeExpiry ($_SESSION.keepAlive)
-    
-    window.addEventListener ('storage', $_SESSION.closeAllOnLogout)
-    
-    if ($_USER && $_USER.opt && $_USER.opt.no_tabs) openTab = function (url, name) {
-        window.name = name || url
-        location = url
-    }
+window.addEventListener ('storage', $_SESSION.closeAllOnLogout)
 
-    setup_request ()
+if ($_USER && $_USER.opt && $_USER.opt.no_tabs) openTab = function (url, name) {
+    window.name = name || url
+    location = url
+}
 
-    show_block ($_USER ? 'main' : 'login')
+setup_request ()
 
-})
+show_block ($_USER ? 'main' : 'login')

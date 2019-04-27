@@ -79,21 +79,7 @@ module.exports = function (grunt) {
         }]
       }
     },
-    
-    requirejs: {
-      compile: {
-        options: {
-            generateSourceMaps: false,
-            baseUrl: 'root/_/libs',
-            paths: {app: '../app/js'},
-//            optimize: "none",
-            out: "root/_/app/js/app.js",
-            findNestedDependencies: true,
-            include: appModules
-        }
-      }
-    },
-    
+        
     concat: {
         options: {
             stripBanners: true,
@@ -101,9 +87,10 @@ module.exports = function (grunt) {
         js: {
             src: [
                 'root/_/libs/jquery/jquery-3.1.1.min.js', 
-                'root/_/libs/requirejs/require.js',
                 'root/_/libs/w2ui/w2ui-1.5.rc1.min.js',
-                'root/_/app/js/app.js'
+                'root/_/libs/elu/elu.js',
+                'root/_/libs/elu_w2ui/elu_w2ui.js',
+                'root/_/app/handler.js'
             ],
             dest: 'root/_/app/js/_.js',
         },
@@ -157,27 +144,26 @@ module.exports = function (grunt) {
       },
 
       js: {
-        files: ['root/_/app/js/data/*.js', 'root/_/app/js/view/*.js', 'root/_/app/handler.js'],
-        tasks: ['requirejs', 'concat:js'],
+        files: ['root/_/app/handler.js'],
+        tasks: ['concat:js'],
         options: {nospawn: true}
       },
-
+/*
       model: {
         files: ['../back/lib/Model/*.pm', '../back/lib/Config.pm'],
         tasks: ['shell:reboot'],
         options: {nospawn: true}
       },
-
+*/
     }
     
   });
   
   grunt.loadNpmTasks('grunt-text-replace');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-svg-sprite');
   grunt.loadNpmTasks('grunt-contrib-compress');
   
   grunt.registerTask('default', ['watch']);
-  grunt.registerTask('build', ['replace', 'svg_sprite', 'less', 'requirejs', 'concat', 'compress']);
+  grunt.registerTask('build', ['replace', 'svg_sprite', 'less', 'concat', 'compress']);
   
 };
