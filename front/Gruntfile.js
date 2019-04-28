@@ -144,7 +144,7 @@ module.exports = function (grunt) {
       },
 
       js: {
-        files: ['root/_/app/handler.js'],
+        files: ['root/_/libs/**/*.js', 'root/_/app/handler.js'],
         tasks: ['concat:js'],
         options: {nospawn: true}
       },
