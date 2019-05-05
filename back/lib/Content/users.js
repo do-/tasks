@@ -91,7 +91,7 @@ do_set_own_option_users:
 
     async function () {
 
-        let voc_user_option = this.db.get ([{voc_user_options: {id: this.rq.data.id_voc_user_option}}]);
+        let voc_user_option = await this.db.get ([{voc_user_options: {id: this.rq.data.id_voc_user_option}}]);
 
         if (!voc_user_option.is_own) throw '#foo#:Доступ запрещён'
 
@@ -246,14 +246,14 @@ do_create_users:
 
         let d = {uuid: this.rq.id}
 
-        for (let k of ['login', 'label', 'id_role']) d [k] = data [k]        
+        for (let k of ['uuid', 'login', 'label', 'id_role']) d [k] = data [k]        
         
         try {
-            d.uuid = await this.db.insert ('users', d)
+            await this.db.insert ('users', d)
         }
-        catch (x) {
+        catch (e) {
             if (this.db.is_pk_violation (e)) return d
-            throw x.constraint == 'ix_users_login' ? '#login#: Этот login уже занят' : x
+            throw e.constraint == 'ix_users_login' ? '#login#: Этот login уже занят' : x
         }
         
         return d
