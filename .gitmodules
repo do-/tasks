@@ -10,3 +10,12 @@
 [submodule "back/lib/Ext/DiaW2ui"]
 	path = back/lib/Ext/DiaW2ui
 	url = https://github.com/do-/dia.js_w2ui.git
+[submodule "front/root/_/libs/SlickGrid"]
+	path = front/root/_/libs/SlickGrid
+	url = https://github.com/6pac/SlickGrid.git
+[submodule "front/root/_/libs/elu_slick"]
+	path = front/root/_/libs/elu_slick
+	url = https://github.com/do-/elu_slick
+[submodule "front/root/_/libs/BtrMilk"]
+	path = front/root/_/libs/BtrMilk
+	url = https://github.com/do-/BtrMilk.git
