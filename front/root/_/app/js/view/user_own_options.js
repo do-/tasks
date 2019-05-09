@@ -1,43 +1,24 @@
 $_DRAW.user_own_options = async function (data) {
 
-    (await use.jq ('user_own_options')).w2uppop ({}, function () {
-
-        $('#w2ui-popup .w2ui-form').w2reform ({
+    let $view = fill (await use.jq ('user_own_options'), data).dialog ({
+        modal: true,
+        width: 650,
+        height: 130,
+    }).dialog ("widget")
         
-            name: 'user_own_options_form',
-            
-            record: {},
+    $("#the_table_container").draw_table ({
 
-            fields : [],
+        columns: [
+            {field: 'label', name: 'Опция',  width: 10},
+            {field: 'user_options.is_on', name: 'Статус', width: 10, voc: {0: 'Нет', 1: 'Да'}},
+        ],
+                
+        url: {type: 'users', part: 'options', id: $_USER.uuid},
 
-        })
-
-        $('.w2ui-form .the_table_container').w2regrid ({ 
-
-            name   : 'user_own_options_grid', 
-
-            show: {
-                toolbar: false,
-                footer: false,
-                toolbarSearch   : false,
-                toolbarInput    : false,
-                skipRecords: false,
-            },           
-
-            columns: [                
-                {field: 'label', caption: 'Опция',  size: 10},
-                {field: 'foo',   caption: 'Статус', size: 10, render: function (i) {return i ['user_options.is_on'] ? 'Установлено' : ''}},
-            ],
-
-            url: '_back/?type=users&part=own_options',
-
-            onDblClick: $_DO.toggle_user_own_options,
-
-        })
-        .refresh ()
-
-        $('#grid_user_own_options_grid_check_all').hide ()
+        onDblClick: $_DO.toggle_user_own_options
 
     })
+        
+    return $view
 
 }
