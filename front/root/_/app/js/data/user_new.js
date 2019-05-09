@@ -2,26 +2,25 @@
 
 $_DO.update_user_new = async function (e) {
 
-    let f = w2ui ['users_new_form']
+    let $this = $(e.target).closest ('.ui-dialog').find ('.ui-dialog-content')
 
-    let v = f.values ()
-    
-    if (!v.id_role) die ('id_role', 'Укажите, пожалуйста, роль')
-    if (!v.label)   die ('label', 'Укажите, пожалуйста, ФИО пользователя')
-    if (!v.login)   die ('login', 'Укажите, пожалуйста, login пользователя')
-    v.uuid = new_uuid ()
-    
-    f.lock ()
+    let data = values ($this)    
 
-    let data = await response ({action: 'create'}, {data: v})
+    if (!data.label)   die ('label', 'Укажите, пожалуйста, ФИО пользователя')
+    if (!data.id_role) die ('id_role', 'Укажите, пожалуйста, роль')
+    if (!data.login)   die ('login', 'Укажите, пожалуйста, login пользователя')
 
-    w2popup.close ()
-        
-    let grid = w2ui ['usersGrid']
-    
-    grid.reload (grid.refresh)
+    data.uuid = new_uuid ()
 
-    w2confirm ('Пользователь зарегистрирован. Открыть его карточку?').yes (function () {openTab ('/users/' + data.uuid)})
+    $this.dialog ("widget").block ()
+
+    data = await response ({action: 'create'}, {data})
+
+    $this.dialog ("close")
+
+    if (confirm ('Пользователь зарегистрирован. Открыть его карточку?')) open_tab ('/users/' + data.uuid)
+
+    reload_page ()
 
 }
 

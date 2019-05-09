@@ -1,40 +1,23 @@
-<span
-	data-popup-width=500
-	data-popup-height=230
-	data-popup-title='Учётная запись'
->
+<span title='Добавить учётную запись' class="drw popup-form">
 
-	<div class="w2ui-reset w2ui-form" style="height:180px; margin:8px 0 0 0;">
+	<style>
+		input {width: 200px;}
+		input[type=radio] {width: auto;}
+	</style>
 
-        <div class="w2ui-page page-0">
-
-			<div class="w2ui-field">
-				<label>Роль:</label>
-				<div>
-					<input name=id_role style="width:270px">
-				</div>
-			</div>
-
-			<div class="w2ui-field">
-				<label>ФИО:</label>
-				<div>
-					<input name=label style="width:270px">
-				</div>
-			</div>
-
-			<div class="w2ui-field">
-				<label>Login:</label>
-				<div>
-					<input name=login style="width:270px">
-				</div>
-			</div>
-
-        </div>
-
-        <div class="w2ui-buttons">
-			<button class=w2ui-btn name=update>Создать...</button>
-        </div>
-
-	</div>
+	<center><table>
+		<tr>
+			<td>ФИО:
+			<td><input name=label>
+		<tr>
+			<td>Роль:
+			<td>
+				<span data-list=roles.items>
+					<label data-text=text /> <input name=id_role data-value=id type=radio>
+				</span>
+		<tr>
+			<td>Login:
+			<td><input name=login>
+	</table>
 
 </span>
