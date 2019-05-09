@@ -177,6 +177,19 @@ do_set_password_users:
 
 ////////////////////////////////////////////////////////////////////////////////
 
+do_undelete_users: 
+
+    async function () {
+    
+        this.db.update ('users', {
+            uuid        : this.rq.id, 
+            is_deleted  : 0, 
+        })
+
+    },
+    
+////////////////////////////////////////////////////////////////////////////////
+
 do_delete_users: 
 
     async function () {

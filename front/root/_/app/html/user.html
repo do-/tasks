@@ -1,0 +1,45 @@
+<span>
+
+	<style>
+		input[data-block-name=user] {width: 300px!important;}
+	</style>
+
+	<table cellspacing=0 cellpadding=0 width=100% height=100%>
+		<tr><td height=1>
+			<div class="drw form">
+
+				<header>
+					<span data-text="role.label" /> <span data-text="label" />
+				</header>
+
+				<table>
+					<tr>
+						<th>ФИО:
+						<td><input name=label />
+					<tr>
+						<th>login:
+						<td><input name=login />
+					<tr>
+						<th>E-mail:
+						<td><input name=mail />
+				</table>
+
+				<div class=toolbar>
+
+					<button name=edit   class="icon edit">Редактировать</button>
+
+					<button name=pass   class="icon options">Установить пароль</button>
+					<button name=delete class="icon delete">Удалить</button>
+					<button name=undelete class="icon undelete">Восстановить</button>
+
+					<button name=update class="icon ok">Сохранить</button>
+					<button name=cancel class="icon cancel" >Отменить</button>
+
+				</div>
+
+			</div>
+		<tr><td>
+			<div id=user_options style="width:100%;height:100%" class="drw table"/>
+	</table>
+
+</span>

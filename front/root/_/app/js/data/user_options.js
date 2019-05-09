@@ -1,20 +1,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.toggle_user_options = async function (e) {
+$_DO.toggle_user_options = async function (e, a) {
 
-    var g = w2ui ['options_grid']
-    
-    var data = {}
+    let r = a.grid.getDataItem (a.row)
 
-    var r = g.get (data.id_voc_user_option = e.recid)
+    var data = {id_voc_user_option: r.id}
 
     data.is_on = 1 - (r ['user_options.is_on'] || 0)
 
     if (!confirm ((data.is_on ? 'Установить' : 'Снять') + ' опцию "' + r.label + '"?')) return
+    
+    $("#user_options").block ()
 
-    await response ({action: 'set_option'}, {data: data})
-
-    g.request ('get')
+    await response ({type: 'users', action: 'set_option'}, {data})
+    
+    $("#user_options").data ('grid').reload ()
 
 }
 

@@ -1,29 +1,20 @@
 $_DRAW.user_options = async function (data) {
-
-    $(w2ui ['main'].el ('main')).w2regrid ({ 
     
-        name   : 'options_grid', 
+    let $result = $("#user_options")
 
-        show: {
-            toolbar: true,
-            footer: false,
-            toolbarSearch   : false,
-            toolbarInput    : false,
-            skipRecords: false,
-        },           
+    $result.draw_table ({
 
-        columns: [                
-            {field: 'label',                caption: 'Опция',         size: 10},
-            {field: 'foo',                caption: 'Статус',         size: 10, render: function (i) {return i ['user_options.is_on'] ? 'Установлено' : ''}},
+        columns: [
+            {field: 'label', name: 'Опция',  width: 10},
+            {field: 'user_options.is_on', name: 'Статус', width: 10, voc: {0: 'Нет', 1: 'Да'}},
         ],
+                
+        url: {type: 'users', part: 'options', id: data.uuid},
 
-        url: '_back/?type=users&part=options&id=' + data.uuid,
-
-        onDblClick: $_DO.toggle_user_options,
+        onDblClick: $_DO.toggle_user_options
 
     })
-    .refresh ()
-
-    $('.w2ui-search-all').focus ()
+    
+    return $result
 
 }
