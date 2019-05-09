@@ -10,7 +10,7 @@ $_DRAW.task_footer = async function (data) {
         
             $b
                 .attr     ({name: id})
-                .addClass ('svg-' + i.id)
+                .css  ({backgroundImage: `url(${svg (i.id)})`})
         
         }
     

@@ -1,9 +1,5 @@
 $_DRAW.nav = async function (data) {
     
-    function svg (icon) {return staticURL (            
-        `libs/tasks/svg/${icon}.svg`            
-    )}
-
     let $nav = $('<nav class=left-sidebar>')
     
     for (let name of ['header', 'footer']) {
