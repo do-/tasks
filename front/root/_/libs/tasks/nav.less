@@ -17,29 +17,26 @@ body > nav {
 	align-content: stretch;
 	
 	min-width: @w;
-	background-color: @bg;	
+	background-image: url(img/bg.jpg);	
     
 	button {
 	    width: @w;
 	    height: 60px;
-	    border-color: @bg;
-	    border-style: solid;
-	    border-width: 14px;
-	    border-left-width: 9px;
-	    border-right-width: 9px;		    
-	    background-color: @bg;
+	    border: 0;
 	    background-repeat: no-repeat;
 	    background-size: 32px auto !important;
+	    background-size: 32px auto;
+	    background-position: 8px 14px; 
 	    outline: none;
+	    background-color: transparent;
+	    filter: blur(0.8px);
 
-		&:hover, &.active {
-			background-color: #5791c1;
-			border-color: #5791c1;
+		&:hover {
+		    filter: none;
 		}
 		
 		&.active {
-			background-color: #274a66;
-			border-color: #274a66;
+			background-color: rgba(255,255,255,0.2);
 		}			
 		
 	}    
@@ -58,6 +55,18 @@ body > nav {
 		display: flex;
 		flex-direction: column;
 		flex-shrink: 0;
+	}
+	
+	header {
+		button {
+			border-bottom: solid 1px #7397b4; 
+		}
+	}
+
+	footer {
+		button {
+			border-top: solid 1px #7397b4; 
+		}
 	}
 	
 }

@@ -64,3 +64,60 @@ $_GET.nav = async function (o) {
     }}
     
 }
+
+$_GET.nav = async function (o) {
+
+    let is_admin = ($_USER.role == 'admin')
+    
+    return {
+    
+        header: [
+        
+            {
+                id: "open_tasks",
+                label: "Дела",
+                icon: "menu",
+            },
+            {
+                id: "open_task_notes",
+                label: "Переписка",
+                icon: "xchg",
+            },
+            {
+                id: "open_users",
+                label: "Пользователи",
+                icon: "users",
+                off: !is_admin
+            },
+            
+        ].filter (not_off),
+        
+        footer: [
+        
+            {
+                id: "open_users_select",
+                label: "Корреспонденты",
+                icon: "users",
+            },
+            {
+                id: "open_user_password",
+                label: "Смена пароля",
+                icon: "keys",
+                off: is_admin
+            },
+            {
+                id: "open_settings",
+                label: "Настройки",
+                icon: "settings",
+            },
+            {
+                id: "logout",
+                label: "Выход",
+                icon: "logout",
+            },
+            
+        ].filter (not_off),
+        
+    }
+    
+}

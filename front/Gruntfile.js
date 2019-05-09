@@ -6,45 +6,7 @@ module.exports = function (grunt) {
   appModules.unshift ('../app/handler')
 
   grunt.initConfig ({
-  
-    svg_sprite      : {
-        options     : {
-            // Task-specific options go here.
-        },
-        icons: {
-            expand      : true,
-            cwd         : 'root/_/libs/tasks/svg',
-            src         : ['**/*.svg'],
-            dest        : 'root/_/libs/tasks',
-            sprite      : 'sprite.svg',
-            options     : {
-
-                shape               : {
-                    dimension       : {         // Set maximum dimensions
-                        maxWidth    : 32,
-                        maxHeight   : 32,
-                        precision: 0,
-                    },
-                    spacing         : {         // Add padding
-                        padding     : 1
-                    }
-                },
-
-                mode : {
-                    css : {
-                        sprite  : 'sprite.svg',
-                        layout  : "vertical",
-                        bust    : false,
-                        render  : {
-                           less : true
-                        },
-//                        dimensions: true
-                    }
-                }
-            }
-        }
-    },
-  
+    
     less: {
       development: {
         options: {
@@ -139,12 +101,6 @@ module.exports = function (grunt) {
         options: {nospawn: true}
       },
 
-      svg: {
-        files: ['root/_/libs/tasks/svg/*.svg'],
-        tasks: ['svg_sprite', 'less'],
-        options: {nospawn: true}
-      },
-
       js: {
         files: [
             'root/_/libs/**/*.js', 
@@ -167,10 +123,9 @@ module.exports = function (grunt) {
   });
   
   grunt.loadNpmTasks('grunt-text-replace');
-  grunt.loadNpmTasks('grunt-svg-sprite');
   grunt.loadNpmTasks('grunt-contrib-compress');
   
   grunt.registerTask('default', ['watch']);
-  grunt.registerTask('build', ['replace', 'svg_sprite', 'less', 'concat', 'compress']);
+  grunt.registerTask('build', ['replace', 'less', 'concat', 'compress']);
   
 };
