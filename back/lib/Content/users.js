@@ -10,22 +10,16 @@ select_users:
    
         this.rq.sort = this.rq.sort || [{field: "label", direction: "asc"}]
 
-        if (this.rq.searchLogic == 'OR') {
-
-            let q = this.rq.search [0].value
-
-            this.rq.search = [
-                {field: 'label', operator: 'contains', value: q},
-                {field: 'login', operator: 'contains', value: q},
-                {field: 'mail',  operator: 'contains', value: q},
-            ]
-
-        }
-    
         let filter = this.w2ui_filter ()
         
+        for (let k in filter) if (/^q /.test (k)) {
+            let v = filter [k]
+            delete filter [k]
+            const fields = ['label', 'login', 'mail']
+            filter [`(${fields.map ((f) => f + ' ILIKE %?%').join (' OR ')})`] = fields.map (() => v)
+        }
+
         filter ['uuid <>'] = '00000000-0000-0000-0000-000000000000'
-        filter.is_deleted  = 0
 
         return this.db.add_all_cnt ({}, [{users: filter}, 'roles AS role'])
 

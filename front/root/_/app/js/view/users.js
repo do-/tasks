@@ -1,30 +1,30 @@
 $_DRAW.users = async function (data) {
-
+    
     $('title').text ('Пользователи системы')
-
-    $('main').w2regrid ({ 
     
-        name: 'usersGrid',             
-        
-        show: {
-            toolbar: true,
-            footer: true,
-            toolbarAdd: true,
-        },            
+    let $result = $('main').html (await use.html ('users'))
 
-        columns: [                
-            {field: 'label',   caption: 'ФИО',    size: 100, sortable: true},
-            {field: 'login',   caption: 'Login',  size: 50,  sortable: true},
-            {field: 'id_role', caption: 'Роль',   size: 50,  voc: data.roles},
-            {field: 'mail',    caption: 'E-mail', size: 50,  sortable: true},
+    let grid = $("#grid_users").draw_table ({
+
+        columns: [
+            {field: "label", name: "ФИО", width: 200, sortable: true},
+            {field: "login", name: "Login", width: 50, sortable: true},
+            {field: "mail", name: "E-mail", width: 100, sortable: true},
+            {field: "id_role", name: "Роль", width: 50, voc: data.roles},
         ],
-                    
-        url: '_back/?type=users',
+        
+        searchInputs: 
+            $(".toolbar :input").toArray ()
+        ,
+        
+        url: {type: 'users'},
 
-        onAdd: function (e) {show_block ('user_new')},
+        onDblClick: (e, a) => open_tab ('/users/' + a.grid.getDataItem (a.row).uuid)
 
-    }).refresh ();
+    })
     
-    $('#grid_usersGrid_search_all').focus ()
+    $(".toolbar input:first").focus ()
+
+    return $result
 
 }
