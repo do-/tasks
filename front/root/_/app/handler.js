@@ -167,6 +167,10 @@ function _ts (record, ind, col_ind, data) {
     return data.slice (0, 10) + ' ' + data.slice (11, 19)
 }
 
+function svg (icon) {return staticURL (            
+    `libs/tasks/svg/${icon}.svg`            
+)}
+
 clearTimeout (window.alarm)
 
 $_SESSION.beforeExpiry ($_SESSION.keepAlive)

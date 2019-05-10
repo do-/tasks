@@ -1,34 +1,26 @@
-<span
-	data-popup-width=700
-	data-popup-height=580
-	data-popup-title='Комментарий'
->
+<span title='Комментарий' class="drw popup-form">
 
-	<div class="w2ui-reset w2ui-form" style="height:530px; margin:8px 0 0 0;">
+	<input type=hidden name=is_assigning>
 
-        <div class="w2ui-page page-0">
+<!--
+	<style>
+		input {width: 200px;}
+		input[type=radio] {width: auto;}
+	</style>
+-->
 
-			<div class="w2ui-field">
-				<label>Кто этим займётся:</label>
-				<div>
-					<input name=id_user_to style="width:490px">
-				</div>
-			</div>
+	<center><table>
+		<tr>
+			<td nowrap>Кто этим займётся:
+			<td>
+				<select name=id_user_to style="width:400px;">
+					<option data-list=users data-text=text data-value=id />
+				</select>
+		<tr>
+			<td nowrap valign=top>Ваше замечание:<br><span id=img />
 
-			<div class="w2ui-field">
-				<label style="">Ваше замечание:</label>
-				<div>
-					<textarea name=label style="width:490px;height:400px;"></textarea>
-					<span id=img />
-				</div>
-			</div>
-
-        </div>
-
-        <div class="w2ui-buttons">
-			<button class=w2ui-btn name=update>Записать</button>
-        </div>
-
-	</div>
+			<td>
+				<textarea name=label style="width:490px;height:400px;"></textarea>
+	</table>
 
 </span>

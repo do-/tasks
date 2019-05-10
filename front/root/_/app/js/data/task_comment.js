@@ -2,32 +2,30 @@
 
 $_DO.update_task_comment = function (e) {
 
-    var f = w2ui ['task_comment_form']
+    let $this = $(e.target).closest ('.ui-dialog').find ('.ui-dialog-content')
+
+    let data = values ($this)    
+
+    var action = data.is_assigning ? 'assign': 'comment'
     
-    var tia = {action: f.record.is_assigning ? 'assign': 'comment'}
+    data.uuid = new_uuid ()
 
-    var v = f.values ()
-    
-    v.img = $('input[name=img]').val ()
-    v.ext = $('input[name=ext]').val ()
-    v.uuid = new_uuid ()
+    if (action == 'assign') {
 
-    if (tia.action == 'assign') {
-
-        if (!v.id_user_to) die ('id_user_to', 'Вы забыли указать адресата')
+        if (!data.id_user_to) die ('id_user_to', 'Вы забыли указать адресата')
         
-        if (!confirm ('Адресат - ' + f.record.id_user_to.label + ', так?')) die ('id_user_to', 'Хорошо, давайте уточним')
+        if (!confirm ('Адресат - ' + $('select option:selected', $this).text () + ', так?')) die ('id_user_to', 'Хорошо, давайте уточним')
 
     }
     else {
     
-        if (v.id_user_to && !v.label) die ('label', 'Напишите что-нибудь')
+        if (data.id_user_to && !data.label) die ('label', 'Напишите что-нибудь')
         
     }        
 
-    f.lock ()
+    $this.dialog ("widget").block ()
 
-    query (tia, {data: v}, reload_page)
+    query ({action}, {data}, reload_page)
 
 }
 
@@ -41,7 +39,10 @@ $_GET.task_comment = async function (o) {
 
     if (o.is_assigning) {
     
-        let d = await response ({type: 'users', id: undefined}, {search: [{field: "uuid", operator: "not in", value: [{id: $_USER.uuid}]}], searchLogic: 'AND', limit: 100, offset: 0})
+        let d = await response ({type: 'users', id: undefined}, {search: [
+            {field: "uuid", operator: "not in", value: [{id: $_USER.uuid}]},
+            {field: "is_deleted", operator: "is", value: 0},
+        ], searchLogic: 'AND', limit: 100, offset: 0})
 
         data.users = d.users.map (function (i) {return {id: i.uuid, label: i.label}})
             

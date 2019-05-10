@@ -1,42 +1,28 @@
 $_DRAW.task_comment = async function (data) {
 
-    (await use.jq ('task_comment')).w2uppop ({}, function () {
-
-        var users = clone (data.users.items)
-
-        if (!data.record.is_assigning) {
+    let it = data.record
+    
+    it.users = ((users) => {
+    
+        if (it.is_assigning) return users
         
-            if ($_USER.id == data.author.id) users.push ({id: "0", text: 'Никто. Дело окончно.'})
-
-            $.each (users, function () {if (this.id == $_USER.id) this.text = 'Я, ' + this.text})
-
-        }
-
-        $('#w2ui-popup .w2ui-form').w2reform ({
+        if ($_USER.id == data.author.id) users.push ({id: "0", text: 'Никто. Дело окончно.'})
         
-            name: 'task_comment_form',
-
-            record: data.record,
-
-            fields : [                
-                {name: 'label',   type: 'text'},
-                {name: 'id_user_to', type: 'list', options: {items: users}},
-            ],
-            
-            focus: data.record.id_user_to ? 1 : 0,
-            
-            onRefresh: function (e) {
-            
-                e.done (function () {
-
-                    $('#img').show_block ('img')
-
-                })
-            
-            }
-            
-        })
+        for (let i of users) if (i.id == $_USER.id) i.text = 'Я, ' + i.text
         
-    })
+        return users
+        
+    }) (clone (data.users.items));
+
+    let $view = fill (await use.jq ('task_comment'), it).dialog ({width: 635,
+        modal: true,
+        buttons: [{name: 'update', text: 'Записать...'}]
+    }).dialog ("widget")
+    
+    $('select', $view).selectmenu ({width: true})
+    
+    $('#img', $view).show_block ('img')
+        
+    return $view
 
 }
