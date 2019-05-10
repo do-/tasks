@@ -1,30 +1,12 @@
 $_DRAW.tasks_new = async function (data) {
 
-    return (await use.jq ('tasks_new')).w2uppop ({}, function () {
+    let $view = (await use.jq ('tasks_new')).dialog ({width: 635,
+        modal: true,
+        buttons: [{name: 'update', text: 'Создать...'}]
+    }).dialog ("widget")
         
-        $('#w2ui-popup .w2ui-form').w2reform ({
+    $('#img', $view).show_block ('img')
         
-            name: 'tasks_new_form',
-            
-            record: {id_user: $_USER.id},
-
-            fields : [                
-                {name: 'label',   type: 'text'},
-                {name: 'body',    type: 'text'},
-            ],
-                            
-            onRefresh: function (e) {
-            
-                e.done (function () {
-
-                    $('#img').show_block ('img')
-
-                })
-            
-            }
-
-        })
-
-    })
+    return $view
 
 }

@@ -2,24 +2,19 @@
 
 $_DO.update_tasks_new = async function (e) {
 
-    var f = w2ui ['tasks_new_form']
+    let $this = $(e.target).closest ('.ui-dialog').find ('.ui-dialog-content')
 
-    var v = f.values ()
+    let data = values ($this)    
     
-    if (!v.label) die ('label', 'Конкретизируйте, пожалуйста, тему')
+    if (!data.label) die ('label', 'Конкретизируйте, пожалуйста, тему')
     
-    v.img = $('input[name=img]').val ()
-    v.ext = $('input[name=ext]').val ()
+    $this.dialog ("widget").block ()
 
-    f.lock ()
+    data = await response ({action: 'create', id: new_uuid ()}, {data})
 
-    let data = await response ({action: 'create', id: new_uuid ()}, {data: v})
-    
-    w2ui ['tasksGrid'].reload ()
-
-    w2popup.close ()
-    
-    w2confirm ('Задача зарегистрирована. Открыть её страницу?').yes (function () {openTab ('/tasks/' + data.uuid)})
+    if (confirm ('Задача зарегистрирована. Открыть её страницу?')) open_tab ('/tasks/' + data.uuid)
+ 
+    reload_page ()
 
 }
 
