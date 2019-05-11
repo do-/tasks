@@ -130,11 +130,14 @@ do_create_tasks:
 
             if (this.db.is_pk_violation (e)) return result; else throw e
 
-        }            
+        }
         
-        this.rq.data.id_user_to = this.user.uuid
+        let data = this.rq.data
+        
+        data.id_user_to = this.user.uuid
+        data.uuid = this.rq.id
 
-        let note = new Note (this.rq.data, this.rq.id)
+        let note = new Note (data, this.rq.id)
         
         let [id_task_note] = await note.store (this.db, this.conf.pics)
         
