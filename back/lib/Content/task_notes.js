@@ -93,31 +93,21 @@ select_task_notes:
         let note
         let status
 
-        if (this.rq.searchLogic == 'OR') {
-        
-            note = this.rq.search [0].value
-            this.rq.search = []
-            
-        }
-        else if (this.rq.searchLogic == 'AND') {
-        
-            let r = []
+        let r = []
 
-            for (let s of this.rq.search) switch (darn(s).field) {
-                case 'note':
-                    note = s.value
-                    break
-                case 'status':
-                    status = s.value
-                    break
-                default:
-                    r.push (s)
-            }
-            
-            this.rq.search = r
-        
+        for (let s of this.rq.search) switch (darn(s).field) {
+            case 'q':
+                note = s.value
+                break
+            case 'status':
+                status = s.value
+                break
+            default:
+                r.push (s)
         }
-
+            
+        this.rq.search = r
+        
         this.rq.sort = [{field: "ts", direction: "desc"}];
 
         let filter = this.w2ui_filter ()
