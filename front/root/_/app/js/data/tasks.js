@@ -1,14 +1,18 @@
 ////////////////////////////////////////////////////////////////////////////////
 
+$_DO.create_tasks = function (e) {
+
+    show_block ('tasks_new')
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 $_DO.show_required_tasks = function () {
 
-    var grid = w2ui ['tasksGrid'] || this
-
-    grid.search ([
-
-        {field: "id_user", type: "enum", operator: "in", value: [{"id": $_USER.id, "text": $_USER.label}]}
-
-    ], 'AND')
+    show_block ('tasks', {
+        id_user: $_USER.id,
+    })
     
 }    
 
@@ -16,16 +20,11 @@ $_DO.show_required_tasks = function () {
 
 $_DO.show_created_tasks = function () {
 
-    var grid = w2ui ['tasksGrid']
+    show_block ('tasks', {
+        id_user: -1,
+        id_other_user: $_USER.id
+    })
 
-    grid.search ([
-
-        {field: "id_other_user", type: "enum", operator: "in", value: [{"id": $_USER.id, "text": $_USER.label}]},
-        {field: "is_author", type: "list", operator: "is", value: 1, "text": "Автор"},
-        {field: "status", type: "list", operator: "is", value: 1, "text": "В работе"}
-
-    ], 'AND')
-    
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +37,14 @@ $_GET.tasks = async function (o) {
     
     $('body').data ('data', data)
     
-    data.id_user = $_USER.uuid
+    let n = 0
+    
+    for (k in o) {
+        data [k] = o [k]
+        n ++
+    }
+    
+    if (!n) data.id_user = $_USER.uuid
 
     return data
 
