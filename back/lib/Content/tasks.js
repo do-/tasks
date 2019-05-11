@@ -177,32 +177,25 @@ select_tasks:
     
         this.rq.sort = [{field: "ts", direction: "asc"}]
         
-        let x = {}
-        
-        if (this.rq.searchLogic == 'OR') {
-            x.note = this.rq.search [0].value
-            this.rq.search = []
-        }
-        else if (this.rq.searchLogic == 'AND') {            
+        let x = {}        
+        let r = []
 
-            let r = []
-
-            for (let s of this.rq.search) switch (s.field) {
-                case 'note':
-                case 'status':
-                case 'id_other_user':
-                case 'is_author':
-                    x [s.field] = s.value
+        for (let s of this.rq.search) switch (s.field) {
+            case 'note':
+            case 'status':
+            case 'id_other_user':
+                x [s.field] = s.value
+                break
+            case 'id_user':
+                if (s.value < 0) {
+                    x.status = 2 + parseInt (s.value)
                     break
-                default:
-                    r.push (s)
-            }
-            
-            if (x.is_author != undefined) x.is_author = (x.is_author == 1) ? 1 : 0
-            
-            this.rq.search = r
-        
+                }
+            default:
+                r.push (s)
         }
+
+        this.rq.search = r
         
         let filter = this.w2ui_filter ()
 
@@ -211,8 +204,8 @@ select_tasks:
         if (x.note != undefined) filter.uuid = this.db.query ([{'task_notes(id_task)': {'label ILIKE %?% OR body ILIKE %?%': [x.note, x.note]}}]) 
 
         if (x.id_other_user) filter ['uuid IN'] = this.db.query ([{'task_users(id_task)': {
-            id_user   : x.id_other_user.map ((i) => i.id),
-            is_author : x.is_author,
+            id_user   : x.id_other_user,
+            is_author : 1,
         }}])
 
         return this.db.add_all_cnt ({}, [
@@ -229,7 +222,7 @@ get_vocs_of_tasks:
     function () {
 
         return this.db.add_vocabularies ({}, {
-            users: {filter: 'login IS NOT NULL'}
+            users: {filter: 'is_deleted = 0 AND label IS NOT NULL'}
         })
 
     },

@@ -37,6 +37,8 @@ $_GET.tasks = async function (o) {
     add_vocabularies (data, {users: 1})
     
     $('body').data ('data', data)
+    
+    data.id_user = $_USER.uuid
 
     return data
 
