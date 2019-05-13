@@ -5,7 +5,7 @@ $_DO.update_user_new = async function (e) {
     let $this = $(e.target).closest ('.ui-dialog').find ('.ui-dialog-content')
 
     let data = values ($this)    
-
+darn (data)
     if (!data.label)   die ('label', 'Укажите, пожалуйста, ФИО пользователя')
     if (!data.id_role) die ('id_role', 'Укажите, пожалуйста, роль')
     if (!data.login)   die ('login', 'Укажите, пожалуйста, login пользователя')
@@ -28,6 +28,10 @@ $_DO.update_user_new = async function (e) {
 
 $_GET.user_new = async function (o) {
 
-    return $('body').data ('data')
+    let data = clone ($('body').data ('data'))      
+    
+    data.id_role = 2
+    
+    return data
     
 }
