@@ -8,9 +8,10 @@ $_DRAW.task_notes = async function (data) {
 
         columns: [
             {field: 'ts',           name: 'Дата',      width: 20, formatter: (r, _, v) => v.slice (0, 19).replace ('T', ' ')},
-            {field: 'label',        name: 'Заголовок', width: 100},
+            {field: 'label',        name: 'Заголовок сообщения', width: 100},
             {field: 'id_user_from', name: 'Автор',     width: 30, voc: data.users},
             {field: 'id_user_to',   name: 'Адресат',   width: 30, voc: data.users},
+            {field: 'tasks.label',  name: 'Тема задачи', width: 100},
         ],
         
         searchInputs: 

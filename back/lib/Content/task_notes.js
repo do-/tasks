@@ -118,7 +118,7 @@ select_task_notes:
 
             {task_notes: filter}, 
 
-            {'$tasks(uuid) ON task_notes.id_task':
+            {'$tasks(uuid, label) ON task_notes.id_task':
                 status ==  1 ? {'id_user <>': null} :
                 status == -1 ? {'id_user  =': null} :
                 {}
