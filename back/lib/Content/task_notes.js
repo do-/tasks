@@ -90,6 +90,7 @@ select_task_notes:
 
     function () {
         
+        let label
         let note
         let status
 
@@ -98,6 +99,9 @@ select_task_notes:
         for (let s of this.rq.search) switch (darn(s).field) {
             case 'q':
                 note = s.value
+                break
+            case 'tasks.label':
+                label = s.value
                 break
             case 'status':
                 status = s.value
@@ -113,17 +117,17 @@ select_task_notes:
         let filter = this.w2ui_filter ()
         
         if (note) filter ['label ILIKE %?% OR body ILIKE %?%'] = [note, note]
+        
+        let task_filter = 
+            status ==  1 ? {'id_user <>': null} :
+            status == -1 ? {'id_user  =': null} :
+            {}
+            
+        if (label) task_filter ['label ILIKE %?%'] = label
 
         return this.db.add_all_cnt ({}, [
-
             {task_notes: filter}, 
-
-            {'$tasks(uuid, label) ON task_notes.id_task':
-                status ==  1 ? {'id_user <>': null} :
-                status == -1 ? {'id_user  =': null} :
-                {}
-            }
-
+            {'$tasks(uuid, label) ON task_notes.id_task': task_filter}
         ])
         
     },
