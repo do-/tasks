@@ -1,6 +1,6 @@
 $_DRAW.task_notes = async function (data) {
 
-    $('title').text ('Всеобщая переписка')
+    $('title').text ('Переписка')
 
     let $result = $('main').html (fill (await use.jq ('task_notes'), data))
     
