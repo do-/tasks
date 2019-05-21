@@ -16,13 +16,17 @@ $_DRAW.task_comment = async function (data) {
 
     let $view = fill (await use.jq ('task_comment'), it).dialog ({width: 635,
         modal: true,
-        buttons: [{name: 'update', text: 'Записать...'}]
+        buttons: [{name: 'update', text: 'Ctrl-Enter'}]
     }).dialog ("widget")
     
     $('select', $view).selectmenu ({width: true})
     
     $('#img', $view).show_block ('img')
-        
+    
+    $(window).keyup ((e) => {if (e.which == 13 && e.ctrlKey) $('button[name=update]').click ()})
+
+    $('textarea', $view).focus ()    
+
     return $view
 
 }
