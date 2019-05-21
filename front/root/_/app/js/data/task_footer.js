@@ -16,7 +16,7 @@ $_GET.task_footer = async function (o) {
     
     data.buttons = [{
         id:    "comment",
-        title: "Добавить комментарий",
+        title: "Добавить комментарий (F4)",
         data:  {},
     }]
 
