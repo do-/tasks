@@ -25,7 +25,12 @@ $_DRAW.tasks = async function (data) {
         
         url: {type: 'tasks'},
 
-        onDblClick: (e, a) => open_tab ('/tasks/' + a.grid.getDataItem (a.row).uuid)
+        onDblClick: (e, a) => open_tab ('/tasks/' + a.grid.getDataItem (a.row).uuid),
+
+        onKeyDown: (e, a) => {
+            if (e.which != 13 || e.ctrlKey || e.altKey) return
+            open_tab ('/tasks/' + a.grid.getDataItem (a.row).uuid)
+        },
 
     })
     
