@@ -22,7 +22,7 @@ $_DO.show_created_tasks = function () {
 
     show_block ('tasks', {
         id_user: -1,
-        id_other_user: $_USER.id
+        id_author: $_USER.id
     })
 
 }

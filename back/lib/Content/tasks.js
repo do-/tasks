@@ -217,6 +217,8 @@ select_tasks:
         return this.db.add_all_cnt ({}, [
             {tasks : filter}, 
             'task_notes ON id_last_task_note',
+            {'$task_users(id_user) AS author ON (author.id_task = tasks.uuid AND author.is_author = 1)': {}},
+            {'$task_users(id_user) AS executor ON (executor.id_task = tasks.uuid AND executor.is_author = 0)': {}},
         ])
 
     },
