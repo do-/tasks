@@ -104,7 +104,7 @@ select_task_notes:
                 task_filter ['label ILIKE %?%'] = s.value
                 break
             case 'status':
-                task_filter ['id_user' + (s.value == 1 ? '=' : '<>')] = null
+                task_filter ['id_user' + (s.value == 1 ? '<>' : '=')] = null
                 break
             default:
                 r.push (s)
