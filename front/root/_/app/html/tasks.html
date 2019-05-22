@@ -10,7 +10,7 @@
 
 			<input name=note placeholder="Поиск">
 
-			На ком:&nbsp;
+			На ком сейчас:&nbsp;
 			<select name=id_user>
 				<option value="" selected>[не важно]</option>
 				<option value=-1 selected>[на ком-либо (открыто)]</option>
@@ -18,9 +18,15 @@
 				<option data-list=users.items data-value=id data-text=text />
 			</select>
 
-			от кого:&nbsp;
-			<select name=id_other_user>
-				<option value="" selected>[ото всех]</option>
+			Автор:&nbsp;
+			<select name=id_author>
+				<option value="" selected>[кто угодно]</option>
+				<option data-list=users.items data-value=id data-text=text />
+			</select>
+
+			Адресат:&nbsp;
+			<select name=id_executor>
+				<option value="" selected>[кто угодно]</option>
 				<option data-list=users.items data-value=id data-text=text />
 			</select>
 

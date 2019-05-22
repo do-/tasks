@@ -183,7 +183,8 @@ select_tasks:
         for (let s of this.rq.search) switch (s.field) {
             case 'note':
             case 'status':
-            case 'id_other_user':
+            case 'id_author':
+            case 'id_executor':
                 x [s.field] = s.value
                 break
             case 'id_user':
@@ -203,9 +204,14 @@ select_tasks:
 
         if (x.note != undefined) filter.uuid = this.db.query ([{'task_notes(id_task)': {'label ILIKE %?% OR body ILIKE %?%': [x.note, x.note]}}]) 
 
-        if (x.id_other_user) filter ['uuid IN'] = this.db.query ([{'task_users(id_task)': {
-            id_user   : x.id_other_user,
+        if (x.id_author) filter ['uuid IN'] = this.db.query ([{'task_users(id_task)': {
+            id_user   : x.id_author,
             is_author : 1,
+        }}])
+        
+        if (x.id_executor) filter ['uuid IN '] = this.db.query ([{'task_users(id_task)': {
+            id_user   : x.id_executor,
+            is_author : 0,
         }}])
 
         return this.db.add_all_cnt ({}, [
