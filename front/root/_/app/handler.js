@@ -29,6 +29,14 @@ function _ts (r, _, v) {
     return `${d}.${m}.${y} ${hm}`
 }
 
+function _io (users) {
+    return function (r, _, v) {
+        if (!v) return '[закрыто]'
+        var [f, i] = users [v].split (' ')
+        return i + ' ' + f.charAt (0) + '.'
+    }
+}
+
 function svg (icon) {return staticURL (            
     `libs/tasks/svg/${icon}.svg`            
 )}

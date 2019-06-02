@@ -4,15 +4,17 @@ $_DRAW.tasks = async function (data) {
     
     let $result = $('main').html (fill (await use.jq ('tasks'), data))
     
+    let __io = _io (data.users)
+    
     let grid = $("#grid_tasks").draw_table ({
 
         columns: [
             {field: 'ts',                name: 'Дата',              minWidth: 125, maxWidth: 125, formatter: _ts},
-            {field: 'label',             name: 'Тема',              width: 100},
-            {field: 'author.id_user',    name: 'Автор',             width: 40, hidden: true, voc: data.users},
-            {field: 'executor.id_user',  name: 'Адресат',           width: 40, hidden: true, voc: data.users},
-            {field: 'id_user',           name: 'На ком сейчас',     width: 40, hidden: true, formatter: (r, _, v) => data.users [v] || '[закрыто]'},
-            {field: 'task_notes.label',  name: 'Последняя реплика', width: 100},
+            {field: 'label',             name: 'Тема',              width: 150},
+            {field: 'author.id_user',    name: 'Автор',             width: 20, hidden: true, formatter: __io},
+            {field: 'executor.id_user',  name: 'Адресат',           width: 20, hidden: true, formatter: __io},
+            {field: 'id_user',           name: 'На ком',     width: 20, hidden: true, formatter: __io},
+            {field: 'task_notes.label',  name: 'Последняя реплика', width: 50},
             {field: 'task_notes.ts',     name: 'от',                minWidth: 125, maxWidth: 125, formatter: _ts},
         ],
 
