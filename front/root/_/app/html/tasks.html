@@ -1,4 +1,22 @@
 <span class="drw table">
+
+	<select name=id_author>
+		<option value="" selected>[кто угодно]</option>
+		<option data-list=users.items data-value=id data-text=text />
+	</select>
+
+	<select name=id_executor>
+		<option value="" selected>[кто угодно]</option>
+		<option data-list=users.items data-value=id data-text=text />
+	</select>
+
+	<select name=id_user>
+		<option value="" selected>[не важно]</option>
+		<option value=-1 selected>[на ком-либо (открыто)]</option>
+		<option value=-2 selected>[ни на ком (закрыто)]</option>
+		<option data-list=users.items data-value=id data-text=text />
+	</select>
+
 <table cellspacing=0 cellpadding=0 width=100% height=100%>
 
 	<tr class=caption><th>Задачи (+ последняя реплика для каждой)
@@ -8,27 +26,8 @@
 
 			<button name=create class="icon create" data-hotkey="Alt-L"><u>Д</u>обавить</button>
 
-			<input name=note placeholder="Поиск">
+			<input name=note placeholder="Поиск" style="width:500px;">
 
-			Автор:&nbsp;
-			<select name=id_author>
-				<option value="" selected>[кто угодно]</option>
-				<option data-list=users.items data-value=id data-text=text />
-			</select>
-
-			Адресат:&nbsp;
-			<select name=id_executor>
-				<option value="" selected>[кто угодно]</option>
-				<option data-list=users.items data-value=id data-text=text />
-			</select>
-
-			На ком сейчас:&nbsp;
-			<select name=id_user>
-				<option value="" selected>[не важно]</option>
-				<option value=-1 selected>[на ком-либо (открыто)]</option>
-				<option value=-2 selected>[ни на ком (закрыто)]</option>
-				<option data-list=users.items data-value=id data-text=text />
-			</select>
 <span style="position:fixed;right:0;margin-top:-3px;">
 			<button name=show_required class="icon tv_0">Что на мне?</button>
 			<button name=show_created  class="icon tv_0">Чего я жду?</button>

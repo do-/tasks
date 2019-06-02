@@ -101,7 +101,10 @@ module.exports = function (grunt) {
       },
 
       styles: {
-        files: ['root/_/libs/tasks/*.less'],
+        files: [
+            'root/_/libs/tasks/*.less',
+            'root/_/libs/BtrMilk/*.less',
+        ],
         tasks: ['less'],
         options: {nospawn: true}
       },

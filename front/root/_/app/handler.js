@@ -31,8 +31,9 @@ function _ts (r, _, v) {
 
 function _io (users) {
     return function (r, _, v) {
-        if (!v) return '[закрыто]'
-        var [f, i] = users [v].split (' ')
+        let fi = users [v]
+        if (!fi) return '[закрыто]'
+        var [f, i] = fi.split (' ')
         return i + ' ' + f.charAt (0) + '.'
     }
 }

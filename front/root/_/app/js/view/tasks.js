@@ -7,6 +7,8 @@ $_DRAW.tasks = async function (data) {
     let __io = _io (data.users)
     
     let grid = $("#grid_tasks").draw_table ({
+    
+        showHeaderRow: true,
 
         columns: [
             {field: 'ts',                name: 'Дата',              minWidth: 125, maxWidth: 125, formatter: _ts},
@@ -30,9 +32,35 @@ $_DRAW.tasks = async function (data) {
             if (e.which != 13 || e.ctrlKey || e.altKey) return
             open_tab ('/tasks/' + a.grid.getDataItem (a.row).uuid)
         },
+        
+        onHeaderRowCellRendered: (e, a) => {
+        
+            let $anode = $(a.node)
+
+            function select (name) {
+                let $os = $(`select[name=${name}]`, $result)
+                let $ns = $os.clone ()
+                $os.remove ()
+                $ns.val (data [name])
+                $ns.appendTo ($(a.node))
+                $ns.selectmenu ({
+                    width: true,
+                    change: () => {a.grid.setFieldFilter (a.grid.toSearch ($ns))}
+                })
+                a.grid.loader.setSearch (a.grid.toSearch ($ns))
+            }
+            
+            switch (a.column.id) {
+                case 'author.id_user':   return select ('id_author')
+                case 'executor.id_user': return select ('id_executor')
+                case 'id_user':          return select ('id_user')
+                default: $anode.text ('\xa0')
+            }
+            
+        },
 
     })
-    
+        
     $(".toolbar input:first").focus ()
 
     return $result
