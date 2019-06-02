@@ -50,10 +50,19 @@ $_DRAW.tasks = async function (data) {
                 a.grid.loader.setSearch (a.grid.toSearch ($ns))
             }
             
+            function input (name) {
+                let $ns = $(`<input name=${name} class=ui-widget style="width:400px;" placeholder="Фильтр по теме">`)
+//                $ns.val (data [name])
+                $ns.appendTo ($(a.node))
+                $ns.change (() => {a.grid.setFieldFilter (a.grid.toSearch ($ns))})
+//                a.grid.loader.setSearch (a.grid.toSearch ($ns))
+            }
+            
             switch (a.column.id) {
                 case 'author.id_user':   return select ('id_author')
                 case 'executor.id_user': return select ('id_executor')
                 case 'id_user':          return select ('id_user')
+                case 'label':            return input  ('label')
                 default: $anode.text ('\xa0')
             }
             
