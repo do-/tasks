@@ -7,7 +7,7 @@ $_DRAW.task_notes = async function (data) {
     let grid = $("#grid_task_notes").draw_table ({
 
         columns: [
-            {field: 'ts',           name: 'Дата',      width: 20, formatter: (r, _, v) => v.slice (0, 19).replace ('T', ' ')},
+            {field: 'ts',           name: 'Дата',      minWidth: 125, maxWidth: 125, formatter: _ts},
             {field: 'label',        name: 'Заголовок сообщения', width: 100},
             {field: 'id_user_from', name: 'Автор',     width: 30, voc: data.users},
             {field: 'id_user_to',   name: 'Адресат',   width: 30, voc: data.users},

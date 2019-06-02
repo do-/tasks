@@ -20,9 +20,13 @@ function setup_request () {
 
 function reload_page () { location.reload () }
 
-function _ts (record, ind, col_ind, data) {
-    if (!data) return ''
-    return data.slice (0, 10) + ' ' + data.slice (11, 19)
+function _ts (r, _, v) {
+    if (!v) return ''
+    let [ymd, hms] = v.split ('T')
+    let [y, m, d]  = ymd.split ('-')
+    let hm = hms.slice (0, 5)
+    y %= 100
+    return `${d}.${m}.${y} ${hm}`
 }
 
 function svg (icon) {return staticURL (            
