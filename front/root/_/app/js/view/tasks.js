@@ -6,7 +6,7 @@ $_DRAW.tasks = async function (data) {
     
     let __io = _io (data.users)
     
-    let grid = $("#grid_tasks").draw_table ({
+    let grid = window.tasks_grid = $("#grid_tasks").draw_table ({
     
         showHeaderRow: true,
 

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.update_task_comment = function (e) {
+$_DO.update_task_comment = async function (e) {
 
     let $this = $(e.target).closest ('.ui-dialog').find ('.ui-dialog-content')
 
@@ -23,9 +23,15 @@ $_DO.update_task_comment = function (e) {
         
     }        
 
-    $this.dialog ("widget").block ()
+    $this.dialog ("close")
 
-    query ({action}, {data}, reload_page)
+    $('body').block ()
+
+    await response ({action}, {data})
+    
+    try {opener.tasks_grid.reload ()} catch (e) {}
+    
+    setTimeout (() => {confirm ('Запись внесена. Может, закрыть страницу?') ? window.close () : reload_page ()}, 10)
 
 }
 
