@@ -20,6 +20,10 @@ $_DRAW.nav = async function (data) {
         }
 
     }
+    
+    document.addEventListener ('keydown', (e) => {        
+        if (e.key == 'F1') $_DO.open_help_nav (e.preventDefault ())
+    })    
 
     return $nav.insertBefore ($('main'))
 
