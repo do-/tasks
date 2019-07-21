@@ -25,20 +25,15 @@ body > nav {
 	    border: 0;
 	    background-repeat: no-repeat;
 	    background-size: 32px auto !important;
-	    background-size: 32px auto;
 	    background-position: 8px 14px; 
 	    outline: none;
 	    background-color: transparent;
-	    filter: blur(0.8px);
-
-		&:hover {
-		    filter: none;
-		}
-		
-		&.active {
-			background-color: rgba(255,255,255,0.2);
-		}			
-		
+	    &:hover {
+		filter: sepia(1) hue-rotate(350deg) saturate(20);
+	    }
+	    &.active {
+		filter: sepia(1) hue-rotate(183deg) saturate(100);
+	    }
 	}    
 
 	hr {

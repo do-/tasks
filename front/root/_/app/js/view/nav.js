@@ -13,9 +13,10 @@ $_DRAW.nav = async function (data) {
                 .css  ({backgroundImage: `url(${svg (o.icon)})`})
                 .appendTo ($result)
 
-            if (o.id == 'open_' + $_REQUEST.type) $b.addClass ('active');
-                else clickOn ($b, $_DO [o.id + '_nav'])
-                
+            if (o.id == 'open_' + $_REQUEST.type) $b
+                .addClass ('active')
+                .attr ('name', '_')
+
         }
 
     }
