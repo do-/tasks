@@ -29,8 +29,9 @@ function _ts (r, _, v) {
     return `${d}.${m}.${y} ${hm}`
 }
 
-function _io (users) {
+function _io (users, me) {
     return function (r, _, v) {
+        if (v == $_USER.id) return me
         let fi = users [v]
         if (!fi) return '[закрыто]'
         var [f, i] = fi.split (' ')

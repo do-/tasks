@@ -32,8 +32,10 @@ $_DO.show_created_tasks = function () {
 $_GET.tasks = async function (o) {
 
     let data = await response ({part: 'vocs'})
-
+    
     add_vocabularies (data, {users: 1})
+    
+    data.others = data.users.items.filter ((r) => r.id != $_USER.id)
     
     $('body').data ('data', data)
     

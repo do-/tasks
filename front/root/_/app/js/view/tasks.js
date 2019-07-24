@@ -4,8 +4,8 @@ $_DRAW.tasks = async function (data) {
     
     let $result = $('main').html (fill (await use.jq ('tasks'), data))
     
-    let __io = _io (data.users)
-    
+    $('option[data-me]').attr ({value: $_USER.id})
+        
     let grid = window.tasks_grid = $("#grid_tasks").draw_table ({
     
         showHeaderRow: true,
@@ -13,9 +13,9 @@ $_DRAW.tasks = async function (data) {
         columns: [
             {field: 'ts',                name: 'Дата',              minWidth: 125, maxWidth: 125, formatter: _ts},
             {field: 'label',             name: 'Тема',              width: 150},
-            {field: 'author.id_user',    name: 'Автор',             width: 20, hidden: true, formatter: __io},
-            {field: 'executor.id_user',  name: 'Адресат',           width: 20, hidden: true, formatter: __io},
-            {field: 'id_user',           name: 'На ком',     width: 20, hidden: true, formatter: __io},
+            {field: 'author.id_user',    name: 'Автор',             width: 20, hidden: true, formatter: _io (data.users, 'я')},
+            {field: 'executor.id_user',  name: 'Адресат',           width: 20, hidden: true, formatter: _io (data.users, 'мне')},
+            {field: 'id_user',           name: 'На ком',            width: 20, hidden: true, formatter: _io (data.users, 'на мне')},
             {field: 'task_notes.label',  name: 'Последняя реплика', width: 50},
             {field: 'task_notes.ts',     name: 'от',                minWidth: 125, maxWidth: 125, formatter: _ts},
         ],
@@ -52,10 +52,8 @@ $_DRAW.tasks = async function (data) {
             
             function input (name) {
                 let $ns = $(`<input name=${name} class=ui-widget style="width:400px;" placeholder="Фильтр по теме">`)
-//                $ns.val (data [name])
                 $ns.appendTo ($(a.node))
                 $ns.change (() => {a.grid.setFieldFilter (a.grid.toSearch ($ns))})
-//                a.grid.loader.setSearch (a.grid.toSearch ($ns))
             }
             
             switch (a.column.id) {
