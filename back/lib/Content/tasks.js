@@ -175,7 +175,7 @@ select_tasks:
 
     function () {
     
-        this.rq.sort = [{field: "ts", direction: "asc"}]
+        if (!this.rq.sort) this.rq.sort = [{field: "ts", direction: "asc"}]
         
         let x = {}        
         let r = []
