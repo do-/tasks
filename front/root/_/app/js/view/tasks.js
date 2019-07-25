@@ -6,6 +6,15 @@ $_DRAW.tasks = async function (data) {
     
     $('option[data-me]').attr ({value: $_USER.id})
         
+    function _io (users, me) {
+        return function (r, _, v) {
+            if (v == $_USER.id) return me
+            let fi = users [v]
+            if (!fi) return '[закрыто]'
+            return fi.split (' ') [1]
+        }
+    }
+
     let grid = window.tasks_grid = $("#grid_tasks").draw_table ({
     
         showHeaderRow: true,
