@@ -38,6 +38,17 @@ module.exports = {
                 id_user = NEW.id_user_to
             WHERE 
                 uuid = NEW.id_task;
+                
+            INSERT INTO task_tasks (
+                id_task,
+                id_task_to
+            )
+            SELECT t.* FROM (
+                SELECT DISTINCT
+                    NEW.id_task
+                    , RIGHT((REGEXP_MATCHES (NEW.body, 'tasks/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}', 'g'))[1], 36)::uuid id_task_to
+            ) t INNER JOIN tasks ON t.id_task = tasks.uuid
+            ON CONFLICT DO NOTHING;
 
             RETURN NEW;
 
