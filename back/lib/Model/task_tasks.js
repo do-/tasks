@@ -1,6 +1,6 @@
 module.exports = {
 
-    label : 'Корреспонденты',
+    label : 'Связи между делами',
 
     columns : {
         id_task      : '(tasks) // Дело, откуда ссылка',            

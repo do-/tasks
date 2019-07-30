@@ -148,6 +148,20 @@ $_DRAW.task = async function (data) {
     let $main = $('main')
     
     for (let i of data.task_notes) $main.append (note (i))
+        
+    for (let i of [
+        {
+            name: 'back_refs',
+            label: 'Ссылки сюда',
+        },
+        {
+            name: 'refs',
+            label: 'Ссылки отсюда',
+        },
+    ]) if ((i.refs = data [i.name]).length) {
+        let $div = $('<div />').appendTo ($main)
+        $div.show_block ('task_refs', i)        
+    }
     
     $main.append ('<div style="height:80px">')
     
