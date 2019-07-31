@@ -15,10 +15,16 @@ $_GET.task_footer = async function (o) {
     if (!data.id_user || !data.users [$_USER.id]) return data
     
     data.buttons = [{
-        id:    "comment",
-        title: "Добавить комментарий (F4)",
-        data:  {},
+        id:    "return",
+        title: "Добавить комментарий, заниматься самостоятельно (F4)",
+        data:  {id_user_to: $_USER.id},
     }]
+
+    if (data.author.id != data.executor.id) data.buttons.push ({
+        id:    "comment",
+        title: "Передать с комментарием (F8)",
+        data:  {},
+    })
 
     if (data.author.id == $_USER.id) data.buttons.unshift ({
         id:    "close",
@@ -26,21 +32,23 @@ $_GET.task_footer = async function (o) {
         data:  {close: 1},
     })
 
-    if (data.author.id != data.executor.id) return data
+    if (data.author.id == data.executor.id) {
 
-    data.buttons.push ({
-        id:    "assign",
-        title: "Запустить",
-        data:  {is_assigning: 1},
-    })
+        data.buttons.push ({
+            id:    "assign",
+            title: "Запустить",
+            data:  {is_assigning: 1},
+        })
 
-    for (i of data.peers) data.buttons.push ({
-        title: i.label,
-        data: {
-            is_assigning: 1, 
-            id_user_to: i.uuid,
-        },
-    })
+        for (i of data.peers) data.buttons.push ({
+            title: i.label,
+            data: {
+                is_assigning: 1, 
+                id_user_to: i.uuid,
+            },
+        })
+    
+    }
 
     return data
 

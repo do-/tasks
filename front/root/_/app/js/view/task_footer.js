@@ -48,7 +48,12 @@ $_DRAW.task_footer = async function (data) {
 
     let $a = $('<span />'); if (data.buttons) for (i of data.buttons) $a.append (button (i))    
     
-    $(window).keyup ((e) => {if (e.key == 'F4' && !e.ctrlKey && !e.altKey) $('button[name=comment]').click ()})
+    $(window).keyup ((e) => {
+        if (!e.ctrlKey && !e.altKey) switch (e.key) {
+            case 'F4': return $('button[name=return]').click ()
+            case 'F8': return $('button[name=comment]').click ()
+        }
+    })
 
     return $a.children ()
 

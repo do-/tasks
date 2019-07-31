@@ -30,8 +30,14 @@ $_DO.update_task_comment = async function (e) {
     await response ({action}, {data})
     
     try {opener.tasks_grid.reload ()} catch (e) {}
-    
-    setTimeout (() => {confirm ('Запись внесена. Может, закрыть страницу?') ? window.close () : reload_page ()}, 10)
+
+    setTimeout (
+
+        data.id_user_to == $_USER.id ? reload_page : 
+
+        () => {confirm ('Задача передана. Может, закрыть страницу?') ? window.close () : reload_page ()}
+
+    , 10)
 
 }
 
@@ -62,6 +68,11 @@ $_GET.task_comment = async function (o) {
     
         data.record.id_user_to = 0
     
+    }
+    else if (o.id_user_to) {
+        
+        data.record.id_user_to = o.id_user_to
+        
     }
     else {
 
