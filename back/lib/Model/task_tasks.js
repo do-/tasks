@@ -23,7 +23,7 @@ module.exports = {
             SELECT t.* FROM (
                 SELECT DISTINCT
                     id_task
-                    , RIGHT((REGEXP_MATCHES (body, 'tasks/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}', 'g'))[1], 36)::uuid id_task_to
+                    , RIGHT((REGEXP_MATCHES (label || body, 'tasks/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}', 'g'))[1], 36)::uuid id_task_to
                 FROM 
                     task_notes
             ) t INNER JOIN tasks ON t.id_task = tasks.uuid

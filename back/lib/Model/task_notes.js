@@ -46,7 +46,7 @@ module.exports = {
             SELECT t.* FROM (
                 SELECT DISTINCT
                     NEW.id_task
-                    , RIGHT((REGEXP_MATCHES (NEW.body, 'tasks/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}', 'g'))[1], 36)::uuid id_task_to
+                    , RIGHT((REGEXP_MATCHES (NEW.label || NEW.body, 'tasks/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}', 'g'))[1], 36)::uuid id_task_to
             ) t INNER JOIN tasks ON t.id_task = tasks.uuid
             ON CONFLICT DO NOTHING;
 
