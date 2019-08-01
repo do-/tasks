@@ -60,7 +60,7 @@ $_DRAW.tasks = async function (data) {
             }
             
             function input (name) {
-                let $ns = $(`<input name=${name} class=ui-widget style="width:400px;" placeholder="Фильтр по теме">`)
+                let $ns = $(`<input name=${name} class=ui-widget style="width:100%;margin:1px;border:0;outline:none;padding:0 0 0 3px;" placeholder="[Фильтр по теме...]">`)
                 $ns.appendTo ($(a.node))
                 $ns.change (() => {a.grid.setFieldFilter (a.grid.toSearch ($ns))})
             }
@@ -77,7 +77,7 @@ $_DRAW.tasks = async function (data) {
 
     })
         
-    $(".toolbar input:first").focus ()
+//    $(".toolbar input:first").focus ()
 
     return $result
     
