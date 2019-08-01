@@ -13,7 +13,7 @@ $_DRAW.nav = async function (data) {
                 .css  ({backgroundImage: `url(${svg (o.icon)})`})
                 .appendTo ($result)
 
-            if (o.id == 'open_' + $_REQUEST.type) $b
+            if (!$_REQUEST.id && o.id == 'open_' + $_REQUEST.type) $b
                 .addClass ('active')
                 .attr ('name', '_')
 
