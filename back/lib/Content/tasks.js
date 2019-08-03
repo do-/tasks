@@ -164,6 +164,7 @@ do_assign_tasks:
         return Promise.all ([        
             this.db.do ('UPDATE task_users SET id_user = ?    WHERE id_task = ? AND is_author = 0', [note.id_user_to, note.id_task]),
             this.db.do ('UPDATE task_notes SET id_user_to = ? WHERE id_task = ?', [note.id_user_to, note.id_task]),
+            this.db.do ('UPDATE tasks      SET id_user_executor = ? WHERE uuid = ?', [note.id_user_to, note.id_task]),
             store_and_notify.call (this, note, 'notify_assign')
         ])
 
@@ -204,20 +205,9 @@ select_tasks:
 
         if (x.note != undefined) filter.uuid = this.db.query ([{'task_notes(id_task)': {'label ILIKE %?% OR body ILIKE %?%': [x.note, x.note]}}]) 
 
-        if (x.id_author) filter ['uuid IN'] = this.db.query ([{'task_users(id_task)': {
-            id_user   : x.id_author,
-            is_author : 1,
-        }}])
-        
-        if (x.id_executor) filter ['uuid IN '] = this.db.query ([{'task_users(id_task)': {
-            id_user   : x.id_executor,
-            is_author : 0,
-        }}])
-
         return this.db.add_all_cnt ({}, [
             {tasks : filter}, 
             'task_notes ON id_last_task_note',
-            {'$task_users(id_user) AS executor ON (executor.id_task = tasks.uuid AND executor.is_author = 0)': {}},
         ])
 
     },
@@ -282,9 +272,8 @@ get_item_of_tasks:
             }},
             'tasks ON id_task',
             'users(label) AS user_a ON tasks.id_user_author',
+            'users(label) AS user_e ON tasks.id_user_executor',
             'task_notes ON tasks.id_last_task_note',
-            {'$task_users(id_user) AS executor ON (executor.id_task = tasks.uuid AND executor.is_author = 0)': {}},
-            'users(label) AS user_e ON executor.id_user',
 
         ])    
         
@@ -296,9 +285,8 @@ get_item_of_tasks:
             }},
             'tasks ON id_task_to',
             'users(label) AS user_a ON tasks.id_user_author',
+            'users(label) AS user_e ON tasks.id_user_executor',
             'task_notes ON tasks.id_last_task_note',
-            {'$task_users(id_user) AS executor ON (executor.id_task = tasks.uuid AND executor.is_author = 0)': {}},
-            'users(label) AS user_e ON executor.id_user',
 
         ])    
 

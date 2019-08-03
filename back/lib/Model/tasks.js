@@ -6,6 +6,7 @@ module.exports = {
 
         id_user            : "(users) // У кого на рассмотрении",
         id_user_author     : "(users)=current_setting('tasks.id_user')::uuid // Автор",
+        id_user_executor   : "(users)=current_setting('tasks.id_user')::uuid // Адресат",
 
         label              : "text // Тема", 
 
@@ -24,6 +25,10 @@ module.exports = {
     
         id_user_author: [
             {sql: "UPDATE tasks SET id_user_author = t.id_user FROM (SELECT * FROM task_users WHERE is_author=1) t WHERE tasks.uuid=t.id_task", params: []}
+        ],
+        
+        id_user_executor: [
+            {sql: "UPDATE tasks SET id_user_executor = t.id_user FROM (SELECT * FROM task_users WHERE is_author=0) t WHERE tasks.uuid=t.id_task", params: []}
         ],
     
     }
