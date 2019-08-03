@@ -4,8 +4,8 @@ $_GET.task = async function (o) {
 
     let data = await response ({})
     
-    data.author   = {id: data.id_user_author,   label: data ['user_a.label']}
-    data.executor = {id: data.id_user_executor, label: data ['user_e.label']}
+    data.author   = {id: data.id_user_author,   label: data.user_author_label}
+    data.executor = {id: data.id_user_executor, label: data.user_executor_label} 
 
     data.users = [data.author]
         

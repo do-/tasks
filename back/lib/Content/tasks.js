@@ -231,9 +231,7 @@ get_item_of_tasks:
     async function () {
 
         let data = await this.db.get ([
-            {tasks: {uuid: this.rq.id}},
-            'users(label) AS user_a ON id_user_author',
-            'users(label) AS user_e ON id_user_executor',
+            {vw_tasks: {uuid: this.rq.id}},
         ])
         
         await this.db.add (data, {
@@ -249,11 +247,9 @@ get_item_of_tasks:
 
             {task_tasks: {
                 id_task_to: data.uuid,
-                ORDER:   'tasks.ts',
+                ORDER:   'vw_tasks.ts',
             }},
-            'tasks ON id_task',
-            'users(label) AS user_a ON tasks.id_user_author',
-            'users(label) AS user_e ON tasks.id_user_executor',
+            'vw_tasks ON id_task',
 
         ])    
         
@@ -261,11 +257,9 @@ get_item_of_tasks:
 
             {task_tasks: {
                 id_task: data.uuid,
-                ORDER:   'tasks.ts',
+                ORDER:   'vw_tasks.ts',
             }},
-            'tasks ON id_task_to',
-            'users(label) AS user_a ON tasks.id_user_author',
-            'users(label) AS user_e ON tasks.id_user_executor',
+            'vw_tasks ON id_task_to',
 
         ])    
 
