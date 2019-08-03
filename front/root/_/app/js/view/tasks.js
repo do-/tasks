@@ -20,13 +20,13 @@ $_DRAW.tasks = async function (data) {
         showHeaderRow: true,
 
         columns: [
-            {field: 'ts',                name: 'Дата',              minWidth: 125, maxWidth: 125, formatter: _ts, sortable: true},
+            {field: 'ts',                name: 'Дата',              minWidth: 100, maxWidth: 100, formatter: _ts, sortable: true},
             {field: 'label',             name: 'Тема',              width: 150},
             {field: 'author.id_user',    name: 'Автор',             width: 20, hidden: true, formatter: _io (data.users, 'я')},
             {field: 'executor.id_user',  name: 'Адресат',           width: 20, hidden: true, formatter: _io (data.users, 'мне')},
             {field: 'id_user',           name: 'На ком',            width: 20, hidden: true, formatter: _io (data.users, 'на мне')},
             {field: 'task_notes.label',  name: 'Последняя реплика', width: 50},
-            {field: 'task_notes.ts',     name: 'от',                minWidth: 125, maxWidth: 125, formatter: _ts, sortable: true},
+            {field: 'task_notes.ts',     name: 'от',                minWidth: 100, maxWidth: 100, formatter: _ts, sortable: true},
         ],
 
         searchInputs: 
