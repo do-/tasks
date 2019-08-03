@@ -236,15 +236,6 @@ get_item_of_tasks:
             'users(label) AS user_e ON id_user_executor',
         ])
         
-        data.author   = {id: data.id_user_author,   label: data ['user_a.label']}
-        data.executor = {id: data.id_user_executor, label: data ['user_e.label']}
-        
-        data.users = [data.author]
-        
-        if (data.id_user_author != data.id_user_executor) {
-            if (data.executor.label > data.author.label) data.users.push (data.executor); else data.users.unshift (data.executor)
-        }
-
         await this.db.add (data, {
         
             task_notes: {
