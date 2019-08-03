@@ -11,6 +11,12 @@ $_DO.update_user_peers = async function (e) {
     $this.dialog ("widget").block ()
 
     await response ({type: 'users', action: 'set_peers'}, {data: {ids}})
+    
+    $_USER.peers = (await response ({type: 'users', id: null, part: 'peers'}))
+        .users.filter (i => i ['user_user.is_on'])
+
+    $_SESSION.set ('user', $_USER)
+    $_LOCAL.set ('user', $_USER)   
 
     reload_page ()
 

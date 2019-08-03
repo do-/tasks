@@ -244,19 +244,6 @@ get_item_of_tasks:
             }
             
         })
-
-        data.peers = await this.db.list ([
-
-            {users: {
-                'login<>' : null,
-                'uuid <>' : this.user.uuid,
-            }},
-            {'$user_users ON user_users.id_user_ref = users.uuid' : {
-                id_user : this.user.uuid,
-                is_on   : 1,
-            }}
-
-        ])    
         
         data.back_refs = await this.db.list ([
 

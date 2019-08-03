@@ -39,6 +39,19 @@ do_create_sessions:
 
         ], (i, d) => {d [i ['voc_user_options.name']] = 1}, {})
 
+        user.peers = await this.db.list ([
+
+            {users: {
+                'login<>' : null,
+                'uuid <>' : user.uuid,
+            }},
+            {'$user_users ON user_users.id_user_ref = users.uuid' : {
+                id_user : user.uuid,
+                is_on   : 1,
+            }}
+
+        ])    
+
         return {user, timeout: this.session.o.timeout}
 
     },

@@ -40,7 +40,7 @@ $_GET.task_footer = async function (o) {
             data:  {is_assigning: 1},
         })
 
-        for (i of data.peers) data.buttons.push ({
+        for (i of $_USER.peers) data.buttons.push ({
             title: i.label,
             data: {
                 is_assigning: 1, 
