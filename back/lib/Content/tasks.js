@@ -273,7 +273,6 @@ get_item_of_tasks:
             'tasks ON id_task',
             'users(label) AS user_a ON tasks.id_user_author',
             'users(label) AS user_e ON tasks.id_user_executor',
-            'task_notes ON tasks.id_last_task_note',
 
         ])    
         
@@ -286,7 +285,6 @@ get_item_of_tasks:
             'tasks ON id_task_to',
             'users(label) AS user_a ON tasks.id_user_author',
             'users(label) AS user_e ON tasks.id_user_executor',
-            'task_notes ON tasks.id_last_task_note',
 
         ])    
 
