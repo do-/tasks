@@ -230,17 +230,20 @@ get_item_of_tasks:
 
     async function () {
 
-        let data = await this.db.get ([{tasks: {uuid: this.rq.id}}])
-
-        data.users = Object.values (await this.db.fold ([{task_users: {id_task: data.uuid}}, '$users'], (i, idx) => {
-
-            let user = {id: i ['users.uuid'], label: i ['users.label']}
-
-            data [i.is_author ? 'author' : 'executor'] = user
-
-            idx [user.id] = user
-
-        }, {})).sort ((a, b) => a > b)   
+        let data = await this.db.get ([
+            {tasks: {uuid: this.rq.id}},
+            'users(label) AS user_a ON id_user_author',
+            'users(label) AS user_e ON id_user_executor',
+        ])
+        
+        data.author   = {id: data.id_user_author,   label: data ['user_a.label']}
+        data.executor = {id: data.id_user_executor, label: data ['user_e.label']}
+        
+        data.users = [data.author]
+        
+        if (data.id_user_author != data.id_user_executor) {
+            if (data.executor.label > data.author.label) data.users.push (data.executor); else data.users.unshift (data.executor)
+        }
 
         await this.db.add (data, {
         
