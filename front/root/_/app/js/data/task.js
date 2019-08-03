@@ -2,7 +2,11 @@
 
 $_GET.task = async function (o) {
 
-    let data = await response ({})
+    let [data, n, b, r] = await response ({})
+    
+    data.task_notes = n
+    data.back_refs = b
+    data.refs = r
     
     data.author   = {id: data.id_user_author,   label: data.user_author_label}
     data.executor = {id: data.id_user_executor, label: data.user_executor_label} 

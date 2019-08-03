@@ -230,38 +230,21 @@ get_item_of_tasks:
 
     async function () {
 
-        let data = await this.db.get ([
-            {vw_tasks: {uuid: this.rq.id}},
+        return Promise.all ([
+
+            this.db.get  ([{vw_tasks:   {uuid:       this.rq.id}}]),
+
+            this.db.list ([{task_notes: {id_task:    this.rq.id, ORDER: 'ts'}}]),
+
+            this.db.list ([{task_tasks: {id_task_to: this.rq.id, ORDER: 'vw_tasks.ts'}},
+                'vw_tasks ON id_task',
+            ]),
+
+            this.db.list ([{task_tasks: {id_task:    this.rq.id, ORDER: 'vw_tasks.ts'}},
+                'vw_tasks ON id_task_to',
+            ]),
+
         ])
-        
-        await this.db.add (data, {
-        
-            task_notes: {
-                id_task: data.uuid,
-                ORDER:   'ts',
-            }
-            
-        })
-        
-        data.back_refs = await this.db.list ([
-
-            {task_tasks: {
-                id_task_to: data.uuid,
-                ORDER:   'vw_tasks.ts',
-            }},
-            'vw_tasks ON id_task',
-
-        ])    
-        
-        data.refs = await this.db.list ([
-
-            {task_tasks: {
-                id_task: data.uuid,
-                ORDER:   'vw_tasks.ts',
-            }},
-            'vw_tasks ON id_task_to',
-
-        ])    
 
         return data
 
