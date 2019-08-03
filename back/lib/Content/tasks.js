@@ -217,7 +217,6 @@ select_tasks:
         return this.db.add_all_cnt ({}, [
             {tasks : filter}, 
             'task_notes ON id_last_task_note',
-            {'$task_users(id_user) AS author ON (author.id_task = tasks.uuid AND author.is_author = 1)': {}},
             {'$task_users(id_user) AS executor ON (executor.id_task = tasks.uuid AND executor.is_author = 0)': {}},
         ])
 
@@ -282,10 +281,9 @@ get_item_of_tasks:
                 ORDER:   'tasks.ts',
             }},
             'tasks ON id_task',
+            'users(label) AS user_a ON tasks.id_user_author',
             'task_notes ON tasks.id_last_task_note',
-            {'$task_users(id_user) AS author ON (author.id_task = tasks.uuid AND author.is_author = 1)': {}},
             {'$task_users(id_user) AS executor ON (executor.id_task = tasks.uuid AND executor.is_author = 0)': {}},
-            'users(label) AS user_a ON author.id_user',
             'users(label) AS user_e ON executor.id_user',
 
         ])    
@@ -297,10 +295,9 @@ get_item_of_tasks:
                 ORDER:   'tasks.ts',
             }},
             'tasks ON id_task_to',
+            'users(label) AS user_a ON tasks.id_user_author',
             'task_notes ON tasks.id_last_task_note',
-            {'$task_users(id_user) AS author ON (author.id_task = tasks.uuid AND author.is_author = 1)': {}},
             {'$task_users(id_user) AS executor ON (executor.id_task = tasks.uuid AND executor.is_author = 0)': {}},
-            'users(label) AS user_a ON author.id_user',
             'users(label) AS user_e ON executor.id_user',
 
         ])    

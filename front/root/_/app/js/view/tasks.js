@@ -22,7 +22,7 @@ $_DRAW.tasks = async function (data) {
         columns: [
             {field: 'ts',                name: 'Дата',              minWidth: 100, maxWidth: 100, formatter: _ts, sortable: true},
             {field: 'label',             name: 'Тема',              width: 150},
-            {field: 'author.id_user',    name: 'Автор',             width: 20, hidden: true, formatter: _io (data.users, 'я')},
+            {field: 'id_user_author',    name: 'Автор',             width: 20, hidden: true, formatter: _io (data.users, 'я')},
             {field: 'executor.id_user',  name: 'Адресат',           width: 20, hidden: true, formatter: _io (data.users, 'мне')},
             {field: 'id_user',           name: 'На ком',            width: 20, hidden: true, formatter: _io (data.users, 'на мне')},
             {field: 'task_notes.label',  name: 'Последняя реплика', width: 50},
@@ -66,7 +66,7 @@ $_DRAW.tasks = async function (data) {
             }
             
             switch (a.column.id) {
-                case 'author.id_user':   return select ('id_author')
+                case 'id_user_author':   return select ('id_user_author')
                 case 'executor.id_user': return select ('id_executor')
                 case 'id_user':          return select ('id_user')
                 case 'label':            return input  ('label')
