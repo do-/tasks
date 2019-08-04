@@ -5,6 +5,7 @@ $_DRAW.tasks = async function (data) {
     let $result = $('main').html (fill (await use.jq ('tasks'), data))
     
     $('option[data-me]').attr ({value: $_USER.id})
+    $('input[data-me]').attr ({name: $_USER.id})
         
     function _io (users, me) {
         return function (r, _, v) {
@@ -46,6 +47,41 @@ $_DRAW.tasks = async function (data) {
         
             let $anode = $(a.node)
 
+            function checkboxes (name) {
+                let $os = $(`#${name}`, $result)
+                let $ns = $os.clone ()
+                $os.remove ()        
+                $anode.text ('...').click (() => {
+                
+                    $ns.dialog ({
+
+                        modal:   true,
+                        close:   function () {$(this).dialog ("destroy")},
+                        buttons: [{text: 'Установить', click: function () {
+
+                            let ids = []
+                            let labels = []
+
+                            $('input:checked', $(this)).each (function () {
+                                ids.push (this.name)
+                                labels.push ($(this).closest ('tr').text ())
+                            })
+
+                            if (!ids.length) {ids = null; labels = ['...']}
+
+                            $anode.text (labels)                                                        
+                            a.grid.setFieldFilter ({field: name, value: ids, operator: 'in'})
+
+                            $(this).dialog ("destroy")
+
+                        }}],
+
+                    }).dialog ("widget")
+
+                })  
+
+            }
+            
             function select (name) {
                 let $os = $(`select[name=${name}]`, $result)
                 let $ns = $os.clone ()
@@ -60,13 +96,13 @@ $_DRAW.tasks = async function (data) {
             }
             
             function input (name) {
-                let $ns = $(`<input name=${name} class=ui-widget style="width:100%;margin:1px;border:0;outline:none;padding:0 0 0 3px;" placeholder="[Фильтр по теме...]">`)
+                let $ns = $(`<input name=${name} class=ui-widget style="width:100%;margin:-3px 0 0 0;border:0;outline:none;padding:0 0 0 3px;" placeholder="[Фильтр по теме...]">`)
                 $ns.appendTo ($anode)
                 $ns.change (() => {a.grid.setFieldFilter (a.grid.toSearch ($ns))})
             }
             
             switch (a.column.id) {
-                case 'id_user_author':   return select ('id_user_author')
+                case 'id_user_author':   return checkboxes ('id_user_author')
                 case 'id_user_executor': return select ('id_user_executor')
                 case 'id_user':          return select ('id_user')
                 case 'label':            return input  ('label')
