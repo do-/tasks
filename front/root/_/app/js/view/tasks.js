@@ -1,7 +1,7 @@
 $_DRAW.tasks = async function (data) {
     
     function me_too (label) {
-        let a = clone (data.others)
+        let a = clone ($_USER.peers)
         a.unshift ({id: $_USER.id, label: label})
         return a
     }

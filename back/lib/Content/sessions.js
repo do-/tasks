@@ -41,7 +41,7 @@ do_create_sessions:
 
         user.peers = await this.db.list ([
 
-            {users: {
+            {'users(uuid, label, uuid AS id)': {
                 'login<>' : null,
                 'uuid <>' : user.uuid,
             }},
