@@ -206,7 +206,7 @@ select_tasks:
         if (x.note != undefined) filter.uuid = this.db.query ([{'task_notes(id_task)': {'label ILIKE %?% OR body ILIKE %?%': [x.note, x.note]}}]) 
 
         return this.db.add_all_cnt ({}, [
-            {tasks : filter}, 
+            {vw_tasks : filter}, 
             'task_notes ON id_last_task_note',
         ])
 

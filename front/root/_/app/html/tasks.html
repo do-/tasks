@@ -26,10 +26,14 @@
 
 	<select name=id_user>
 		<option value="" selected>[не важно]</option>
-		<option value=-1 selected>[на ком-либо (открыто)]</option>
-		<option value=-2 selected>[ни на ком (закрыто)]</option>
 		<option data-me>[на мне]</option>
 		<option data-list=others data-value=id data-text=text />
+	</select>
+
+	<select name=is_open>
+		<option value="" selected>[не важно]</option>
+		<option value=1 selected>в работе</option>
+		<option value=0 selected>закрыто</option>
 	</select>
 
 <table cellspacing=0 cellpadding=0 width=100% height=100%>

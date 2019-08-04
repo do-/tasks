@@ -21,7 +21,7 @@ $_DO.show_required_tasks = function () {
 $_DO.show_created_tasks = function () {
 
     show_block ('tasks', {
-        id_user: -1,
+        is_open: 1,
         id_user_author: [$_USER.id]
     })
 
@@ -33,7 +33,12 @@ $_GET.tasks = async function (o) {
 
     let data = await response ({part: 'vocs'})
     
-    add_vocabularies (data, {users: 1})
+    data.voc_status = [
+        {id: 1, label: 'В работе'},
+        {id: 0, label: 'Закрыто'},
+    ]
+    
+    add_vocabularies (data, {users: 1, voc_status: 1})
     
     data.others = data.users.items.filter ((r) => r.id != $_USER.id)
     

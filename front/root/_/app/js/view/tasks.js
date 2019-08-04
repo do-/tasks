@@ -25,7 +25,8 @@ $_DRAW.tasks = async function (data) {
             {field: 'label',             name: 'Тема',              width: 150},
             {field: 'id_user_author',    name: 'Автор',             width: 20, hidden: true, formatter: _io (data.users, 'я')},
             {field: 'id_user_executor',  name: 'Адресат',           width: 20, hidden: true, formatter: _io (data.users, 'мне')},
-            {field: 'id_user',           name: 'На ком',            width: 20, hidden: true, formatter: _io (data.users, 'на мне')},
+            {field: 'is_open',           name: 'Статус',            minWidth: 80, maxWidth: 80, hidden: true, voc: data.voc_status},
+            {field: 'id_user',           name: 'На ком',            width: 20, formatter: _io (data.users, 'на мне')},
             {field: 'task_notes.label',  name: 'Последняя реплика', width: 50},
             {field: 'task_notes.ts',     name: 'от',                minWidth: 100, maxWidth: 100, formatter: _ts, sortable: true},
         ],
@@ -38,6 +39,7 @@ $_DRAW.tasks = async function (data) {
             {field: 'id_user_author',   value: data.id_user_author, operator: 'in'},
             {field: 'id_user_executor', value: data.id_user_executor, operator: 'in'},
             {field: 'id_user',          value: data.id_user, operator: 'in'},
+            {field: 'is_open',          value: data.is_open, operator: 'is'},
         ].filter (i => i.value != null)},
         
         url: {type: 'tasks'},
@@ -127,6 +129,7 @@ $_DRAW.tasks = async function (data) {
                 case 'id_user_author':   return checkboxes ('id_user_author')
                 case 'id_user_executor': return select ('id_user_executor')
                 case 'id_user':          return select ('id_user')
+                case 'is_open':          return select ('is_open')
                 case 'label':            return input  ('label')
                 default: $anode.text ('\xa0')
             }
