@@ -183,16 +183,9 @@ select_tasks:
 
         for (let s of this.rq.search) switch (s.field) {
             case 'note':
-            case 'status':
-            case 'id_author':
-            case 'id_executor':
+            case 'is_open':
                 x [s.field] = s.value
                 break
-            case 'id_user':
-                if (s.value < 0) {
-                    x.status = 2 + parseInt (s.value)
-                    break
-                }
             default:
                 r.push (s)
         }
@@ -201,9 +194,9 @@ select_tasks:
         
         let filter = this.w2ui_filter ()
 
-        if (x.status != undefined) filter ['id_user ' + (x.status ? '<>' : '=')] = null
+        if (x.is_open != null) filter ['id_user ' + ['=', '<>'] [x.is_open]] = null
 
-        if (x.note != undefined) filter.uuid = this.db.query ([{'task_notes(id_task)': {'label ILIKE %?% OR body ILIKE %?%': [x.note, x.note]}}]) 
+        if (x.note != null) filter.uuid = this.db.query ([{'task_notes(id_task)': {'label ILIKE %?% OR body ILIKE %?%': [x.note, x.note]}}]) 
 
         return this.db.add_all_cnt ({}, [
             {vw_tasks : filter}, 
