@@ -22,11 +22,16 @@
 		</table></center>
 	</span>
 
-	<select name=id_user>
-		<option value="" selected>[не важно]</option>
-		<option data-me>[на мне]</option>
-		<option data-list=others data-value=id data-text=text />
-	</select>
+	<span title='На ком сейчас' class="drw popup-form" id=id_user>
+		<center><table>
+			<tr>
+				<td><input data-me type=checkbox>
+				<td>[на мне]
+			<tr data-list=others>
+				<td><input data-name=id type=checkbox>
+				<td data-text=label>
+		</table></center>
+	</span>
 
 	<select name=is_open>
 		<option value="" selected>[не важно]</option>

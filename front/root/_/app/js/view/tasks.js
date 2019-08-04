@@ -25,7 +25,7 @@ $_DRAW.tasks = async function (data) {
             {field: 'label',             name: 'Тема',              width: 150},
             {field: 'id_user_author',    name: 'Автор',             width: 20, hidden: true, formatter: _io (data.users, 'я')},
             {field: 'id_user_executor',  name: 'Адресат',           width: 20, hidden: true, formatter: _io (data.users, 'мне')},
-            {field: 'is_open',           name: 'Статус',            minWidth: 80, maxWidth: 80, hidden: true, voc: data.voc_status},
+            {field: 'is_open',           name: 'Статус',            minWidth: 104, maxWidth: 104, hidden: true, voc: data.voc_status},
             {field: 'id_user',           name: 'На ком',            width: 20, formatter: _io (data.users, 'на мне')},
             {field: 'task_notes.label',  name: 'Последняя реплика', width: 50},
             {field: 'task_notes.ts',     name: 'от',                minWidth: 100, maxWidth: 100, formatter: _ts, sortable: true},
@@ -128,7 +128,7 @@ $_DRAW.tasks = async function (data) {
             switch (a.column.id) {
                 case 'id_user_author':   return checkboxes ('id_user_author')
                 case 'id_user_executor': return checkboxes ('id_user_executor')
-                case 'id_user':          return select ('id_user')
+                case 'id_user':          return checkboxes ('id_user')
                 case 'is_open':          return select ('is_open')
                 case 'label':            return input  ('label')
                 default: $anode.text ('\xa0')
@@ -137,8 +137,6 @@ $_DRAW.tasks = async function (data) {
         },
 
     })
-        
-//    $(".toolbar input:first").focus ()
 
     return $result
     
