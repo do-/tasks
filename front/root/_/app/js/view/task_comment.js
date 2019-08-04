@@ -22,8 +22,6 @@ $_DRAW.task_comment = async function (data) {
     $('select', $view).selectmenu ({width: true})
     
     $('#img', $view).show_block ('img')
-    
-    $(window).keyup ((e) => {if (e.which == 13 && e.ctrlKey) $('button[name=update]').click ()})
 
     $('textarea', $view).focus ()    
 
