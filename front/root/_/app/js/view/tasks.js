@@ -22,10 +22,10 @@ $_DRAW.tasks = async function (data) {
 
         columns: [
             {field: 'ts',                name: 'Дата',              minWidth: 100, maxWidth: 100, formatter: _ts, sortable: true},
-            {field: 'label',             name: 'Тема',              width: 150},
+            {field: 'label',             name: 'Тема',              width: 150, filter: {type: 'text', title: 'Фильтр по теме'}},
             {field: 'id_user_author',    name: 'Автор',             width: 20, hidden: true, formatter: _io (data.users, 'я')},
             {field: 'id_user_executor',  name: 'Адресат',           width: 20, hidden: true, formatter: _io (data.users, 'мне')},
-            {field: 'is_open',           name: 'Статус',            minWidth: 104, maxWidth: 104, hidden: true, voc: data.voc_status},
+            {field: 'is_open',           name: 'Статус',            minWidth: 104, maxWidth: 104, hidden: true, voc: data.voc_status, filter: {type: 'list', voc: data.voc_status, empty: '[не важно]'}},
             {field: 'id_user',           name: 'На ком',            width: 20, formatter: _io (data.users, 'на мне')},
             {field: 'task_notes.label',  name: 'Последняя реплика', width: 50},
             {field: 'task_notes.ts',     name: 'от',                minWidth: 100, maxWidth: 100, formatter: _ts, sortable: true},
@@ -106,25 +106,14 @@ $_DRAW.tasks = async function (data) {
 
             }
             
-            function select (name) {
-                let $os = $(`select[name=${name}]`, $result)
-                let $ns = $os.clone ()
-                $os.remove ()
-                $ns.val (data [name])
-                $ns.appendTo ($anode)
-                $ns.selectmenu ({
-                    width: true,
-                    change: () => {a.grid.setFieldFilter (a.grid.toSearch ($ns))}
-                })
-
-            }            
-            
             switch (a.column.id) {
                 case 'id_user_author':   return checkboxes ('id_user_author')
                 case 'id_user_executor': return checkboxes ('id_user_executor')
                 case 'id_user':          return checkboxes ('id_user')
-                case 'is_open':          return select ('is_open')
-                case 'label':            return a.grid.colFilter.text (a, {title: 'Фильтр по теме'})
+                case 'is_open':          
+                case 'label':            
+                    let filter = a.column.filter
+                    return a.grid.colFilter [filter.type] (a, filter)
                 default: $anode.text ('\xa0')
             }
             
