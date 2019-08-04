@@ -1,4 +1,10 @@
 $_DRAW.tasks = async function (data) {
+    
+    function me_too (label) {
+        let a = clone (data.others)
+        a.unshift ({id: $_USER.id, label: label})
+        return a
+    }
 
     $('title').text ('Дела')
     
@@ -23,10 +29,10 @@ $_DRAW.tasks = async function (data) {
         columns: [
             {field: 'ts',                name: 'Дата',              minWidth: 100, maxWidth: 100, formatter: _ts, sortable: true},
             {field: 'label',             name: 'Тема',              width: 150, filter: {type: 'text', title: 'Фильтр по теме'}},
-            {field: 'id_user_author',    name: 'Автор',             width: 20, hidden: true, formatter: _io (data.users, 'я')},
-            {field: 'id_user_executor',  name: 'Адресат',           width: 20, hidden: true, formatter: _io (data.users, 'мне')},
+            {field: 'id_user_author',    name: 'Автор',             width: 20, hidden: true, formatter: _io (data.users, 'я'), filter: {type: 'checkboxes', title: 'Автор', items: me_too ('[я]')}},
+            {field: 'id_user_executor',  name: 'Адресат',           width: 20, hidden: true, formatter: _io (data.users, 'мне'), filter: {type: 'checkboxes', title: 'Адресат', items: me_too ('[мне]')}},
             {field: 'is_open',           name: 'Статус',            minWidth: 104, maxWidth: 104, hidden: true, voc: data.voc_status, filter: {type: 'list', voc: data.voc_status, empty: '[не важно]'}},
-            {field: 'id_user',           name: 'На ком',            width: 20, formatter: _io (data.users, 'на мне')},
+            {field: 'id_user',           name: 'На ком',            width: 20, formatter: _io (data.users, 'на мне'), filter: {type: 'checkboxes', title: 'На ком', items: me_too ('[на мне]')}},
             {field: 'task_notes.label',  name: 'Последняя реплика', width: 50},
             {field: 'task_notes.ts',     name: 'от',                minWidth: 100, maxWidth: 100, formatter: _ts, sortable: true},
         ],
@@ -49,75 +55,7 @@ $_DRAW.tasks = async function (data) {
         onKeyDown: (e, a) => {
             if (e.which != 13 || e.ctrlKey || e.altKey) return
             open_tab ('/tasks/' + a.grid.getDataItem (a.row).uuid)
-        },
-        
-        onHeaderRowCellRendered: (e, a) => {
-        
-            let $anode = $(a.node)            
-
-            function checkboxes (name) {
-                
-                let $os = $(`#${name}`, $result)                
-                let $ns = $os.clone ()
-                
-                $os.remove ()        
-                
-                function label (ids) {
-                    if (!ids || !ids.length) return '...'
-                    return ids.map (id => $(`input[name=${id}]`, $ns).closest ('tr').text ())
-                }                 
-
-                let ids = null
-                let loader = a.grid.loader
-                if (loader && loader.postData && loader.postData.search) {
-                    for (let search of loader.postData.search) if (search.field == name) ids = search.value
-                }
-                
-                $(`input`, $ns).prop ({checked: false})
-                if (ids) for (let id of ids) $(`input[name=${id}]`, $ns).prop ({checked: true})
-
-                $anode.text (label (ids)).click (() => {
-                
-                    $ns.dialog ({
-
-                        modal:   true,
-                        close:   function () {$(this).dialog ("destroy")},
-                        buttons: [{text: 'Установить', click: function () {
-
-                            let ids = []
-
-                            $('input:checked', $(this)).each (function () {
-                                ids.push (this.name)
-                            })
-
-                            if (!ids.length) ids = null
-
-                            $anode.text (label (ids))
-                            
-                            a.grid.setFieldFilter ({field: name, value: ids, operator: 'in'})
-
-                            $(this).dialog ("destroy")
-
-                        }}],
-
-                    }).dialog ("widget")
-
-                })  
-
-            }
-            
-            switch (a.column.id) {
-                case 'id_user_author':   return checkboxes ('id_user_author')
-                case 'id_user_executor': return checkboxes ('id_user_executor')
-                case 'id_user':          return checkboxes ('id_user')
-                case 'is_open':          
-                case 'label':            
-                    let filter = a.column.filter
-                    return a.grid.colFilter [filter.type] (a, filter)
-                default: $anode.text ('\xa0')
-            }
-            
-        },
+        },        
 
     })
 
