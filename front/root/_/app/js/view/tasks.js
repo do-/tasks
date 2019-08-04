@@ -117,20 +117,14 @@ $_DRAW.tasks = async function (data) {
                     change: () => {a.grid.setFieldFilter (a.grid.toSearch ($ns))}
                 })
 
-            }
-            
-            function input (name) {
-                let $ns = $(`<input name=${name} class=ui-widget style="width:100%;margin:-3px 0 0 0;border:0;outline:none;padding:0 0 0 3px;" placeholder="[Фильтр по теме...]">`)
-                $ns.appendTo ($anode)
-                $ns.change (() => {a.grid.setFieldFilter (a.grid.toSearch ($ns))})
-            }
+            }            
             
             switch (a.column.id) {
                 case 'id_user_author':   return checkboxes ('id_user_author')
                 case 'id_user_executor': return checkboxes ('id_user_executor')
                 case 'id_user':          return checkboxes ('id_user')
                 case 'is_open':          return select ('is_open')
-                case 'label':            return input  ('label')
+                case 'label':            return a.grid.colFilter.text (a, {title: 'Фильтр по теме'})
                 default: $anode.text ('\xa0')
             }
             
