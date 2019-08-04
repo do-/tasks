@@ -15,10 +15,11 @@ $_DRAW.task_comment = async function (data) {
     }) (clone (data.users.items));
 
     let $view = fill (await use.jq ('task_comment'), it).dialog ({width: 635,
-        modal: true,
-        buttons: [{name: 'update', text: 'Ctrl-Enter'}]
+        modal:   true,
+        buttons: [{name: 'update', text: 'Ctrl-Enter'}],
+        close:   function () {$(this).dialog ("destroy")},
     }).dialog ("widget")
-    
+
     $('select', $view).selectmenu ({width: true})
     
     $('#img', $view).show_block ('img')
