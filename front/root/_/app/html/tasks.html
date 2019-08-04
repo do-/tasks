@@ -1,11 +1,4 @@
 <span class="drw table">
-<!--
-	<select name=id_user_author>
-		<option value="" selected>[кто угодно]</option>
-		<option data-me>[я]</option>
-		<option data-list=others data-value=id data-text=text />
-	</select>
--->
 
 	<span title='Автор(ы)' class="drw popup-form" id=id_user_author>
 		<center><table>
@@ -18,11 +11,16 @@
 		</table></center>
 	</span>
 
-	<select name=id_user_executor>
-		<option value="" selected>[кому угодно]</option>
-		<option data-me>[мне]</option>
-		<option data-list=others data-value=id data-text=text />
-	</select>
+	<span title='Адресат(ы)' class="drw popup-form" id=id_user_executor>
+		<center><table>
+			<tr>
+				<td><input data-me type=checkbox>
+				<td>[мне]
+			<tr data-list=others>
+				<td><input data-name=id type=checkbox>
+				<td data-text=label>
+		</table></center>
+	</span>
 
 	<select name=id_user>
 		<option value="" selected>[не важно]</option>

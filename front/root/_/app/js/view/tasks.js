@@ -116,7 +116,7 @@ $_DRAW.tasks = async function (data) {
                     width: true,
                     change: () => {a.grid.setFieldFilter (a.grid.toSearch ($ns))}
                 })
-//                a.grid.loader.setSearch (a.grid.toSearch ($ns))
+
             }
             
             function input (name) {
@@ -127,7 +127,7 @@ $_DRAW.tasks = async function (data) {
             
             switch (a.column.id) {
                 case 'id_user_author':   return checkboxes ('id_user_author')
-                case 'id_user_executor': return select ('id_user_executor')
+                case 'id_user_executor': return checkboxes ('id_user_executor')
                 case 'id_user':          return select ('id_user')
                 case 'is_open':          return select ('is_open')
                 case 'label':            return input  ('label')
