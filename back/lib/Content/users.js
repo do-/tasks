@@ -125,7 +125,7 @@ get_peers_of_users:
     async function () {
         
         return this.db.add ({}, [
-            {users: {
+            {'users(uuid, label, uuid AS id)': {
                 'login <>' : null,
                 'uuid  <>' : this.user.uuid,
                 is_deleted : 0,
