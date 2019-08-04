@@ -11,7 +11,7 @@ $_DO.create_tasks = function (e) {
 $_DO.show_required_tasks = function () {
 
     show_block ('tasks', {
-        id_user: $_USER.id,
+        id_user: [$_USER.id],
     })
     
 }    
@@ -22,7 +22,7 @@ $_DO.show_created_tasks = function () {
 
     show_block ('tasks', {
         id_user: -1,
-        id_author: $_USER.id
+        id_user_author: [$_USER.id]
     })
 
 }
@@ -46,7 +46,7 @@ $_GET.tasks = async function (o) {
         n ++
     }
     
-    if (!n) data.id_user = $_USER.uuid
+    if (!n) data.id_user = [$_USER.uuid]
 
     return data
 

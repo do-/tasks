@@ -33,6 +33,12 @@ $_DRAW.tasks = async function (data) {
         searchInputs: 
             darn ($(".toolbar :input").toArray ())
         ,
+                
+        postData: {search: [
+            {field: 'id_user_author',   value: data.id_user_author, operator: 'in'},
+            {field: 'id_user_executor', value: data.id_user_executor, operator: 'in'},
+            {field: 'id_user',          value: data.id_user, operator: 'in'},
+        ].filter (i => i.value != null)},
         
         url: {type: 'tasks'},
 
@@ -45,13 +51,30 @@ $_DRAW.tasks = async function (data) {
         
         onHeaderRowCellRendered: (e, a) => {
         
-            let $anode = $(a.node)
+            let $anode = $(a.node)            
 
             function checkboxes (name) {
-                let $os = $(`#${name}`, $result)
+                
+                let $os = $(`#${name}`, $result)                
                 let $ns = $os.clone ()
+                
                 $os.remove ()        
-                $anode.text ('...').click (() => {
+                
+                function label (ids) {
+                    if (!ids || !ids.length) return '...'
+                    return ids.map (id => $(`input[name=${id}]`, $ns).closest ('tr').text ())
+                }                 
+
+                let ids = null
+                let loader = a.grid.loader
+                if (loader && loader.postData && loader.postData.search) {
+                    for (let search of loader.postData.search) if (search.field == name) ids = search.value
+                }
+                
+                $(`input`, $ns).prop ({checked: false})
+                if (ids) for (let id of ids) $(`input[name=${id}]`, $ns).prop ({checked: true})
+
+                $anode.text (label (ids)).click (() => {
                 
                     $ns.dialog ({
 
@@ -60,16 +83,15 @@ $_DRAW.tasks = async function (data) {
                         buttons: [{text: 'Установить', click: function () {
 
                             let ids = []
-                            let labels = []
 
                             $('input:checked', $(this)).each (function () {
                                 ids.push (this.name)
-                                labels.push ($(this).closest ('tr').text ())
                             })
 
-                            if (!ids.length) {ids = null; labels = ['...']}
+                            if (!ids.length) ids = null
 
-                            $anode.text (labels)                                                        
+                            $anode.text (label (ids))
+                            
                             a.grid.setFieldFilter ({field: name, value: ids, operator: 'in'})
 
                             $(this).dialog ("destroy")
@@ -92,7 +114,7 @@ $_DRAW.tasks = async function (data) {
                     width: true,
                     change: () => {a.grid.setFieldFilter (a.grid.toSearch ($ns))}
                 })
-                a.grid.loader.setSearch (a.grid.toSearch ($ns))
+//                a.grid.loader.setSearch (a.grid.toSearch ($ns))
             }
             
             function input (name) {
