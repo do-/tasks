@@ -212,7 +212,7 @@ get_vocs_of_tasks:
     function () {
 
         return this.db.add_vocabularies ({}, {
-            users: {filter: 'is_deleted = 0 AND label IS NOT NULL'}
+            users: {filter: 'uuid IN (SELECT DISTINCT id_user FROM task_users)'}
         })
 
     },
