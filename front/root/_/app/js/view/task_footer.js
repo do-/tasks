@@ -60,6 +60,8 @@ $_DRAW.task_footer = async function (data) {
         }
 
     })
+    
+    clickOn ($('<button name=fork title="Создать подзадачу">+</button>').appendTo ($a), $_DO.fork_task)
 
     return $a.children ()
 

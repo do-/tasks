@@ -22,6 +22,6 @@ $_DO.update_tasks_new = async function (e) {
 
 $_GET.tasks_new = async function (o) {
 
-    return $('body').data ('data')
+    return o
 
 }
