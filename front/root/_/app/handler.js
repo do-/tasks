@@ -18,8 +18,6 @@ function setup_request () {
 
 }
 
-function reload_page () { location.reload () }
-
 function _ts (r, _, v) {
     if (!v) return ''
     let [ymd, hms] = v.split ('T')
