@@ -8,7 +8,12 @@ function setup_request () {
     
     if (!$_USER) return
 
-    if (!$_REQUEST.type) redirect (window.name = '/tasks')
+    if (!$_REQUEST.type) return redirect (window.name = '/tasks')
+    
+    let name = '/' + type 
+    if (id) name += '/' + id 
+    
+    window.name = name
     
     $_SESSION.beforeExpiry ($_SESSION.keepAlive)
     
