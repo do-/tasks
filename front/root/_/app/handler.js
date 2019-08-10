@@ -41,4 +41,6 @@ if ($_USER && $_USER.opt && $_USER.opt.no_tabs) openTab = function (url, name) {
 
 setup_request ()
 
+$(window).keydown (check_hotkeys)
+
 show_block ($_USER ? 'main' : 'login')

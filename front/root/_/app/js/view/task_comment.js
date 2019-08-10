@@ -16,7 +16,7 @@ $_DRAW.task_comment = async function (data) {
 
     let $view = fill (await use.jq ('task_comment'), it).dialog ({width: 635,
         modal:   true,
-        buttons: [{name: 'update', text: 'Ctrl-Enter'}],
+        buttons: [{name: 'update', text: 'Ctrl-Enter', attr: {"data-hotkey": "Ctrl-Enter"}}],
         close:   function () {$(this).dialog ("destroy")},
     }).dialog ("widget")
 

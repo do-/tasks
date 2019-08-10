@@ -16,13 +16,15 @@ $_GET.task_footer = async function (o) {
     
     data.buttons = [{
         id:    "return",
-        title: "Добавить комментарий, заниматься самостоятельно (F4)",
+        title: "Добавить комментарий, заниматься самостоятельно",
+        hotkey: "F4",
         data:  {id_user_to: $_USER.id},
     }]
 
     if (data.author.id != data.executor.id) data.buttons.push ({
         id:    "comment",
-        title: "Передать с комментарием (F8)",
+        title: "Передать с комментарием",
+        hotkey: "F8",
         data:  {},
     })
 

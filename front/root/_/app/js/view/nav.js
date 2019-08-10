@@ -9,7 +9,7 @@ $_DRAW.nav = async function (data) {
         for (let o of data [name]) {
         
             let $b = $('<button>')
-                .attr ({name: o.id, title: o.label})
+                .attr ({name: o.id, title: o.label, 'data-hotkey': o.hotkey})
                 .css  ({backgroundImage: `url(${svg (o.icon)})`})
                 .appendTo ($result)
 
@@ -20,10 +20,6 @@ $_DRAW.nav = async function (data) {
         }
 
     }
-    
-    document.addEventListener ('keydown', (e) => {        
-        if (e.key == 'F1') $_DO.open_help_nav (e.preventDefault ())
-    })    
 
     return $nav.insertBefore ($('main'))
 

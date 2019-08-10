@@ -93,6 +93,7 @@ $_GET.nav = async function (o) {
                 id: "open_help",
                 label: "Справка",
                 icon: "help",
+                hotkey: "F1",
             },
             {
                 id: "open_users",

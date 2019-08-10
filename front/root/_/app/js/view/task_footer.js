@@ -2,8 +2,12 @@ $_DRAW.task_footer = async function (data) {
 
     function button (i) {
     
+        let attr = {title: i.title}
+        
+        if (i.hotkey) attr.title += ` (${attr ['data-hotkey'] = i.hotkey})`
+
         let $b = $('<button>')
-            .attr ({title: i.title})
+            .attr (attr)
             .data ('data', i.data)
 
         function set_id (id) {
@@ -47,20 +51,7 @@ $_DRAW.task_footer = async function (data) {
     }
 
     let $a = $('<span />'); if (data.buttons) for (i of data.buttons) $a.append (button (i))    
-    
-    $(window).keyup ((e) => {
-    
-        if (!e.ctrlKey && !e.altKey) switch (e.key) {
-            case 'F4': return $('button[name=return]').click ()
-            case 'F8': return $('button[name=comment]').click ()
-        }
         
-        if ( e.ctrlKey && !e.altKey) switch (e.key) {
-            case 'Enter': return $('button[name=update]').click ()
-        }
-
-    })
-    
     clickOn ($('<button name=fork title="Создать подзадачу">+</button>').appendTo ($a), $_DO.fork_task)
 
     return $a.children ()
