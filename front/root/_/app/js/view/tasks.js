@@ -8,8 +8,8 @@ $_DRAW.tasks = async function (data) {
 
     $('title').text ('Дела')
     
-    let $result = $('main').html (fill (await use.jq ('tasks'), data))
-    
+    let $result = $('main').html (await to_fill ('tasks', data))
+
     $('option[data-me]').attr ({value: $_USER.id})
     $('input[data-me]').attr ({name: $_USER.id})
         

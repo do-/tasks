@@ -14,7 +14,7 @@ $_DRAW.task_comment = async function (data) {
         
     }) (clone (data.users.items));
 
-    let $view = fill (await use.jq ('task_comment'), it).dialog ({width: 635,
+    let $view = (await to_fill ('task_comment', it)).dialog ({width: 635,
         modal:   true,
         buttons: [{name: 'update', text: 'Ctrl-Enter', attr: {"data-hotkey": "Ctrl-Enter"}}],
         close:   function () {$(this).dialog ("destroy")},

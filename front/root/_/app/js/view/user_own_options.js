@@ -1,6 +1,6 @@
 $_DRAW.user_own_options = async function (data) {
 
-    let $view = fill (await use.jq ('user_own_options'), data).dialog ({
+    let $view = (await to_fill ('user_own_options', data)).dialog ({
         modal: true,
         width: 650,
         height: 130,

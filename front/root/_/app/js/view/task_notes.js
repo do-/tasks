@@ -2,7 +2,7 @@ $_DRAW.task_notes = async function (data) {
 
     $('title').text ('Переписка')
 
-    let $result = $('main').html (fill (await use.jq ('task_notes'), data))
+    let $result = $('main').html (await to_fill ('task_notes', data))
     
     let grid = $("#grid_task_notes").draw_table ({
 

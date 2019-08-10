@@ -1,6 +1,6 @@
 $_DRAW.user_peers = async function (data) {
 
-    let $view = fill (await use.jq ('user_peers'), data).dialog ({
+    let $view = (await to_fill ('user_peers', data)).dialog ({
         modal: true,
         buttons: [{name: 'update', text: 'Установить'}]
     }).dialog ("widget")
