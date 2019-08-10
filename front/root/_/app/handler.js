@@ -1,20 +1,18 @@
-if (window.__LOGOUT__) delete window.__LOGOUT__
-
-function get_default_url () {
-
-    return '/tasks'
-
-}
+clearTimeout (window.alarm); if (window.__LOGOUT__) delete window.__LOGOUT__
 
 function setup_request () {
 
-    var parts = location.pathname.split ('/').filter (function (i) {return i})
-    
-    if (!parts.length && $_USER && $_USER.role) return redirect (window.name = get_default_url ())
+    let [type, id] = location.pathname.split ('/').filter (i => i)
 
-    $_REQUEST = {type: parts [0]}
+    $_REQUEST = {type, id}
     
-    if (parts [1]) $_REQUEST.id = parts [1]
+    if (!$_USER) return
+
+    if (!$_REQUEST.type) redirect (window.name = '/tasks')
+    
+    $_SESSION.beforeExpiry ($_SESSION.keepAlive)
+    
+    window.addEventListener ('storage', $_SESSION.closeAllOnLogout)
 
 }
 
@@ -30,12 +28,6 @@ function _ts (r, _, v) {
 function svg (icon) {return staticURL (            
     `libs/tasks/svg/${icon}.svg`            
 )}
-
-clearTimeout (window.alarm)
-
-$_SESSION.beforeExpiry ($_SESSION.keepAlive)
-
-window.addEventListener ('storage', $_SESSION.closeAllOnLogout)
 
 if ($_USER && $_USER.opt && $_USER.opt.no_tabs) openTab = function (url, name) {
     window.name = name || url
