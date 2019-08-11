@@ -56,6 +56,45 @@ $_DRAW.tasks = async function (data) {
             if (e.which != 13 || e.ctrlKey || e.altKey) return
             open_tab ('/tasks/' + a.grid.getDataItem (a.row).uuid)
         },        
+        
+        onContextMenu: (e, a) => {
+            let grid = a.grid
+            let rc = grid.getCellFromEvent (e)
+            let col = grid.getColumns () [rc.cell]
+            let filter = col.filter; 
+            if (!filter || (filter.type != 'checkboxes' && filter.type != 'list')) return
+            let [v] = grid.loader.postData.search.filter (i => i.field == col.field).map (i => i.value)
+            if (v) return
+            blockEvent (e)
+            let $m = $('<ul>').css ({
+                'position': 'absolute',
+                'z-index' : 2,
+            })
+            let $div = $(e.target)
+            let txt = $div.text ()
+            $('<li>').text ('Только ' + txt).appendTo ($m)
+            let [ln] = $div.attr ('class').split (/\s+/).filter (c => /^l\d+$/.test (c))
+            $m.css ({left: e.clientX - 5, top: e.clientY - 5}).appendTo ($('body')).menu ()
+            $m.on ("menublur", () => $m.remove ())
+            $m.on ("click", () => {
+                let ff = {field: col.field}
+                let v = grid.getDataItem (rc.row)[col.field]
+                let $hdr = $('div.slick-headerrow-column.' + ln)
+                if (filter.type == 'checkboxes') {
+                    ff.operator = 'in'
+                    ff.value = [v]
+                    $hdr.text ('[' + txt + ']')
+                }
+                else {
+                    ff.operator = 'is'
+                    ff.value = v
+                    let $ns = $('select', $hdr)
+                    $ns.val (v)
+                    $ns.selectmenu ("refresh")
+                }
+                grid.setFieldFilter (ff)
+            })
+        },
 
     })
 
