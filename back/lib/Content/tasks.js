@@ -212,7 +212,8 @@ get_vocs_of_tasks:
     function () {
 
         return this.db.add_vocabularies ({}, {
-            users: {filter: 'uuid IN (SELECT DISTINCT id_user FROM task_users)'}
+            users: {filter: 'uuid IN (SELECT DISTINCT id_user FROM task_users)'},
+            voc_task_status: {order: 'id'},
         })
 
     },
