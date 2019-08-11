@@ -21,7 +21,7 @@ $_DO.show_required_tasks = function () {
 $_DO.show_created_tasks = function () {
 
     show_block ('tasks', {
-        is_open: 1,
+        id_status: [101],
         id_user_author: [$_USER.id]
     })
 

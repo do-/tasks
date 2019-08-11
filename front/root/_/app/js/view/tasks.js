@@ -46,7 +46,7 @@ $_DRAW.tasks = async function (data) {
             {field: 'id_user_author',   value: data.id_user_author, operator: 'in'},
             {field: 'id_user_executor', value: data.id_user_executor, operator: 'in'},
             {field: 'id_user',          value: data.id_user, operator: 'in'},
-            {field: 'is_open',          value: data.is_open, operator: 'is'},
+            {field: 'id_status',        value: data.id_status, operator: 'in'},
         ].filter (i => i.value != null)},
         
         url: {type: 'tasks'},
