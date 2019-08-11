@@ -25,9 +25,10 @@ $_DRAW.tasks = async function (data) {
     let grid = window.tasks_grid = $("#grid_tasks").draw_table ({
     
         showHeaderRow: true,
+        enableAsyncPostRender: true,
 
         columns: [
-            {field: 'ts',                name: 'Дата',              minWidth: 100, maxWidth: 100, formatter: _ts, sortable: true},
+            {field: 'ts',                name: 'Дата',              width: 125, resizable: false, formatter: _ts, sortable: true, cssClass: 'status', asyncPostRender: (cell, row, data) => $(cell).addClass ('status-' + data.id_status)},
             {field: 'label',             name: 'Тема',              width: 150, filter: {type: 'text', title: 'Фильтр по теме'}},
             {field: 'id_user_author',    name: 'Автор',             width: 20, hidden: true, formatter: _io (data.users, 'я'), filter: {type: 'checkboxes', title: 'Автор', items: me_too ('[я]')}},
             {field: 'id_user_executor',  name: 'Адресат',           width: 20, hidden: true, formatter: _io (data.users, 'мне'), filter: {type: 'checkboxes', title: 'Адресат', items: me_too ('[мне]')}},
