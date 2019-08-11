@@ -32,10 +32,10 @@ $_DRAW.tasks = async function (data) {
             {field: 'label',             name: 'Тема',              width: 150, filter: {type: 'text', title: 'Фильтр по теме'}},
             {field: 'id_user_author',    name: 'Автор',             width: 20, hidden: true, formatter: _io (data.users, 'я'), filter: {type: 'checkboxes', title: 'Автор', items: me_too ('[я]')}},
             {field: 'id_user_executor',  name: 'Адресат',           width: 20, hidden: true, formatter: _io (data.users, 'мне'), filter: {type: 'checkboxes', title: 'Адресат', items: me_too ('[мне]')}},
-            {field: 'id_status',         name: 'Статус',            minWidth: 104, maxWidth: 104, hidden: true, voc: data.voc_task_status, filter: {type: 'list', voc: data.voc_task_status, empty: '[не важно]'}},
+            {field: 'id_status',         name: 'Статус',            width: 104, resizable: false, hidden: true, voc: data.voc_task_status, filter: {type: 'checkboxes', items: data.voc_task_status.items, empty: '[не важно]'}},
             {field: 'id_user',           name: 'На ком',            width: 20, formatter: _io (data.users, 'на мне'), filter: {type: 'checkboxes', title: 'На ком', items: me_too ('[на мне]')}},
             {field: 'task_notes.label',  name: 'Последняя реплика', width: 50},
-            {field: 'task_notes.ts',     name: 'от',                minWidth: 100, maxWidth: 100, formatter: _ts, sortable: true},
+            {field: 'task_notes.ts',     name: 'от',                width: 100, resizable: false, formatter: _ts, sortable: true},
         ],
 
         searchInputs: 
