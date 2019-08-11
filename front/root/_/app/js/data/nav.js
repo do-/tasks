@@ -1,5 +1,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
+$_DO.open_search_nav = function () {
+    show_block ('tasks_search')
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 $_DO.open_help_nav = function () {
     openTab ('/help')
 }
@@ -88,6 +94,12 @@ $_GET.nav = async function (o) {
                 id: "open_task_notes",
                 label: "Переписка",
                 icon: "xchg",
+            },
+            {
+                id: "open_search",
+                label: "Найти",
+                icon: "find",
+                hotkey: "F7",
             },
             {
                 id: "open_help",

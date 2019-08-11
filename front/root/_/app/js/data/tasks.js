@@ -32,7 +32,7 @@ $_DO.show_created_tasks = function () {
 $_GET.tasks = async function (o) {
 
     let data = await response ({part: 'vocs'})
-    
+        
     data.voc_status = [
         {id: 1, label: 'В работе'},
         {id: 0, label: 'Закрыто'},
@@ -42,8 +42,12 @@ $_GET.tasks = async function (o) {
     
     data.others = data.users.items.filter ((r) => r.id != $_USER.id)
     
-    $('body').data ('data', data)
+    $('body').data ('data', data)    
     
+    let note = $_SESSION.delete ('note')
+    
+    if (note) o = {note}
+
     let n = 0
     
     for (k in o) {
