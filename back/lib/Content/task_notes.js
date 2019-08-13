@@ -12,6 +12,8 @@ notify:
             {task_notes: {uuid: this.rq.id}},
             'users(label, mail) ON id_user_to',
         ])
+        
+        if (data.id_user_from == data.id_user_to) return
 
         let msg = {
         
@@ -22,7 +24,7 @@ notify:
         
             subject: data.label,
         
-            text: `${data.body}\n\n${this.rq.uri}`
+            text: `${data.body}\n\n${this.rq.uri}\n`
 
         }
         
