@@ -69,6 +69,8 @@ notify_assign:
             if (note.ext) msg.attachments.push ({path: `${this.conf.pics}${note.path}`})
 
         }
+        
+        msg.text += `\n\n${this.rq.uri}\n`
 
         this.mail.sendMail (msg, darn)
 
