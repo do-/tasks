@@ -17,9 +17,9 @@ $_DRAW.users = async function (data) {
             $(".toolbar :input").toArray ()
         ,
         
-        url: {type: 'users'},
-
-        onDblClick: (e, a) => open_tab ('/users/' + a.grid.getDataItem (a.row).uuid)
+        src: data.src,
+        
+        onRecordDblClick: (r) => open_tab ('/users/' + r.uuid),
 
     })
     

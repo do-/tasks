@@ -18,9 +18,9 @@ $_DRAW.task_notes = async function (data) {
             darn ($(".toolbar :input").toArray ())
         ,
         
-        url: {type: 'task_notes'},
+        src: data.src,
 
-        onDblClick: (e, a) => open_tab ('/tasks/' + a.grid.getDataItem (a.row).id_task)
+        onRecordDblClick: (r) => open_tab ('/tasks/' + r.id_task),
 
     })
     

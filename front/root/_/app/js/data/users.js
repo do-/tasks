@@ -16,6 +16,8 @@ $_GET.users = async function (o) {
     
     $('body').data ('data', data)
             
+    data.src = $_REQUEST.type
+
     return data
 
 }

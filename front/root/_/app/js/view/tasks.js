@@ -37,21 +37,14 @@ $_DRAW.tasks = async function (data) {
         searchInputs: 
             darn ($(".toolbar :input").toArray ())
         ,
-                
-        postData: {search: [
-            {field: 'id_user_author',   value: data.id_user_author, operator: 'in'},
-            {field: 'id_user_executor', value: data.id_user_executor, operator: 'in'},
-            {field: 'id_user',          value: data.id_user, operator: 'in'},
-            {field: 'id_status',        value: data.id_status, operator: 'in'},
-        ].filter (i => i.value != null)},
-        
-        url: {type: 'tasks'},
+                        
+        src: data.src,
 
-        onDblClick: (e, a) => open_tab ('/tasks/' + a.grid.getDataItem (a.row).uuid),
+        onRecordDblClick: (r) => open_tab ('/tasks/' + r.uuid),
 
         onKeyDown: (e, a) => {
             if (e.which != 13 || e.ctrlKey || e.altKey) return
-            open_tab ('/tasks/' + a.grid.getDataItem (a.row).uuid)
+            a.grid.onDblClick.notify (a, e, this)
         },        
         
         onContextMenu: (e, a) => {
