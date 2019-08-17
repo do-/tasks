@@ -28,6 +28,7 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
                 
             keep_alive () {
             	this.h.sessions.set (this.id, this.user.uuid)
+            	return this.user
             }
 
             async start () {  
@@ -47,40 +48,32 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
             }            
             
             invalidate_user (uuid) {
-            	delete this.h.users [uuid]
+            	this.h.users.del (uuid)
             }
 
             async get_user () {
 
                 if (!this.id) return this.restrict_access ()
                 
-                this.user = {is_deleted: 0}
+                let uuid = this.h.sessions.get (this.id)
 
-                if (!(this.user.uuid = this.h.sessions.get (this.id))) return this.restrict_access ()
-
-                let r = this.h.users [this.user.uuid]
-
-                if (!r) {
-
-					r = await this.h.db.get ([                
-						{'users (uuid, label)': this.user},
-						'roles (name)'
-					])
-
-	                if (!r.uuid) return this.restrict_access ()
-	                
-	                this.h.users [this.user.uuid] = r
-
+                if (!uuid) {
+                	darn (`session ${this.id} not found`)
+                	return this.restrict_access ()
+                }
+                
+                this.user = await this.h.users.to_get (uuid, async () => {
+                	let r = await this.h.db.get ([{vw_users: {uuid}}])
+                	return r.uuid ? r : null
+                })
+                
+                if (!this.user) {
+                	darn (`session ${this.id}: valid user ${uuid} not found`)
+                	return this.restrict_access ()
                 }
 
-                this.keep_alive ()
-
-                return {
-                    uuid: r.uuid, 
-                    label: r.label, 
-                    role: r ['roles.name']
-                }
-
+                return this.keep_alive ()
+                                
             }
             
             async password_hash (salt, password) {
