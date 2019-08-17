@@ -75,6 +75,8 @@ do_set_option_users:
         
         for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.rq.data [k]
         
+        this.session.invalidate_user (this.rq.id)
+        
         return this.db.upsert ('user_options', d, ['id_user', 'id_voc_user_option'])
         
     },
@@ -94,6 +96,8 @@ do_set_own_option_users:
         }
 
         for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.rq.data [k]
+
+        this.session.invalidate_user (this.user.id)
 
         return this.db.upsert ('user_options', d, ['id_user', 'id_voc_user_option'])
 
@@ -145,6 +149,8 @@ do_set_peers_users:
   
     async function () {
         
+        this.session.invalidate_user (this.rq.id)
+
         await this.db.do ('UPDATE user_users SET is_on = 0 WHERE id_user = ?', [this.user.uuid])
 
         await this.db.upsert ('user_users', this.rq.data.ids.map ((i) => {return {
@@ -181,6 +187,8 @@ do_undelete_users:
 
     async function () {
     
+        this.session.invalidate_user (this.rq.id)
+
         this.db.update ('users', {
             uuid        : this.rq.id, 
             is_deleted  : 0, 
@@ -194,6 +202,8 @@ do_delete_users:
 
     async function () {
     
+        this.session.invalidate_user (this.rq.id)
+
         return Promise.all ([
 
             this.db.update ('user_users', {
@@ -227,7 +237,9 @@ do_update_users:
         let d = {uuid}
 
         for (let k of ['login', 'label', 'mail']) d [k] = data [k]
-        
+
+        this.session.invalidate_user (this.rq.id)
+
         try {
             await this.db.update ('users', d)
         }

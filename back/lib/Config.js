@@ -16,6 +16,7 @@ module.exports = class {
             mail      : this.setup_mail (),
             db        : this.setup_db (),
             sessions  : this.setup_sessions (),
+            users     : {},
         }
 
     }

@@ -45,6 +45,10 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
                 if (rq.type != 'sessions' && rq.action != 'create') throw '401 Authenticate first'
                 return undefined
             }            
+            
+            invalidate_user (uuid) {
+            	delete this.h.users [uuid]
+            }
 
             async get_user () {
 
@@ -52,20 +56,22 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
                 
                 this.user = {is_deleted: 0}
 
-                try {
-                    if (!(this.user.uuid = this.h.sessions.get (this.id))) return this.restrict_access ()
-                }
-                catch (e) {
-                    darn (e)
-                    return this.restrict_access ()
-                }
-                                                
-                let r = await this.h.db.get ([                
-                    {'users (uuid, label)': this.user},
-                    'roles (name)'
-                ])
+                if (!(this.user.uuid = this.h.sessions.get (this.id))) return this.restrict_access ()
 
-                if (!r.uuid) return this.restrict_access ()                
+                let r = this.h.users [this.user.uuid]
+
+                if (!r) {
+
+					r = await this.h.db.get ([                
+						{'users (uuid, label)': this.user},
+						'roles (name)'
+					])
+
+	                if (!r.uuid) return this.restrict_access ()
+	                
+	                this.h.users [this.user.uuid] = r
+
+                }
 
                 this.keep_alive ()
 
@@ -141,6 +147,7 @@ module.exports.create_http_server = function (conf) {
                     db: conf.pools.db,
                     queue: conf.pools.queue,
                     sessions: conf.pools.sessions,
+                    users: conf.pools.users,
                 }, 
                 
                 http: {request, response}}
