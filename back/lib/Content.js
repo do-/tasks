@@ -1,5 +1,7 @@
 const Dia = require ('./Ext/Dia/Dia.js')
 
+//let $_SESSIONS = {}
+
 let HTTP_handler = class extends Dia.HTTP.Handler {
 
     check () {
@@ -17,46 +19,27 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
     }
 
     get_session () {
-    
-        function carp (e) {if (e) darn (e)}    
 
         return new class extends this.CookieSession {
+        
+        	time () {
+        		return new Date ().getTime ()
+        	}
                 
             keep_alive () {
-                this.h.memcached.set (this.id, this.user.uuid, this.o.timeout * 60, carp)
+            	this.h.sessions.set (this.id, this.user.uuid)
             }
 
-            async start () {            
+            async start () {  
                 super.start ()
                 this.keep_alive ()
             }
             
             async finish () {            
                 super.finish ()
-                this.h.memcached.del (this.id, carp)
+                this.h.sessions.del (this.id)
             }
-            
-            async get_user_uuid () {
 
-                let m = this.h.memcached
-                
-                return new Promise ((resolve, reject) => {
-
-                    m.get (this.id, function (err, data) {
-
-                        if (err) {
-                            reject (err)
-                        }
-                        else {
-                            resolve (data)
-                        }
-
-                    })
-                
-                })
-                
-            }
-            
             restrict_access () {
                 let rq = this.h.rq
                 if (rq.type != 'sessions' && rq.action != 'create') throw '401 Authenticate first'
@@ -70,7 +53,7 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
                 this.user = {is_deleted: 0}
 
                 try {
-                    if (!(this.user.uuid = await this.get_user_uuid ())) return restrict_access ()
+                    if (!(this.user.uuid = this.h.sessions.get (this.id))) return this.restrict_access ()
                 }
                 catch (e) {
                     darn (e)
@@ -157,7 +140,7 @@ module.exports.create_http_server = function (conf) {
                 pools: {
                     db: conf.pools.db,
                     queue: conf.pools.queue,
-                    memcached: conf.pools.memcached,
+                    sessions: conf.pools.sessions,
                 }, 
                 
                 http: {request, response}}

@@ -1,6 +1,5 @@
 const fs         = require ('fs')
 const nodemailer = require ('nodemailer')
-const memcached  = require ('memcached')
 const Dia        = require ('./Ext/Dia/Dia.js')
 
 module.exports = class {
@@ -16,7 +15,7 @@ module.exports = class {
         this.pools = {
             mail      : this.setup_mail (),
             db        : this.setup_db (),
-            memcached : this.setup_memcached (),
+            sessions  : this.setup_sessions (),
         }
 
     }
@@ -49,10 +48,13 @@ module.exports = class {
 
     }
     
-    setup_memcached () {
-
-        return new memcached (this.auth.sessions.memcached)
+    setup_sessions () {
+    
+        return new Dia.Cache ({
+        	name: 'session',
+        	ttl : this.auth.sessions.timeout * 60 * 1000,
+        })
 
     }
-
+    
 }
