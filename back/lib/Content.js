@@ -32,20 +32,19 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
             }
 
             async start () {  
-                super.start ()
+                await super.start ()
                 this.keep_alive ()
             }
             
             async finish () {            
-                super.finish ()
+                await super.finish ()
                 this.h.sessions.del (this.id)
             }
 
             restrict_access () {
-                let rq = this.h.rq
-                if (rq.type != 'sessions' && rq.action != 'create') throw '401 Authenticate first'
+            	if (!this.h.is_anonymous ()) throw '401 Authenticate first'
                 return undefined
-            }            
+            }
             
             invalidate_user (uuid) {
             	this.h.users.del (uuid)
@@ -53,13 +52,13 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
 
             async get_user () {
 
-                if (!this.id) return this.restrict_access ()
+                if (!this.id) return this.h.no_user ()
                 
                 let uuid = this.h.sessions.get (this.id)
 
                 if (!uuid) {
                 	darn (`session ${this.id} not found`)
-                	return this.restrict_access ()
+                	return this.h.no_user ()
                 }
                 
                 this.user = await this.h.users.to_get (uuid, async () => {
@@ -69,36 +68,13 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
                 
                 if (!this.user) {
                 	darn (`session ${this.id}: valid user ${uuid} not found`)
-                	return this.restrict_access ()
+                	return this.h.no_user ()
                 }
 
                 return this.keep_alive ()
                                 
             }
             
-            async password_hash (salt, password) {
-            
-                const fs     = require ('fs')
-                const crypto = require ('crypto')
-                const hash   = crypto.createHash ('sha256')
-                const input  = fs.createReadStream (this.h.conf.auth.salt_file)
-
-                return new Promise ((resolve, reject) => {
-
-                    input.on ('error', reject)
-
-                    input.on ('end', () => {
-                        hash.update (String (salt))
-                        hash.update (String (password), 'utf8')
-                        resolve (hash.digest ('hex'))
-                    })
-
-                    input.pipe (hash, {end: false})
-
-                })
-
-            }
-
         } ({
             cookie_name: this.conf.auth.sessions.cookie_name || 'sid',
             timeout: this.conf.auth.sessions.timeout || 10,
@@ -120,8 +96,35 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
         return (rq.id ? 'get_item_of_' : 'select_') + rq.type
     }
     
+    is_anonymous () {
+        return this.rq.type == 'sessions' && this.rq.action == 'create'
+    }
+    
     w2ui_filter () {
         return new (require ('./Ext/DiaW2ui/Filter.js')) (this.rq)
+    }
+    
+    async password_hash (salt, password) {
+    
+        const fs     = require ('fs')
+        const crypto = require ('crypto')
+        const hash   = crypto.createHash ('sha256')
+        const input  = fs.createReadStream (this.conf.auth.salt_file)
+
+        return new Promise ((resolve, reject) => {
+
+            input.on ('error', reject)
+
+            input.on ('end', () => {
+                hash.update (String (salt))
+                hash.update (String (password), 'utf8')
+                resolve (hash.digest ('hex'))
+            })
+
+            input.pipe (hash, {end: false})
+
+        })
+
     }
 
 }

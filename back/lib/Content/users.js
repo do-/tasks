@@ -174,8 +174,8 @@ do_set_password_users:
                    this.user.role == 'admin' ? this.rq.id : 
                    this.user.uuid
 
-        let salt     = await this.session.password_hash (Math.random (), new Date ().toJSON ())
-        let password = await this.session.password_hash (salt, this.rq.p1)
+        let salt     = await this.password_hash (Math.random (), new Date ().toJSON ())
+        let password = await this.password_hash (salt, this.rq.p1)
 
         return this.db.update ('users', {uuid, salt, password})
 
