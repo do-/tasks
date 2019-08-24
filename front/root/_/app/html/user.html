@@ -15,25 +15,25 @@
 				<table>
 					<tr>
 						<th>ФИО:
-						<td><input name=label />
+						<td><input name=label required pattern="^[А-ЯЁ][А-ЯЁа-яё\- ]+[а-яё]$"/>
 					<tr>
 						<th>login:
-						<td><input name=login />
+						<td><input name=login required pattern="^[A-Za-z0-9_\.]+$" />
 					<tr>
 						<th>E-mail:
-						<td><input name=mail />
+						<td><input name=mail type=email />
 				</table>
 
 				<div class=toolbar>
 
-					<button name=edit   class="icon edit">Редактировать</button>
+					<button name=edit   class="icon edit" data-hotkey=F4>Редактировать</button>
 
 					<button name=pass   class="icon options">Установить пароль</button>
-					<button name=delete class="icon delete">Удалить</button>
+					<button name=delete class="icon delete" data-hotkey=Ctrl-Delete>Удалить</button>
 					<button name=undelete class="icon undelete">Восстановить</button>
 
-					<button name=update class="icon ok">Сохранить</button>
-					<button name=cancel class="icon cancel" >Отменить</button>
+					<button name=update class="icon ok" data-hotkey=Ctrl-Enter>Сохранить</button>
+					<button name=cancel class="icon cancel" data-hotkey=Esc>Отменить</button>
 
 				</div>
 
