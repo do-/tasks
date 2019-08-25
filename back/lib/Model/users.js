@@ -23,15 +23,20 @@ module.exports = {
     
     triggers : {
 
-        before_insert_update : function () {return `
+        before_insert_update : function () {
+        
+        	let check = (col) => {
+        		return `
+					IF NEW.${col} IS NOT NULL AND NEW.${col} !~ '${this.columns[col].PATTERN}' THEN
+						RAISE '#${col}#: Проверьте, пожалуйста, правильность заполнения поля "${this.columns[col].REMARK}"';
+					END IF;
+        		`
+        	}        
+        
+        return `
 
-			IF NEW.label IS NOT NULL AND NEW.label !~ '${this.columns.label.PATTERN}' THEN
-				RAISE '#label#: Проверьте, пожалуйста, правильность заполнения поля ФИО';
-			END IF;
-			
-			IF NEW.login IS NOT NULL AND NEW.login !~ '${this.columns.login.PATTERN}' THEN
-				RAISE '#login#: Проверьте, пожалуйста, правильность заполнения поля login';
-			END IF;
+			${check ('label')}			
+			${check ('login')}
 
             RETURN NEW;
 
