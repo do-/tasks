@@ -75,8 +75,6 @@ $_GET.user = async function (o) {
 
     let data = await response ({type: 'users'})
     
-    data.active_tab = localStorage.getItem ('user.active_tab') || 'user_options'
-
     $('body').data ('data', data)
 
     return data

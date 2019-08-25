@@ -4,14 +4,13 @@ module.exports = {
 
     columns : {
         uuid       : 'uuid=uuid_generate_v4()',
-        id_role    : '(roles)=2 // Роль',           
-        is_deleted : 'int=0     // 1, если удалён', 
-        label      : 'string  /^[А-ЯЁ][А-ЯЁа-яё \\-]+[а-яё]$/ // ФИО',
-//		label      : {REMARK: 'ФИО', NULLABLE: true, TYPE_NAME: 'string', PATTERN: '^[А-ЯЁ][А-ЯЁа-яё \\-]+[а-яё]$'},
-        login      : 'string    // login',             
-        mail       : 'string    // E-mail',              
-        password   : 'string    // Пароль',             
-        salt       : 'string    // "Соль" пароля',
+        id_role    : '(roles)=2                                   // Роль',           
+        is_deleted : 'int=0                                       // 1, если удалён', 
+        label      : 'string [30] /^[А-ЯЁ][А-ЯЁа-яё \\-]+[а-яё]$/ // ФИО',
+        login      : 'string      /^[A-Za-z0-9_\.]+$/             // login',             
+        mail       : 'string                                      // E-mail',              
+        password   : 'string                                      // Пароль',             
+        salt       : 'string                                      // "Соль" пароля',
     },
     
     keys : {
@@ -27,7 +26,11 @@ module.exports = {
         before_insert_update : function () {return `
 
 			IF NEW.label IS NOT NULL AND NEW.label !~ '${this.columns.label.PATTERN}' THEN
-				RAISE '#label#: Проверьте, пожалуйста, правильность заполнения ФИО';
+				RAISE '#label#: Проверьте, пожалуйста, правильность заполнения поля ФИО';
+			END IF;
+			
+			IF NEW.login IS NOT NULL AND NEW.login !~ '${this.columns.login.PATTERN}' THEN
+				RAISE '#login#: Проверьте, пожалуйста, правильность заполнения поля login';
 			END IF;
 
             RETURN NEW;

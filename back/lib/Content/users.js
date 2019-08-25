@@ -8,7 +8,7 @@ get_vocs_of_users:
 
     function () {
 
-        return this.db.add_vocabularies ({}, {
+        return this.db.add_vocabularies ({_fields: this.db.model.tables.users.columns}, {
             roles: {},
         })
 
@@ -41,13 +41,17 @@ select_users:
     
 get_item_of_users: 
 
-    function () {
+    async function () {
         
-        return this.db.get ([{users: 
+        let data = await this.db.get ([{users: 
 
             {uuid: this.rq.id},
 
         }, 'roles AS role'])
+        
+        data._fields = this.db.model.tables.users.columns
+        
+        return data
 
     },
     

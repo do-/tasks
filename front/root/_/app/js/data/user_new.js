@@ -31,7 +31,7 @@ $_GET.user_new = async function (o) {
     let data = clone ($('body').data ('data'))      
     
     data.id_role = 2
-    
+darn (data)    
     return data
     
 }
