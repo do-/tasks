@@ -31,7 +31,7 @@ $_DO.update_user = async function (e) {
     let data = values ($form)
     
     data.not_null ('label', 'Вы забыли указать ФИО')
-    data.match    ('label', /^[А-ЯЁ][А-ЯЁа-яё\- ]+[а-яё]$/, 'Некорректное ФИО')
+//    data.match    ('label', /^[А-ЯЁ][А-ЯЁа-яё\- ]+[а-яё]$/, 'Некорректное ФИО')
     
     data.not_null ('login', 'Вы забыли указать login')
 

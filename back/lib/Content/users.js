@@ -240,7 +240,7 @@ do_update_users:
     
         let data = this.rq.data
             
-        if (!/^[А-ЯЁ][А-ЯЁа-яё\- ]+[а-яё]$/.test (data.label)) throw '#label#: Проверьте, пожалуйста, правильность заполнения ФИО'
+//        if (!/^[А-ЯЁ][А-ЯЁа-яё\- ]+[а-яё]$/.test (data.label)) throw '#label#: Проверьте, пожалуйста, правильность заполнения ФИО'
 
         if (!/^[A-Za-z0-9_\.]+$/.test (data.login)) throw '#login#: Недопустимый login'
         
@@ -271,7 +271,7 @@ do_create_users:
             
         if (!data.id_role) throw '#id_role#: Не указана роль'
 
-        if (!/^[А-ЯЁ][А-ЯЁа-яё\- ]+[а-яё]$/.test (data.label)) throw '#label#: Проверьте, пожалуйста, правильность заполнения ФИО'
+//        if (!/^[А-ЯЁ][А-ЯЁа-яё\- ]+[а-яё]$/.test (data.label)) throw '#label#: Проверьте, пожалуйста, правильность заполнения ФИО'
 
         if (!/^[A-Za-z0-9_\.]+$/.test (data.login)) throw '#login#: Недопустимый login'
 
@@ -282,9 +282,9 @@ do_create_users:
         try {
             await this.db.insert ('users', d)
         }
-        catch (e) {
-            if (this.db.is_pk_violation (e)) return d
-            throw e.constraint == 'ix_users_login' ? '#login#: Этот login уже занят' : x
+        catch (x) {
+            if (this.db.is_pk_violation (x)) return d
+            throw x.constraint == 'ix_users_login' ? '#login#: Этот login уже занят' : x
         }
         
         return d
