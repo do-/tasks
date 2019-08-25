@@ -10,9 +10,9 @@ $_DO.create_users = function (e) {
 
 $_GET.users = async function (o) {
 
-    let data = await response ({type: 'roles'})
+    let data = await response ({type: 'users', part: 'vocs'})
     
-    add_vocabularies (data, {roles: 1})
+    add_vocabularies (data, data)
     
     $('body').data ('data', data)
             
