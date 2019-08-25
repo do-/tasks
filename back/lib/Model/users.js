@@ -20,27 +20,14 @@ module.exports = {
     data : [
         {uuid: '00000000-0000-0000-0000-000000000000', id_role: 1},
     ],
-    
+
     triggers : {
 
         before_insert_update : function () {
-        
-        	let check = (col) => {
-        		return `
-					IF NEW.${col} IS NOT NULL AND NEW.${col} !~ '${this.columns[col].PATTERN}' THEN
-						RAISE '#${col}#: Проверьте, пожалуйста, правильность заполнения поля "${this.columns[col].REMARK}"';
-					END IF;
-        		`
-        	}        
-        
-        return `
 
-			${check ('label')}			
-			${check ('login')}
+			return this.model.trg_check_column_values (this) + 'RETURN NEW;'
 
-            RETURN NEW;
-
-        `},
+        },
 
     },
 
