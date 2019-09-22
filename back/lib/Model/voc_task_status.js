@@ -14,7 +14,7 @@ module.exports = {
     data: [
         {id: 100, label: 'Проект'},
         {id: 101, label: 'Назначено'},
-        {id: 200, label: 'Возвращено'},
+        {id: 102, label: 'Возвращено'},
         {id: 300, label: 'Архив'},
     ],
 

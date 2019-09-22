@@ -33,7 +33,7 @@ module.exports = {
                 WHEN id_user IS NULL                   THEN 300 
                 WHEN id_user_executor = id_user_author THEN 100 
                 WHEN id_user_executor = id_user        THEN 101 
-                ELSE 200 
+                ELSE 102
             END AS id_status
         FROM
             tasks
