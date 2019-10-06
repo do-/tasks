@@ -7,7 +7,7 @@ module.exports = {
 do_create_task_notes: 
 
     async function () {
-
+darn (this.rq)
 		let data = this.rq.data
 		
         if (data.id_user_to <= 0) data.id_user_to = null
@@ -19,10 +19,21 @@ do_create_task_notes:
             data.label = lines.shift ()
             data.body  = lines.join ("\n")
         }
-		
-		this.db.insert ('task_notes', data)
+        
+        let todo = []
+                
+        if (data.img) {
+            data.is_illustrated = 1
+            data.ext  = this.ext || 'png'
+            let [yyyy, mm, dd]  = new Date ().toJSON ().substr (0, 10).split ('-')
+            data.path = `/${yyyy}/${mm}/${dd}/${data.uuid}.${data.ext}`
+        }
 
-    },	
+        todo.push (this.db.insert ('task_notes', data))
+
+		await Promise.all (todo)
+
+    },
 
 ////////////////////////////////////////////////////////////////////////////////
 
