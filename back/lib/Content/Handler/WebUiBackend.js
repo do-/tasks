@@ -3,6 +3,11 @@ const DiaW2uiFilter = require ('../../Ext/DiaW2ui/Filter.js')
 
 module.exports = class extends require ('../../Ext/Dia/Content/Handler/HTTP.js').Handler {
 
+    constructor (o) {
+    	super (o)
+    	this.import ((require ('./Base')), ['get_method_name', 'fork'])
+    }
+
     check () {
         super.check ()
         let m = this.http.request.method
