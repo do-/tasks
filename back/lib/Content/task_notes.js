@@ -8,6 +8,7 @@ do_create_task_notes:
 
     async function () {
 darn (this.rq)
+darn (this.user)
 		let data = this.rq.data
 		
         if (data.id_user_to <= 0) data.id_user_to = null
@@ -35,6 +36,9 @@ darn (this.rq)
         todo.push (this.db.insert ('task_notes', data))
 
 		await Promise.all (todo)
+		
+		if (data.id_user_to == null) return
+		if (data.id_user_to == this.user.id) return
 		
 		let filter = data.is_assigning ? {id_task: data.id_task, ORDER: 'ts'} : {uuid: data.uuid}
 
@@ -81,80 +85,6 @@ do_notify_on_task_notes:
         }
         
         msg.text += `\n\n${this.uri}\n`
-
-        this.mail.sendMail (msg, darn)
-
-    },
-
-////////////////////////////////////////////////////////////////////////////////
-
-notify: 
-
-    async function () {
-
-        let data = await this.db.get ([
-            {task_notes: {uuid: this.rq.id}},
-            'users(label, mail) ON id_user_to',
-        ])
-        
-        if (data.id_user_from == data.id_user_to) return
-
-        let msg = {
-        
-            to: {
-                name:    data ['users.label'],
-                address: data ['users.mail'],
-            },
-        
-            subject: data.label,
-        
-            text: `${data.body}\n\n${this.rq.uri}\n`
-
-        }
-        
-        if (data.ext) msg.attachments = [{path: `${this.conf.pics}${data.path}`}]
-
-        this.mail.sendMail (msg, darn)
-
-    },
-
-////////////////////////////////////////////////////////////////////////////////
-
-notify_assign: 
-
-    async function () {
-
-        let data = await this.db.get ([
-            {task_notes: {uuid: this.rq.id}},
-            'users(label, mail) ON id_user_to',
-        ])
-
-        let msg = {        
-            to: {
-                name:    data ['users.label'],
-                address: data ['users.mail'],
-            },        
-            text: '',            
-            attachments: [],
-        }
-
-        let notes = await this.db.select_all ('SELECT * FROM task_notes WHERE id_task = ? ORDER BY ts', [data.id_task])
-
-        for (let note of notes) {
-
-            if (msg.subject) {
-                msg.text += `\n${note.label}\n${note.body}`
-            }
-            else {
-                msg.subject = note.label
-                msg.text += `\n${note.body}`
-            }
-
-            if (note.ext) msg.attachments.push ({path: `${this.conf.pics}${note.path}`})
-
-        }
-        
-        msg.text += `\n\n${this.rq.uri}\n`
 
         this.mail.sendMail (msg, darn)
 
