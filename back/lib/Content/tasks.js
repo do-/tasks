@@ -100,12 +100,10 @@ module.exports = {
 do_comment_tasks: 
 
     async function () {        
-    
-        let note = new Note (this.rq.data, this.rq.id)
-                
-        let u = note.id_user_to
+    		
+		this.rq.data.id_task = this.rq.id; delete this.rq.id
 
-        store_and_notify.call (this, note, !u && u == this.user.uuid ? null : 'notify')
+		await this.fork ({type: 'task_notes', action: 'create'}, this.rq)
 
     },
     

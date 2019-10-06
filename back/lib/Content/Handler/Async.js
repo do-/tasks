@@ -7,6 +7,10 @@ module.exports = class extends Async.Handler {
     	this.import ((require ('./Base')), ['get_method_name', 'fork'])
     }
     
-    is_anonymous () {return true}
+    async get_user () {
+    	let user = this.user // must be injected 
+        await this.db.do ("SELECT set_config ('tasks.id_user', ?, true)", [user.uuid])
+        return user
+    }
 
 }

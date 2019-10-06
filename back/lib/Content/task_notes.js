@@ -4,6 +4,28 @@ module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+do_create_task_notes: 
+
+    async function () {
+
+		let data = this.rq.data
+		
+        if (data.id_user_to <= 0) data.id_user_to = null
+        
+        data.label = (data.label || '').trim ()
+        
+        if (data.body == null) {
+            let lines  = data.label.split (/[\n\r]+/)
+            data.label = lines.shift ()
+            data.body  = lines.join ("\n")
+        }
+		
+		this.db.insert ('task_notes', data)
+
+    },	
+
+////////////////////////////////////////////////////////////////////////////////
+
 notify: 
 
     async function () {
