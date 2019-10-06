@@ -11,19 +11,22 @@ module.exports = class {
 
 		let user = this.user
 		let conf = this.conf
-		let pools = conf.pools
 
 		let rq = {}
 
 		if (data) for (let k in data) rq [k] = data [k]
-		
+
 		for (let k of ['type', 'id', 'action']) rq [k] = tia [k] || this.rq [k]
 
-		let b = this.get_log_banner ()
+		let o = {user, conf, rq, pools: []}
+			
+		for (let k in conf.pools) o [k]	= this [k]
+
+		let b = this.get_log_banner ()		
 
 		return new Promise (function (resolve, reject) {
 
-			let h = new (require ('./Async')) ({user, conf, rq, pools}, resolve, reject)
+			let h = new (require ('./Async')) (o, resolve, reject)
 
 			darn (b + ' -> ' + h.get_log_banner ())
 

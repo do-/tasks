@@ -23,10 +23,13 @@ darn (this.rq)
         let todo = []
                 
         if (data.img) {
+        
             data.is_illustrated = 1
-            data.ext  = this.ext || 'png'
-            let [yyyy, mm, dd]  = new Date ().toJSON ().substr (0, 10).split ('-')
-            data.path = `/${yyyy}/${mm}/${dd}/${data.uuid}.${data.ext}`
+            
+            let [yyyy, mm, dd] = new Date ().toJSON ().substr (0, 10).split ('-'); data.path = `/${yyyy}/${mm}/${dd}/${data.uuid}.${data.ext}`
+	        
+	        todo.push (this.fork ({type: 'task_note_images', id: data.uuid}, data))
+
         }
 
         todo.push (this.db.insert ('task_notes', data))
