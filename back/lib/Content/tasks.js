@@ -155,16 +155,22 @@ do_assign_tasks:
 
     async function () {
 
-        let note = new Note (this.rq.data, this.rq.id)        
+        let data = this.rq.data
 
-        if (!note.id_user_to) throw '#id_user_to#:Не указан адресат'
+        if (!data.id_user_to) throw '#id_user_to#:Не указан адресат'
 
-        return Promise.all ([        
-            this.db.do ('UPDATE task_users SET id_user = ?    WHERE id_task = ? AND is_author = 0', [note.id_user_to, note.id_task]),
-            this.db.do ('UPDATE task_notes SET id_user_to = ? WHERE id_task = ?', [note.id_user_to, note.id_task]),
-            this.db.do ('UPDATE tasks      SET id_user_executor = ? WHERE uuid = ?', [note.id_user_to, note.id_task]),
-            store_and_notify.call (this, note, 'notify_assign')
+        data.id_task = this.rq.id; delete this.rq.id
+        
+        let to_task = [data.id_user_to, data.id_task]
+
+        await Promise.all ([        
+            this.db.do ('UPDATE task_users SET id_user = ?          WHERE id_task = ? AND is_author = 0', to_task),
+            this.db.do ('UPDATE task_notes SET id_user_to = ?       WHERE id_task = ?', to_task),
+            this.db.do ('UPDATE tasks      SET id_user_executor = ? WHERE    uuid = ?', to_task),
+//            store_and_notify.call (this, note, 'notify_assign')
         ])
+		
+		await this.fork ({type: 'task_notes', action: 'create'}, this.rq)
 
     },
 

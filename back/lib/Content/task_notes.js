@@ -35,6 +35,54 @@ darn (this.rq)
         todo.push (this.db.insert ('task_notes', data))
 
 		await Promise.all (todo)
+		
+		let filter = data.is_assigning ? {id_task: data.id_task, ORDER: 'ts'} : {uuid: data.uuid}
+
+		let notes = await this.db.list ([
+            {task_notes: filter},
+            'users(label, mail) ON id_user_to',
+        ])
+        
+        this.fork ({action: 'notify_on'}, {notes})
+
+    },
+
+////////////////////////////////////////////////////////////////////////////////
+
+do_notify_on_task_notes:
+
+    async function () {
+
+        let notes = this.rq.notes
+        
+        let data = notes [notes.length - 1]
+
+        let msg = {        
+            to: {
+                name:    data ['users.label'],
+                address: data ['users.mail'],
+            },        
+            text: '',            
+            attachments: [],
+        }
+
+        for (let note of notes) {
+
+            if (msg.subject) {
+                msg.text += `\n${note.label}\n${note.body}`
+            }
+            else {
+                msg.subject = note.label
+                msg.text += `\n${note.body}`
+            }
+
+            if (note.ext) msg.attachments.push ({path: `${this.conf.pics}${note.path}`})
+
+        }
+        
+        msg.text += `\n\n${this.uri}\n`
+
+        this.mail.sendMail (msg, darn)
 
     },
 

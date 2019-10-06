@@ -18,7 +18,7 @@ module.exports = class {
 
 		for (let k of ['type', 'id', 'action']) rq [k] = tia [k] || this.rq [k]
 
-		let o = {user, conf, rq, pools: []}
+		let o = {user, conf, rq, pools: [], uri: this.uri}
 			
 		for (let k in conf.pools) o [k]	= this [k]
 
