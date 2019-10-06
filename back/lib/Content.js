@@ -163,28 +163,3 @@ module.exports.create_http_server = function (conf) {
         )
 
 }
-
-module.exports.create_queue = function (conf) {
-
-    return {
-    
-        publish: (module_name, method_name, rq) => {
-        
-            let h = new Dia.Handler ({
-                conf, 
-                pools: {
-                    db: conf.pools.db,
-                    mail: conf.pools.mail,
-                }, 
-                module_name, 
-                method_name, 
-                rq
-            })
-
-            setImmediate (() => h.run ())
-
-        }
-
-    }
-
-}

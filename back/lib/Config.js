@@ -15,6 +15,7 @@ module.exports = class {
         this.pools = {
             mail      : this.setup_mail (),
             db        : this.setup_db (),
+		    queue     : this.setup_queue (),            
             sessions  : this.setup_sessions (),
             users     : new Dia.Cache ({name: 'user'}),
         }
@@ -57,5 +58,32 @@ module.exports = class {
         })
 
     }
+    
+	setup_queue () {
+	
+		let conf = this
+
+		return {
+
+			publish: (module_name, method_name, rq) => {
+
+				let h = new Dia.Handler ({
+					conf, 
+					pools: {
+						db: this.pools.db,
+						mail: this.pools.mail,
+					}, 
+					module_name, 
+					method_name, 
+					rq
+				})
+
+				setImmediate (() => h.run ())
+
+			}
+
+		}
+
+	}    
     
 }
