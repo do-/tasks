@@ -1,7 +1,7 @@
-const Dia = require ('../../Ext/Dia/Dia.js')
-const Session = require ('../../Ext/Dia/Content/Handler/HTTP/Session/CachedCookieSession.js')
+const Session       = require ('./HTTP/Session.js')
+const DiaW2uiFilter = require ('../../Ext/DiaW2ui/Filter.js')
 
-module.exports = class extends Dia.HTTP.Handler {
+module.exports = class extends require ('../../Ext/Dia/Content/Handler/HTTP.js').Handler {
 
     check () {
         super.check ()
@@ -10,29 +10,11 @@ module.exports = class extends Dia.HTTP.Handler {
     }
     
     check_params () {
-        super.check ()
+        super.check_params ()
         let h = this.http.request.headers
         let rq = this.rq
         this.uri = `${h.scheme}://${h.host}/${rq.type}/`
         if (rq.id) this.uri += rq.id
-    }
-
-    get_session () {
-
-    	let h = this
-
-    	return new Session (h, {
-    		sessions:    h.pools.sessions,
-    		cookie_name: h.conf.auth.sessions.cookie_name || 'sid',
-    	})
-
-    }
-    
-    async get_user () {
-        let user = await super.get_user ()
-        if (!this.is_transactional () || !user) return user
-        await this.db.do ("SELECT set_config ('tasks.id_user', ?, true)", [user.uuid])
-        return user
     }
     
     get_method_name () {
@@ -43,34 +25,26 @@ module.exports = class extends Dia.HTTP.Handler {
     }
     
     is_anonymous () {
-        return this.rq.type == 'sessions' && this.rq.action == 'create'
+        let rq = this.rq
+        return rq.type == 'sessions' && rq.action == 'create'
     }
     
-    w2ui_filter () {
-        return new (require ('../../Ext/DiaW2ui/Filter.js')) (this.rq)
+    get_session () {
+    	let h = this; return new Session (h, {
+    		sessions:    h.pools.sessions,
+    		cookie_name: h.conf.auth.sessions.cookie_name || 'sid',
+    	})
     }
     
-    async password_hash (salt, password) {
-    
-        const fs     = require ('fs')
-        const crypto = require ('crypto')
-        const hash   = crypto.createHash ('sha256')
-        const input  = fs.createReadStream (this.conf.auth.salt_file)
-
-        return new Promise ((resolve, reject) => {
-
-            input.on ('error', reject)
-
-            input.on ('end', () => {
-                hash.update (String (salt))
-                hash.update (String (password), 'utf8')
-                resolve (hash.digest ('hex'))
-            })
-
-            input.pipe (hash, {end: false})
-
-        })
-
+    async get_user () {
+        let user = await super.get_user ()
+        if (!this.is_transactional () || !user) return user
+        await this.db.do ("SELECT set_config ('tasks.id_user', ?, true)", [user.uuid])
+        return user
     }
+
+    w2ui_filter () {return new DiaW2uiFilter (this.rq)}
+
+    async password_hash (s, p) { return this.session.password_hash (s, p) }
 
 }
