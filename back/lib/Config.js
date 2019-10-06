@@ -84,6 +84,21 @@ module.exports = class {
 
 		}
 
-	}    
+	}   
+	
+    async init () {
+    
+		let db = this.pools.db
+		
+		await db.load_schema ()
+
+		let patch = db.gen_sql_patch ()
+
+		patch.unshift ({sql: "SELECT set_config ('tasks.id_user', ?, false)", params: ['00000000-0000-0000-0000-000000000000']})
+		patch.push ({sql: "SELECT set_config ('tasks.id_user', NULL, false)"})
+
+		await db.run (patch)
+		
+    }
     
 }

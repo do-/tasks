@@ -1,31 +1,26 @@
-const Content = require ('./Content.js')
+const WebUiBackend = require ('./Content/Handler/WebUiBackend.js')
+const conf  = new (require ('./Config.js'))
+const pools = conf.pools
 
-_ ()
-
-async function _ () {
-
-    let conf = new (require ('./Config.js'))
+;(async () => {
 
     try {
-        await migrate (conf.pools.db)
+        conf.init ()
     }
     catch (x) {
-        return darn (['DB MIGRATION FAILED', x])
+        return darn (['Initialization failed', x])
     }
 
-    Content.create_http_server (conf)
+    require ('http').createServer (
 
-}
+        (request, response) => {new WebUiBackend ({conf, pools, http: {request, response}}).run ()}
 
-async function migrate (db) {
+    ).listen (
 
-    await db.load_schema ()
+        conf.listen,
 
-    let patch = db.gen_sql_patch ()
+        function () {darn ('tasks app is listening to HTTP at ' + this._connectionKey)}
 
-    patch.unshift ({sql: "SELECT set_config ('tasks.id_user', ?, false)", params: ['00000000-0000-0000-0000-000000000000']})
-    patch.push ({sql: "SELECT set_config ('tasks.id_user', NULL, false)"})
+    )
 
-    await db.run (patch)
-
-}
+}) ()
