@@ -133,17 +133,20 @@ do_create_tasks:
         let data = this.rq.data
         
         data.id_user_to = this.user.uuid
-        data.uuid = this.rq.id
+        
+        data.uuid = data.id_task = this.rq.id; delete this.rq.id
 
-        let note = new Note (data, this.rq.id)
-        
-        let [id_task_note] = await note.store (this.db, this.conf.pics)
-        
-        await this.db.insert ('task_users', [0, 1].map ((i) => {return {
-            id_task    : note.id_task,
-            id_user    : this.user.uuid,
-            is_author  : i,
-        }}))
+		await Promise.all ([
+
+			this.fork ({type: 'task_notes', action: 'create'}, this.rq),
+
+			this.db.insert ('task_users', [0, 1].map ((i) => {return {
+				id_task    : data.id_task,
+				id_user    : this.user.uuid,
+				is_author  : i,
+			}}))
+
+		])
         
         return result
             
@@ -167,7 +170,6 @@ do_assign_tasks:
             this.db.do ('UPDATE task_users SET id_user = ?          WHERE id_task = ? AND is_author = 0', to_task),
             this.db.do ('UPDATE task_notes SET id_user_to = ?       WHERE id_task = ?', to_task),
             this.db.do ('UPDATE tasks      SET id_user_executor = ? WHERE    uuid = ?', to_task),
-//            store_and_notify.call (this, note, 'notify_assign')
         ])
 		
 		await this.fork ({type: 'task_notes', action: 'create'}, this.rq)
