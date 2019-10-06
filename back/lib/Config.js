@@ -16,8 +16,11 @@ module.exports = class {
             mail      : this.setup_mail (),
             db        : this.setup_db (),
 		    queue     : this.setup_queue (),            
-            sessions  : this.setup_sessions (),
-            users     : new Dia.Cache ({name: 'user'}),
+            sessions  : new (require ('./Ext/Dia/Cache/MapTimer.js')) ({
+				name: 'session',
+				ttl: this.auth.sessions.timeout * 60 * 1000,
+			}),
+
         }
 
     }
@@ -49,16 +52,7 @@ module.exports = class {
         return Dia.DB.Pool (this.db, model)
 
     }
-    
-    setup_sessions () {
-    
-        return new Dia.Cache ({
-        	name: 'session',
-        	ttl : this.auth.sessions.timeout * 60 * 1000,
-        })
-
-    }
-    
+        
 	setup_queue () {
 	
 		let conf = this

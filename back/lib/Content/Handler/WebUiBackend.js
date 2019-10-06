@@ -1,4 +1,5 @@
 const Dia = require ('../../Ext/Dia/Dia.js')
+const Session = require ('../../Ext/Dia/Content/Handler/HTTP/Session/CachedCookieSession.js')
 
 module.exports = class extends Dia.HTTP.Handler {
 
@@ -18,66 +19,13 @@ module.exports = class extends Dia.HTTP.Handler {
 
     get_session () {
 
-        return new class extends this.CookieSession {
-        
-        	time () {
-        		return new Date ().getTime ()
-        	}
-                
-            keep_alive () {
-            	this.h.sessions.set (this.id, this.user.uuid)
-            	return this.user
-            }
+    	let h = this
 
-            async start () {  
-                await super.start ()
-                this.keep_alive ()
-            }
-            
-            async finish () {            
-                await super.finish ()
-                this.h.sessions.del (this.id)
-            }
+    	return new Session (h, {
+    		sessions:    h.pools.sessions,
+    		cookie_name: h.conf.auth.sessions.cookie_name || 'sid',
+    	})
 
-            restrict_access () {
-            	if (!this.h.is_anonymous ()) throw '401 Authenticate first'
-                return undefined
-            }
-            
-            invalidate_user (uuid) {
-            	this.h.users.del (uuid)
-            }
-
-            async get_user () {
-
-                if (!this.id) return this.h.no_user ()
-                
-                let uuid = this.h.sessions.get (this.id)
-
-                if (!uuid) {
-                	darn (`session ${this.id} not found`)
-                	return this.h.no_user ()
-                }
-                
-                this.user = await this.h.users.to_get (uuid, async () => {
-                	let r = await this.h.db.get ([{vw_users: {uuid}}])
-                	return r.uuid ? r : null
-                })
-                
-                if (!this.user) {
-                	darn (`session ${this.id}: valid user ${uuid} not found`)
-                	return this.h.no_user ()
-                }
-
-                return this.keep_alive ()
-                                
-            }
-            
-        } ({
-            cookie_name: this.conf.auth.sessions.cookie_name || 'sid',
-            timeout: this.conf.auth.sessions.timeout || 10,
-        })
-        
     }
     
     async get_user () {
