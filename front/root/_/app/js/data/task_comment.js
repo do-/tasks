@@ -19,7 +19,7 @@ $_DO.update_task_comment = async function (e) {
     }
     else {
     
-        if (data.id_user_to && !data.label) die ('label', 'Напишите что-нибудь')
+        if (data.id_user_to && !data.label) die ('label', 'Напишите что-нибудь, пожалуйста')
         
     }        
 
@@ -30,12 +30,14 @@ $_DO.update_task_comment = async function (e) {
     await response ({action}, {data})
     
     try {opener.tasks_grid.reload ()} catch (e) {}
+    
+    let to = data.id_user_to
 
     setTimeout (
 
-        data.id_user_to == $_USER.id ? reload_page : 
+        to == $_USER.id ? reload_page : 
 
-        () => {confirm ('Задача передана. Может, закрыть страницу?') ? window.close () : reload_page ()}
+        () => confirm ('Задача ' + (to == 0 ? 'завершена' : 'передана') + '. Закрыть эту страницу?') ? window.close () : reload_page ()
 
     , 10)
 
