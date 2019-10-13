@@ -15,7 +15,6 @@ module.exports = class {
         this.pools = {
             mail      : this.setup_mail (),
             db        : this.setup_db (),
-		    queue     : this.setup_queue (),            
             sessions  : new (require ('./Ext/Dia/Cache/MapTimer.js')) ({
 				name: 'session',
 				ttl: this.auth.sessions.timeout * 60 * 1000,
@@ -52,33 +51,6 @@ module.exports = class {
         return Dia.DB.Pool (this.db, model)
 
     }
-        
-	setup_queue () {
-	
-		let conf = this
-
-		return {
-
-			publish: (module_name, method_name, rq) => {
-
-				let h = new Dia.Handler ({
-					conf, 
-					pools: {
-						db: this.pools.db,
-						mail: this.pools.mail,
-					}, 
-					module_name, 
-					method_name, 
-					rq
-				})
-
-				setImmediate (() => h.run ())
-
-			}
-
-		}
-
-	}   
 	
     async init () {
     
