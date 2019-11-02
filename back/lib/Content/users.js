@@ -108,12 +108,12 @@ do_set_own_option_users:
         if (!voc_user_option.is_own) throw '#foo#:Доступ запрещён'
 
         let d = {
-            id_user: this.user.id
+            id_user: this.user.uuid
         }
 
         for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.rq.data [k]
 
-        this.session.invalidate_user (this.user.id)
+        this.session.invalidate_user (this.user.uuid)
 
         return this.db.upsert ('user_options', d, ['id_user', 'id_voc_user_option'])
 

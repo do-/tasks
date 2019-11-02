@@ -6,7 +6,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "pg": "^7.0.0",
-    "nodemailer": "^5.0.0"
+    "jsonwebtoken": "^8.5.1",
+    "nodemailer": "^5.0.0",
+    "pg": "^7.0.0"
   }
 }

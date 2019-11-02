@@ -15,11 +15,6 @@ module.exports = class {
         this.pools = {
             mail      : this.setup_mail (),
             db        : this.setup_db (),
-            sessions  : new (require ('./Ext/Dia/Cache/MapTimer.js')) ({
-				name: 'session',
-				ttl: this.auth.sessions.timeout * 60 * 1000,
-			}),
-
         }
 
     }

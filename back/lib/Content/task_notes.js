@@ -7,8 +7,7 @@ module.exports = {
 do_create_task_notes: 
 
     async function () {
-darn (this.rq)
-darn (this.user)
+
 		let data = this.rq.data
 		
         if (data.id_user_to <= 0) data.id_user_to = null
@@ -38,7 +37,7 @@ darn (this.user)
 		await Promise.all (todo)
 		
 		if (data.id_user_to == null) return
-		if (data.id_user_to == this.user.id) return
+		if (data.id_user_to == this.user.uuid) return
 		
 		let filter = data.is_assigning ? {id_task: data.id_task, ORDER: 'ts'} : {uuid: data.uuid}
 

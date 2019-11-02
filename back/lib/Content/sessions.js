@@ -22,12 +22,13 @@ do_create_sessions:
             return {}
         }
 
-        this.session.user = user
+        this.session.user = {
+        	uuid: user.id = user.uuid,
+        	role: user.role = user ['roles.name']
+        }
+        
         await this.session.start ()
-        
-        user.role = user ['roles.name']
-        user.id = user.uuid
-        
+
         user.opt = await this.db.fold ([
 
             {'user_options()': {

@@ -35,10 +35,7 @@ module.exports = class extends require ('../../Ext/Dia/Content/Handler/HTTP.js')
     }
     
     get_session () {
-    	let h = this; return new Session (h, {
-    		sessions:    h.pools.sessions,
-    		cookie_name: h.conf.auth.sessions.cookie_name || 'sid',
-    	})
+    	return new Session (this, this.conf.auth.sessions)
     }
     
     async get_user () {
