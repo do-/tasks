@@ -1,6 +1,7 @@
 const fs         = require ('fs')
 const nodemailer = require ('nodemailer')
 const Dia        = require ('./Ext/Dia/Dia.js')
+const HashCalc   = require ('./Ext/Dia/Crypto/FileSaltHashCalculator.js')
 
 module.exports = class {
 
@@ -15,6 +16,7 @@ module.exports = class {
         this.pools = {
             mail      : this.setup_mail (),
             db        : this.setup_db (),
+			pwd_calc  : new HashCalc (this.auth),
         }
 
     }
