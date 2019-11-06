@@ -91,7 +91,7 @@ do_set_option_users:
         
         for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.rq.data [k]
         
-        this.session.invalidate_user (this.rq.id)
+//        this.session.invalidate_user (this.rq.id)
         
         return this.db.upsert ('user_options', d, ['id_user', 'id_voc_user_option'])
         
