@@ -5,8 +5,8 @@ $_DO.update_user_peers = async function (e) {
     let $this = $(e.target).closest ('.ui-dialog').find ('.ui-dialog-content')
 
     let data = values ($this)    
-    
-    let ids = []; for (let uuid in data) if (data [uuid]) ids.push (uuid)
+darn (data)    
+    let ids = []; for (let uuid in data) if (data [uuid] === 1) ids.push (uuid)
 
     $this.dialog ("widget").block ()
 
