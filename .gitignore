@@ -8,7 +8,7 @@
 /front/root/_/app/js/app.js
 /front/root/_/app/js/*.js*
 /front/root/_/app/xslt/*.gz
-/front/root/_/libs/elu_dia_w2ui_template/elu_dia_w2ui_template.css
-/front/root/_/libs/elu_dia_w2ui_template/css/sprite.*
+/front/root/_/libs/tasks/tasks.css
+/front/root/_/libs/tasks/css/sprite.*
 /back/package-lock.json
 /back/node_modules
