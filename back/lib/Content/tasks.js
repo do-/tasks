@@ -134,16 +134,47 @@ get_vocs_of_tasks:
 get_item_of_tasks: 
 
     async function () {
-
+    
         return Promise.all ([
 
             this.db.get  ([{vw_tasks:   {uuid:       this.rq.id}}]),
 
             this.db.list ([{task_notes: {id_task:    this.rq.id, ORDER: 'ts'}}]),
-
+/*
             this.db.list ([{task_tasks: {id_task_to: this.rq.id, ORDER: 'vw_tasks.ts'}},
                 'vw_tasks ON id_task',
             ]),
+*/
+
+			this.db.select_all (`
+
+				WITH RECURSIVE r AS (
+
+						SELECT
+							0 AS lvl
+							, ts::text AS ord
+							, vw_tasks.*
+						FROM
+							task_tasks
+							INNER JOIN vw_tasks ON task_tasks.id_task = vw_tasks.uuid
+						WHERE
+							task_tasks.id_task_to = ?
+
+					UNION ALL
+
+						SELECT
+							1 + r.lvl AS lvl
+							, r.ord || vw_tasks.ts::text AS ord
+							, vw_tasks.*
+						FROM
+							r
+							INNER JOIN task_tasks ON task_tasks.id_task_to = r.uuid
+							INNER JOIN vw_tasks ON task_tasks.id_task = vw_tasks.uuid
+
+
+				) SELECT * FROM r ORDER BY ord
+
+			`, [this.rq.id]),
 
             this.db.list ([{task_tasks: {id_task:    this.rq.id, ORDER: 'vw_tasks.ts'}},
                 'vw_tasks ON id_task_to',
