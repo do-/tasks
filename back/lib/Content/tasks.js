@@ -148,8 +148,6 @@ get_item_of_tasks:
 
 			this.db.select_all (`
 
-				WITH RECURSIVE r AS (
-
 						SELECT
 							0 AS lvl
 							, ts::text AS ord
@@ -159,20 +157,8 @@ get_item_of_tasks:
 							INNER JOIN vw_tasks ON task_tasks.id_task = vw_tasks.uuid
 						WHERE
 							task_tasks.id_task_to = ?
-
-					UNION ALL
-
-						SELECT
-							1 + r.lvl AS lvl
-							, r.ord || vw_tasks.ts::text AS ord
-							, vw_tasks.*
-						FROM
-							r
-							INNER JOIN task_tasks ON task_tasks.id_task_to = r.uuid
-							INNER JOIN vw_tasks ON task_tasks.id_task = vw_tasks.uuid
-
-
-				) SELECT * FROM r ORDER BY ord
+						ORDER BY
+							ts
 
 			`, [this.rq.id]),
 
