@@ -65,19 +65,7 @@ module.exports = function (grunt) {
         },
     },    
     
-    shell: {
-        reboot: {command: '/etc/init.d/tasks restart'}
-    },
-
     compress: {
-      xslt: {
-        options: {mode: 'gzip'},
-        expand: true,
-        cwd: 'root/_/app/xslt',
-        ext: '.xsl.gz',
-        src: ['*.xsl'],
-        dest: 'root/_/app/xslt'
-      },
       js: {
         options: {mode: 'gzip'},
         expand: true,
@@ -95,7 +83,9 @@ module.exports = function (grunt) {
     watch: {
 
       general: {
-        files: ['root/**/*.*'],
+        files: [
+            'root/_/app/html/*.html',
+        ],
         tasks: ['bump', 'replace'],
         options: {nospawn: true}
       },
@@ -105,7 +95,7 @@ module.exports = function (grunt) {
             'root/_/libs/tasks/*.less',
             'root/_/libs/BtrMilk/*.less',
         ],
-        tasks: ['less'],
+        tasks: ['bump', 'replace', 'less'],
         options: {nospawn: true}
       },
 
@@ -116,16 +106,10 @@ module.exports = function (grunt) {
             'root/_/app/js/data/*.js',
             'root/_/app/js/view/*.js',
         ],
-        tasks: ['concat:js'],
+        tasks: ['bump', 'replace', 'concat:js'],
         options: {nospawn: true}
       },
-/*
-      model: {
-        files: ['../back/lib/Model/*.pm', '../back/lib/Config.pm'],
-        tasks: ['shell:reboot'],
-        options: {nospawn: true}
-      },
-*/
+
     }
     
   });
