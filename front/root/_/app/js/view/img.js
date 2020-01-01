@@ -1,25 +1,8 @@
 $_DRAW.img = async function (data) {
 
-    let $img = $(`
-        <span>
+	let $img = await to_fill ('img', {})
 
-            <input name=img type=hidden>
-            <input name=ext type=hidden>
-            <input name=file type=file style="display:none">
-
-            <img id=png title=
-                "Чтобы проиллюстрировать текст,
-                 скопируйте PNG (например, инструментом 'ножницы')
-                 и вставьте из буфера (Ctrl-V, Shift-Insert) прямо в текстовую область"
-            >
-
-            <video id=mp4 autoplay loop>
-            </video>
-
-        </span>
-    `)
-
-    $('textarea').on ('paste', $_DO.paste_img)
+    $('textarea', $img).on ('paste', $_DO.paste_img)
 
     $('#png', $img)
         .on ("dragover",  blockEvent)
