@@ -12,13 +12,9 @@ $_DRAW.task_comment = async function (data) {
         
         return users
         
-    }) (clone (data.users.items));
+    }) (clone (data.users.items))
 
-    let $view = (await to_fill ('task_comment', it)).dialog ({width: 635,
-        modal:   true,
-        buttons: [{name: 'update', text: 'Ctrl-Enter', attr: {"data-hotkey": "Ctrl-Enter"}}],
-        close:   function () {$(this).dialog ("destroy")},
-    }).dialog ("widget")
+	let $view = await draw_popup ('task_comment', it)
 
     $('select', $view).selectmenu ({width: true})
     
