@@ -6,25 +6,11 @@
 
 		<div class="toolbar">
 
-			<input name=q placeholder="Поиск по сообщению">
-			<input name=tasks.label placeholder="Поиск по теме">
-
-			<select name=id_user_from>
-				<option value="" selected>Все</option>
-				<option data-list=users.items data-value=id data-text=text />
-			</select>
-
-			&rarr;&nbsp;
-
-			<select name=id_user_to>
-				<option value="" selected>Всем</option>
-				<option data-list=users.items data-value=id data-text=text />
-			</select>
-
+			<input name=q placeholder="Поиск по тексту сообщений" style="width:200px;">
 			<select name=status>
-				<option value="" selected>По всем делам</option>
+				<option value="" selected>В работе и закрытые</option>
 				<option value=1>Только в работе</option>
-				<option value=-1>Только по закрытым</option>
+				<option value=-1>Только закрытые</option>
 			</select>
 
 		</div>
