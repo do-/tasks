@@ -13,7 +13,8 @@ module.exports = function (grunt) {
           compress: true,
           yuicompress: true,
           relativeUrls: true,
-          optimization: 2
+          optimization: 2,
+          plugins: [require ('less-plugin-glob')]
         },
         files: {
           "root/_/libs/tasks/tasks.css": "root/_/libs/tasks/tasks.less"
@@ -55,6 +56,8 @@ module.exports = function (grunt) {
                 'root/_/libs/blockUI/jquery.blockUI.min.js',                 
                 'root/_/libs/SlickGrid/slick.core.js',
                 'root/_/libs/SlickGrid/slick.grid.js',
+                'root/_/libs/SlickGrid/plugins/slick.rowselectionmodel.js',
+				'root/_/libs/SlickGrid/plugins/slick.checkboxselectcolumn.js',
                 'root/_/libs/elu/elu.js',
                 'root/_/libs/elu_slick/elu_slick.js',
                 'root/_/app/handler.js',
@@ -94,6 +97,7 @@ module.exports = function (grunt) {
         files: [
             'root/_/libs/tasks/*.less',
             'root/_/libs/BtrMilk/*.less',
+            'root/_/app/less/*.less',
         ],
         tasks: ['bump', 'replace', 'less'],
         options: {nospawn: true}

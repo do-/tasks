@@ -1,6 +1,6 @@
 {
   "name": "front",
-  "version": "1.0.6568",
+  "version": "1.0.6629",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -19,5 +19,8 @@
     "grunt-shell": "^2.1.0",
     "grunt-text-replace": "^0.4.0",
     "jit-grunt": "^0.10.0"
+  },
+  "dependencies": {
+    "less-plugin-glob": "^3.0.0"
   }
 }

@@ -5,14 +5,13 @@
 @import "../SlickGrid/css/smoothness/jquery-ui-1.11.3.custom.min.css";
 @import "../SlickGrid/slick.grid.css";
 @import "../BtrMilk/_";
-@import "nav";
-@import "help";
+@import "../../app/less/*.less";
 
 .invisible {
 	display: none;
 }
 
-.clickable {
+.clickable, span.anchor, div.slick-cell.pointer {
 	cursor: pointer;
 }
 
@@ -22,151 +21,13 @@ body {
 	min-height: 100%;
 	min-width:100%;
 	display: flex;	
-	flex-direction: row;
-	
+	flex-direction: row;	
 	font-family: Arial, sans-serif;
-	font-size: 11px;
-		
-	& > main {
-	
-		height: 100%;
-		flex: 1;	
-		flex-direction: column;
-
-		header {		
-			@h: 40px;
-			height: @h;
-			line-height: @h;
-		}
-
-		article {
-			flex: 1;
-		}
-		
-		margin: 0 0 0 50px;
-
-	}
-
+	font-size: 11px;		
 }
 
-span.anchor {
-	cursor: pointer;
-}
-
-div[data-block-name=task] {
-	
-	font-size: 14px;
-	
-	h1 {
-		font-size: 18px;
-		margin: 5px 0 0 20px;
-	}
-	
-	li {
-		line-height: 22px;
-		label {
-			text-decoration: underline;
-		}
-		label:hover {
-			text-decoration: none;
-		}		
-	
-	}	
-
-	header {
-		padding: 0 10px;
-		background-color: #ddffff;
-		overflow: hidden;
-		
-		b {
-			text-overflow: ellipsis;
-		}
-	}
-	
-	article {
-		padding: 10px;
-	}
-
-	&+footer {
-	
-		position:fixed;
-		right:20px;
-		bottom:20px;
-		display: flex;	
-		flex-direction: row;
-
-		&>button {
-
-			@r: 50px;
-			width: @r;
-			height: @r;
-			border-radius: 5px;
-			border-style: solid;
-
-			border-width: 8px;
-			    
-    			margin: 0 0 0 20px;
-			box-shadow: none;
-			outline:0;
-
-			color: white;
-			font-size:18px;
-			line-height:30px;
-			
-			&[name=assign] {
-				@c: #500052;
-				background-color: @c;
-				border-color: @c;
-			}
-			
-			&[name=close] {
-				@c: #770000;
-				background-color: @c;
-				border-color: @c;
-				background-position-x:2px;
-			}
-			
-			&[name=comment] {
-				@c: #005500;
-				background-color: @c;
-				border-color: @c;
-			}
-			
-			&[name=return] {
-				@c: #005500;
-				background-color: @c;
-				border-color: @c;
-			}
-			
-			&[name=fork] {
-				@c: #008800;
-				border-radius: 25px;
-				background-color: @c;
-				border-color: @c;
-				font-size: 40px;
-			}
-
-		}
-
- 	}
-
-}
-
-img#png {
-	float:left;
-	width:100px;
-	margin:130px 0 0 -15px;
-	border:solid rgb(202, 202, 202) 1px;
-	content:url("data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==");
-}
-
-video#mp4 {
-	float:left;
-	width:100px;
-	height:75px;
-	display: none;
-	margin:170px 0 0 -20px;
-	border:solid rgb(202, 202, 202) 1px;
+.the_backbround () {
+	background: url(img/bg.jpg);
 }
 
 .drw.table tr.caption {
@@ -175,17 +36,8 @@ video#mp4 {
 		line-height: 40px;
 		text-align: left;
 		padding: 0 0 0 10px;
-		background: url(img/bg.jpg);
 		color: white;
+		.the_backbround ();
 		background-position: -50px 0px; 
 	}
-}
-
-.drw.popup-form textarea {
-	font-family: Arial;
-	font-size: 14px;
-}
-
-div.slick-cell.pointer {
-	cursor: pointer;
 }

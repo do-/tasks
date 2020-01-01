@@ -1,0 +1,98 @@
+div[data-block-name=task] {
+	
+	font-size: 14px;
+	
+	h1 {
+		font-size: 18px;
+		margin: 5px 0 0 20px;
+	}
+	
+	li {
+		line-height: 22px;
+		label {
+			text-decoration: underline;
+		}
+		label:hover {
+			text-decoration: none;
+		}		
+	
+	}	
+
+	header {
+		padding: 0 10px;
+		background-color: #ddffff;
+		overflow: hidden;
+		
+		b {
+			text-overflow: ellipsis;
+		}
+	}
+	
+	article {
+		padding: 10px;
+	}
+
+	&+footer {
+	
+		position:fixed;
+		right:20px;
+		bottom:20px;
+		display: flex;	
+		flex-direction: row;
+
+		&>button {
+
+			@r: 50px;
+			width: @r;
+			height: @r;
+			border-radius: 5px;
+			border-style: solid;
+
+			border-width: 8px;
+			    
+    			margin: 0 0 0 20px;
+			box-shadow: none;
+			outline:0;
+
+			color: white;
+			font-size:18px;
+			line-height:30px;
+			
+			&[name=assign] {
+				@c: #500052;
+				background-color: @c;
+				border-color: @c;
+			}
+			
+			&[name=close] {
+				@c: #770000;
+				background-color: @c;
+				border-color: @c;
+				background-position-x:2px;
+			}
+			
+			&[name=comment] {
+				@c: #005500;
+				background-color: @c;
+				border-color: @c;
+			}
+			
+			&[name=return] {
+				@c: #005500;
+				background-color: @c;
+				border-color: @c;
+			}
+			
+			&[name=fork] {
+				@c: #008800;
+				border-radius: 25px;
+				background-color: @c;
+				border-color: @c;
+				font-size: 40px;
+			}
+
+		}
+
+ 	}
+
+}
