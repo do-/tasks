@@ -37,14 +37,14 @@ $_GET.tasks = async function (o) {
     
     data.others = data.users.items.filter ((r) => r.id != $_USER.id)
     
-    $('body').data ('data', data)    
-    
-    let note = $_SESSION.delete ('note'); if (note) o = {note}
+    data.note = $_SESSION.delete ('note')
 
-    let e = Object.entries (o); if (!e.length) e = [['id_user', [$_USER.uuid]]]
+    $('body').data ('data', data)
 
-	let search = e.map (fv => {[field, value] = fv; return {field, value, operator: 'in'}})
-	    
+    let e = Object.entries (o); if (!e.length && !data.note) e = [['id_user', [$_USER.uuid]]]
+
+	let search = e.map (fv => {[field, value] = fv; darn ({field, value}); return {field, value, operator: 'in'}})
+
     data.src = [$_REQUEST.type, {search}]
 
     return data
