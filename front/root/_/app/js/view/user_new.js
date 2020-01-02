@@ -1,5 +1,6 @@
 $_DRAW.user_new = async function (data) {
 
+/*
     let $view = (await to_fill ('user_new', data)).dialog ({
         modal: true,
         buttons: [{
@@ -9,5 +10,8 @@ $_DRAW.user_new = async function (data) {
     }).dialog ("widget")
         
     return $view
-    
+*/
+
+	return draw_popup ('user_new', data)
+
 }

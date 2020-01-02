@@ -2,21 +2,17 @@
 
 $_DO.update_user_new = async function (e) {
 
-    let $this = $(e.target).closest ('.ui-dialog').find ('.ui-dialog-content')
+    let $this = get_popup ()
 
-    let data = values ($this)    
-darn (data)
-    if (!data.label)   die ('label', 'Укажите, пожалуйста, ФИО пользователя')
-    if (!data.id_role) die ('id_role', 'Укажите, пожалуйста, роль')
-    if (!data.login)   die ('login', 'Укажите, пожалуйста, login пользователя')
+    let data = $this.valid_data ()    
 
     data.uuid = new_uuid ()
 
-    $this.dialog ("widget").block ()
+    $this.block ()
 
     data = await response ({action: 'create'}, {data})
 
-    $this.dialog ("close")
+    close_popup ()
 
     if (confirm ('Пользователь зарегистрирован. Открыть его карточку?')) open_tab ('/users/' + data.uuid)
 
@@ -29,9 +25,9 @@ darn (data)
 $_GET.user_new = async function (o) {
 
     let data = clone ($('body').data ('data'))      
-    
+
     data.id_role = 2
-darn (data)    
+
     return data
-    
+
 }

@@ -1,14 +1,14 @@
-<span title='Добавить учётную запись' class="drw popup-form">
+<span title='Добавить учётную запись' class="drw popup-form" width=260>
 
 	<style>
 		input {width: 200px;}
 		input[type=radio] {width: auto;}
 	</style>
 
-	<center><table>
+	<table width=100%>
 		<tr>
 			<td>ФИО:
-			<td><input name=label>
+			<td><input name=label required>
 		<tr>
 			<td>Роль:
 			<td>
@@ -17,7 +17,9 @@
 				</span>
 		<tr>
 			<td>Login:
-			<td><input name=login>
+			<td><input name=login required>
 	</table>
+
+	<button name=update data-hotkey="Ctrl-Enter">Ctrl-Enter</button>
 
 </span>
