@@ -7,7 +7,7 @@ $_DRAW.task_notes = async function (data) {
     let grid = $("#grid_task_notes").draw_table ({
 
         columns: [
-            {field: 'ts',           name: 'Дата',      minWidth: 100, maxWidth: 100, formatter: _ts},
+            {field: 'ts',           name: 'Дата',      minWidth: 100, maxWidth: 100, formatter: _ts, filter: {type: 'dates', dt_from: 'YYYY-MM-01', dt_to: 'YYYY-MM-DD'}},
             {field: 'label',        name: 'Заголовок сообщения', cssClass: 'clickable', width: 100, filter: {type: 'text', title: '[Поиск]'}},
             {field: 'id_user_from', name: 'Автор',     width: 30, voc: data.users, filter: {type: 'checkboxes'}},
             {field: 'id_user_to',   name: 'Адресат',   width: 30, voc: data.users, filter: {type: 'checkboxes'}},
