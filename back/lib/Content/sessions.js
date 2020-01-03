@@ -48,7 +48,6 @@ do_create_sessions:
             }},
             {'$user_users ON user_users.id_user_ref = users.uuid' : {
                 id_user : user.uuid,
-                is_on   : 1,
             }}
 
         ])    

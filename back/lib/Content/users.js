@@ -161,17 +161,33 @@ get_peers_of_users:
 ////////////////////////////////////////////////////////////////////////////////
 
 do_set_peers_users:
-  
+
     async function () {
-        
-//        this.session.invalidate_user (this.rq.id)
 
-        await this.db.do ('DELETE FROM user_users WHERE id_user = ?', [this.user.uuid])
+    	let ids = this.rq.data.ids
 
-        await this.db.insert ('user_users', this.rq.data.ids.map ((i) => {return {
-            id_user            : this.user.uuid,
-            id_user_ref        : i,            
-        }}), ['id_user', 'id_user_ref'])
+    	let [q, p] = ['DELETE FROM user_users WHERE id_user = ?', [this.user.uuid]]
+
+    	let todo = []
+
+    	if (ids.length > 0) {
+
+    		q += ` AND id_user_ref NOT IN (${ids.map (id => '?')})`; p.push (...ids)
+
+    		todo.push (
+
+				this.db.upsert ('user_users', ids.map (i => ({
+					id_user     : this.user.uuid,
+					id_user_ref : i,            
+				})))
+
+    		)
+
+    	}
+
+    	todo.push (this.db.do (q, p))
+
+		return Promise.all (todo)
 
     },
         
