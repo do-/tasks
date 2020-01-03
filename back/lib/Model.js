@@ -27,13 +27,17 @@ module.exports = class extends Dia.DB.Model {
 
         let cols = table.columns
         
-        if (cols.id) {
-            table.pk = 'id'
-        } 
-        else {
-            cols [table.pk = 'uuid'] = 'uuid=uuid_generate_v4()'
-        }
+        if (!table.pk) {
         
+			if (cols.id) {
+				table.pk = 'id'
+			} 
+			else {
+				cols [table.pk = 'uuid'] = 'uuid=uuid_generate_v4()'
+			}
+        
+        }
+                
     }
 
 }
