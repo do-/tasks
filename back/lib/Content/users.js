@@ -152,7 +152,6 @@ get_peers_of_users:
                 ORDER      : 'label',
             }},
             {'user_users AS user_user ON user_user.id_user_ref = users.uuid': {
-                is_on: 1,
                 id_user: this.user.uuid,
             }}
         ])
@@ -167,10 +166,9 @@ do_set_peers_users:
         
 //        this.session.invalidate_user (this.rq.id)
 
-        await this.db.do ('UPDATE user_users SET is_on = 0 WHERE id_user = ?', [this.user.uuid])
+        await this.db.do ('DELETE FROM user_users WHERE id_user = ?', [this.user.uuid])
 
-        await this.db.upsert ('user_users', this.rq.data.ids.map ((i) => {return {
-            is_on              : 1,
+        await this.db.insert ('user_users', this.rq.data.ids.map ((i) => {return {
             id_user            : this.user.uuid,
             id_user_ref        : i,            
         }}), ['id_user', 'id_user_ref'])

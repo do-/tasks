@@ -5,7 +5,7 @@ $_DO.update_user_peers = async function (e) {
     let $this = $(e.target).closest ('.ui-dialog').find ('.ui-dialog-content')
 
     let data = values ($this)    
-darn (data)    
+
     let ids = []; for (let uuid in data) if (data [uuid] === 1) ids.push (uuid)
 
     $this.dialog ("widget").block ()
@@ -13,7 +13,7 @@ darn (data)
     await response ({type: 'users', action: 'set_peers'}, {data: {ids}})
     
     $_USER.peers = (await response ({type: 'users', id: null, part: 'peers'}))
-        .users.filter (i => i ['user_user.is_on'])
+        .users.filter (i => i ['user_user.id_user'])
 
     $_SESSION.set ('user', $_USER)
     $_LOCAL.set ('user', $_USER)   
