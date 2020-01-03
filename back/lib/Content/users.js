@@ -221,11 +221,8 @@ do_delete_users:
 //        this.session.invalidate_user (this.rq.id)
 
         return Promise.all ([
-
-            this.db.update ('user_users', {
-                id_user_ref : this.rq.id,
-                is_on       : 0,
-            }, ['id_user_ref']),
+        
+        	this.db.do ('DELETE FROM user_users WHERE id_user_ref = ?', [this.rq.id]),
 
             this.db.update ('users', {
                 uuid        : this.rq.id, 
