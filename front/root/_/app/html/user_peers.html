@@ -1,9 +1,32 @@
-<span title='Мои корреспонденты' class="drw popup-form">
+<span title='Мои корреспонденты' class="drw popup-form" width=800>
 
-	<table width=100%>
-		<tr data-list=users>
-			<td><input data-name=uuid type=checkbox>
-			<td data-text=label>
+	<style>
+
+		.drw.table[data-block-name=user_peers] {
+			border: solid silver 1px;
+			width: 100%;
+			height: 100%;
+		}
+
+	</style>
+
+	<table width=100% height=100%>
+
+		<tr>
+			<td width=50%>
+				<div id="grid_available" class="drw table" />
+			</td>
+			<td align=center width=20>
+				<button name=add>&rarr;</button>
+				<br>
+				<br>
+				<br>
+				<br>
+				<button name=del>&larr;</button>
+			</td>
+			<td width=50%>
+				<div id="grid_selected" class="drw table" />
+			</td>
 	</table>
 
 	<button name=update>Установить</button>
