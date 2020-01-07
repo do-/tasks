@@ -18,12 +18,11 @@ $_DO.toggle_user_own_options = async function (e, a) {
 
     $_USER.opt [r.name] = data.is_on
 
-    localStorage.removeItem ('user')
-    localStorage.setItem ('user', 1)
+	$_LOCAL.set   ('user', $_USER)
     $_SESSION.set ('user', $_USER)
 
     delete window.__LOGOUT__
-    
+
     location.reload ()
 
 }

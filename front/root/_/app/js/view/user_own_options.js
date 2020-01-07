@@ -1,11 +1,7 @@
 $_DRAW.user_own_options = async function (data) {
 
-    let $view = (await to_fill ('user_own_options', data)).dialog ({
-        modal: true,
-        width: 650,
-        height: 130,
-    }).dialog ("widget")
-        
+	let $view = await draw_popup ('user_own_options', data)
+
     $("#the_table_container").draw_table ({
 
         columns: [
