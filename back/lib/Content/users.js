@@ -82,24 +82,15 @@ get_options_of_users:
 do_set_option_users: 
 
     async function () {
-    
-        if (this.user.role != 'admin') throw '#foo#:Доступ запрещён'
-        
-        let data = this.rq.data
-        
-        return data.is_on == 1 ? 
-        
-        	this.db.upsert ('user_options', {
-				id_user:            this.rq.id,
-				id_voc_user_option: data.id_voc_user_option
-        	})
-        
-        :
 
-			this.db.do ('DELETE FROM user_options WHERE id_user = ? AND id_voc_user_option = ?', [
-				this.rq.id,
-				data.id_voc_user_option
-			])
+        if (this.user.role != 'admin') throw '#foo#:Доступ запрещён'
+
+		let data = this.rq.data
+
+       	return this.db [['delete', 'upsert'] [data.is_on]] ('user_options', {
+			id_user:            this.rq.id,
+			id_voc_user_option: data.id_voc_user_option
+       	})
 
     },
 
@@ -117,19 +108,10 @@ do_set_own_option_users:
 
         if (!voc_user_option.is_own) throw '#foo#:Доступ запрещён'
 
-        return data.is_on == 1 ? 
-        
-        	this.db.upsert ('user_options', {
-				id_user:            this.user.uuid,
-				id_voc_user_option: data.id_voc_user_option
-        	})
-        
-        :
-
-			this.db.do ('DELETE FROM user_options WHERE id_user = ? AND id_voc_user_option = ?', [
-				this.user.uuid,
-				data.id_voc_user_option
-			])
+       	return this.db [['delete', 'upsert'] [data.is_on]] ('user_options', {
+			id_user:            this.user.uuid,
+			id_voc_user_option: data.id_voc_user_option
+       	})
 
     },
     
