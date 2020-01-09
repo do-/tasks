@@ -159,31 +159,22 @@ get_peers_of_users:
 do_set_peers_users:
 
     async function () {
-
-    	let ids = this.rq.data.ids
-
-    	let [q, p] = ['DELETE FROM user_users WHERE id_user = ?', [this.user.uuid]]
-
-    	let todo = []
-
-    	if (ids.length > 0) {
-
-    		q += ` AND id_user_ref NOT IN (${ids.map (id => '?')})`; p.push (...ids)
-
-    		todo.push (
-
-				this.db.upsert ('user_users', ids.map (i => ({
-					id_user     : this.user.uuid,
-					id_user_ref : i,            
-				})))
-
-    		)
-
-    	}
-
-    	todo.push (this.db.do (q, p))
-
-		return Promise.all (todo)
+    
+    	return this.db.delepsert (
+    	
+    		'user_users', 
+    		
+    		{
+    			id_user     : this.user.uuid
+    		},
+    		
+    		this.rq.data.ids.map (i => ({
+				id_user_ref : i,
+			})),
+			
+//			'id_user_ref',
+			
+    	)
 
     },
         
