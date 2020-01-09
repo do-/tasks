@@ -69,7 +69,7 @@ get_options_of_users:
         
             {voc_user_options: filter},
             
-            {'user_options(is_on)': {
+            {'vw_user_options(is_on) AS user_options': {
                 id_user: user.uuid,
             }}
 
@@ -84,17 +84,23 @@ do_set_option_users:
     async function () {
     
         if (this.user.role != 'admin') throw '#foo#:Доступ запрещён'
+        
+        let data = this.rq.data
+        
+        return data.is_on == 1 ? 
+        
+        	this.db.upsert ('user_options', {
+				id_user:            this.rq.id,
+				id_voc_user_option: data.id_voc_user_option
+        	})
+        
+        :
 
-        let d = {
-            id_user: this.rq.id
-        }
-        
-        for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.rq.data [k]
-        
-//        this.session.invalidate_user (this.rq.id)
-        
-        return this.db.upsert ('user_options', d, ['id_user', 'id_voc_user_option'])
-        
+			this.db.do ('DELETE FROM user_options WHERE id_user = ? AND id_voc_user_option = ?', [
+				this.rq.id,
+				data.id_voc_user_option
+			])
+
     },
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -103,19 +109,27 @@ do_set_own_option_users:
 
     async function () {
 
-        let voc_user_option = await this.db.get ([{voc_user_options: {id: this.rq.data.id_voc_user_option}}]);
+        let data = this.rq.data
+        
+        let id_voc_user_option = data.id_voc_user_option
+
+        let voc_user_option = await this.db.get ([{voc_user_options: id_voc_user_option}])
 
         if (!voc_user_option.is_own) throw '#foo#:Доступ запрещён'
 
-        let d = {
-            id_user: this.user.uuid
-        }
+        return data.is_on == 1 ? 
+        
+        	this.db.upsert ('user_options', {
+				id_user:            this.user.uuid,
+				id_voc_user_option: data.id_voc_user_option
+        	})
+        
+        :
 
-        for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.rq.data [k]
-
-//        this.session.invalidate_user (this.user.uuid)
-
-        return this.db.upsert ('user_options', d, ['id_user', 'id_voc_user_option'])
+			this.db.do ('DELETE FROM user_options WHERE id_user = ? AND id_voc_user_option = ?', [
+				this.user.uuid,
+				data.id_voc_user_option
+			])
 
     },
     
@@ -131,7 +145,7 @@ get_own_options_of_users:
         filter.is_own = 1
         
         return await this.db.add ({}, [{voc_user_options: filter},
-            {'user_options(is_on)': {
+            {'vw_user_options(is_on) AS user_options': {
                 id_user: this.user.uuid,
             }}
         ])

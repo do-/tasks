@@ -31,10 +31,7 @@ do_create_sessions:
 
         user.opt = await this.db.fold ([
 
-            {'user_options()': {
-                is_on: 1,
-                id_user: user.uuid
-            }},
+            {'user_options()': {id_user: user.uuid}},
 
             'voc_user_options(name)'
 

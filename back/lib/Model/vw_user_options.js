@@ -9,13 +9,15 @@ module.exports = {
 
     pk : ['id_user', 'id_voc_user_option'],
     
-    on_before_recreate_table: (table) => {
-        	
-    	if (table.existing.columns.is_on) return {
-    		sql    : 'DELETE FROM user_options WHERE is_on=?',
-    		params : [0],
-    	}
-   
-    }
+    sql : `
+    
+        SELECT
+        	id_user,
+        	id_voc_user_option,
+        	1 is_on
+        FROM
+            user_options
+
+    `,
 
 }

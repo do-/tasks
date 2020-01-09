@@ -34,7 +34,7 @@ function svg (icon) {return staticURL (
     `libs/tasks/svg/${icon}.svg`            
 )}
 
-if ($_USER && $_USER.opt && $_USER.opt.no_tabs) openTab = function (url, name) {
+if ($_USER && $_USER.opt && $_USER.opt.no_tabs) open_tab = openTab = function (url, name) {
     window.name = name || url
     location = url
 }
