@@ -2,7 +2,7 @@ $_DRAW.img = async function (data) {
 
 	let $img = await to_fill ('img', {})
 
-    $('textarea', $img).on ('paste', $_DO.paste_img)
+    $('textarea').on ('paste', $_DO.paste_img)
 
     $('#png', $img)
         .on ("dragover",  blockEvent)
