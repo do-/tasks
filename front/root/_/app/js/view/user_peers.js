@@ -16,7 +16,8 @@ $_DRAW.user_peers = async function (data) {
             {	
             	field: "label", 
             	name: "Доступные",
-            },
+				filter: {type: 'text', title: '[ФИО]'},
+			},
         ],
         
         data: data.u [0],
