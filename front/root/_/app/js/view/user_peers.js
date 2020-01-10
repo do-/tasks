@@ -2,7 +2,9 @@ $_DRAW.user_peers = async function (data) {
 
     let $view = await draw_popup ('user_peers', data, {height: 400})
     
-    $("#grid_available", $view).draw_table ({
+    let grid_available, grid_selected
+    
+    grid_available = $("#grid_available", $view).draw_table ({
 
         enableCellNavigation: false,
 
@@ -20,13 +22,12 @@ $_DRAW.user_peers = async function (data) {
         data: data.u [0],
         
         onDblClick: (e, a) => {
-        	a.grid.setSelectedRows ([a.row])
-        	$_DO.move_user_peers ('#grid_available', '#grid_selected')
+			grid_available.moveDataTo (grid_selected, {rows: [a.row]})
         }
 
     })
     
-    $("#grid_selected", $view).draw_table ({
+    grid_selected = $("#grid_selected", $view).draw_table ({
 
         enableCellNavigation: false,
 
@@ -44,13 +45,10 @@ $_DRAW.user_peers = async function (data) {
         data: data.u [1],
         
         onDblClick: (e, a) => {
-        	a.grid.setSelectedRows ([a.row])
-        	$_DO.move_user_peers ('#grid_selected', '#grid_available')
+			grid_selected.moveDataTo (grid_available, {rows: [a.row]})
         }        
 
     })
-
-//    for (i of data.users) if (i ['user_user.id_user']) $(`input[name=${i.uuid}]`, $view).prop ({checked: 1})
 
     return $view
 

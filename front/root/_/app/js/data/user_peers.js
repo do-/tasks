@@ -2,7 +2,7 @@
 
 $_DO.add_user_peers = async function () {
 
-	$_DO.move_user_peers ('#grid_available', '#grid_selected')
+	$('#grid_available').data ('grid').moveSelectedDataTo ($('#grid_selected').data ('grid'))
 
 }
 
@@ -10,7 +10,7 @@ $_DO.add_user_peers = async function () {
 
 $_DO.del_user_peers = async function () {
 
-	$_DO.move_user_peers ('#grid_selected', '#grid_available')
+	$('#grid_selected').data ('grid').moveSelectedDataTo ($('#grid_available').data ('grid'))
 
 }
 
@@ -20,21 +20,9 @@ $_DO.move_user_peers = async function (from, to) {
 
 	let grid_from = $(from).data ('grid')
 	let grid_to = $(to).data ('grid')
-
-	let a = clone (grid_from.getData ())
-	let s = clone (grid_to.getData ())
-	let n = clone (grid_from.getSelectedRows ()).reverse ()
-
-	for (let i of n) s.push (a.splice (i, 1) [0])
-
-	grid_from.setData (a)
-	grid_from.setSelectedRows ([])
-	grid_from.render ()
-
-	grid_to.setData (s.sort ((a, b) => a.label > b.label ? 1 : a.label < b.label ? -1 : 0))
-	grid_to.setSelectedRows ([])
-	grid_to.render ()
-
+	
+	grid_from.moveSelectedDataTo (grid_to)
+	
 }
 
 ////////////////////////////////////////////////////////////////////////////////
