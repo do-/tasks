@@ -1,11 +1,13 @@
 $_DRAW.user = async function (data) {
 
     $('title').text (data.label)
+
+    let $view = await draw_form ('user', data)
     
-    let $main = $('main').html ((await use.jq ('user')).draw_form (data))
+    $('main').html ($view)
     
     show_block ('user_options')
 
-    return $main
+    return $view
 
 }

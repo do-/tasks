@@ -26,15 +26,10 @@ $_DO.update_user = async function (e) {
 
     if (!confirm ('Сохранить изменения?')) return
     
-    let $form = $('.drw.form')
+    let $form = $('body > main > span')
     
-    let data = values ($form)
+    let data = $form.valid_data ()
     
-    data.not_null ('label', 'Вы забыли указать ФИО')
-//    data.match    ('label', /^[А-ЯЁ][А-ЯЁа-яё\- ]+[а-яё]$/, 'Некорректное ФИО')
-    
-    data.not_null ('login', 'Вы забыли указать login')
-
     $form.block ()    
 
     await response ({type: 'users', action: 'update'}, {data})
