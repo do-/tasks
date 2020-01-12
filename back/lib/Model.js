@@ -19,4 +19,16 @@ module.exports = class extends Dia.DB.Model {
                 
     }
 
+    on_after_parse_table_columns (table) {
+
+    	if (this.has_validation (table)) {
+
+    		if (!table.triggers) table.triggers = {}
+
+    		if (!table.triggers.before_insert_update) table.triggers.before_insert_update = '/*+ VALIDATE ALL */ RETURN NEW;'
+
+    	}	
+
+	}
+
 }
