@@ -23,11 +23,11 @@ module.exports = {
 
     triggers : {
 
-        before_insert_update : function () {
-
-			return this.model.trg_check_column_values (this) + 'RETURN NEW;'
-
-        },
+        before_insert_update : `
+        	/*+ VALIDATE label*/ 
+        	/*+ VALIDATE login*/ 
+        	RETURN NEW;
+        `
 
     },
 
