@@ -24,8 +24,7 @@ module.exports = {
     triggers : {
 
         before_insert_update : `
-        	/*+ VALIDATE label*/ 
-        	/*+ VALIDATE login*/ 
+        	/*+ VALIDATE ALL */ 
         	RETURN NEW;
         `
 
