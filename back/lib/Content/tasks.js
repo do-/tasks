@@ -111,7 +111,6 @@ select_tasks:
 
         return this.db.add_all_cnt ({}, [
             {vw_tasks : filter}, 
-            'task_notes ON id_last_task_note',
         ])
 
     },

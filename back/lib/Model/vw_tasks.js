@@ -9,7 +9,6 @@ module.exports = {
         id_user_executor    : "(users)=current_setting('tasks.id_user')::uuid // Адресат (uuid)",
 
         label               : "text // Тема", 
-
         ts                  : "timestamp=now() // Когда оформлено",
 
         id_last_task_note   : "(task_notes) // Последняя реплика",
@@ -19,6 +18,9 @@ module.exports = {
         
         is_open             : 'int=0 // Открыто ли (0 — закрыто, 1 — в работе)', 
         id_status           : "(task_status) // Статус",
+
+        task_note_label     : "text // Заголовок последней реплики",
+        task_note_ts        : "timestamp=now() // Когда была последняя реплика",
 
     },
 
@@ -35,10 +37,13 @@ module.exports = {
                 WHEN id_user_executor = id_user        THEN 101 
                 ELSE 102
             END AS id_status
+            , task_notes.label AS task_note_label
+            , task_notes.ts AS task_note_ts
         FROM
             tasks
-            INNER JOIN users AS a ON tasks.id_user_author = a.uuid
+            INNER JOIN users AS a ON tasks.id_user_author = a.uuid            
             INNER JOIN users AS e ON tasks.id_user_executor = e.uuid       
+            LEFT  JOIN task_notes ON tasks.id_last_task_note = task_notes.uuid
 
     `,
 
