@@ -94,7 +94,6 @@ select_tasks:
 
         for (let s of this.rq.search) switch (s.field) {
             case 'note':
-            case 'is_open':
                 x [s.field] = s.value
                 break
             default:
@@ -104,8 +103,6 @@ select_tasks:
         this.rq.search = r
         
         let filter = this.w2ui_filter ()
-
-        if (x.is_open != null) filter ['id_user ' + ['=', '<>'] [x.is_open]] = null
 
         if (x.note != null) filter.uuid = this.db.query ([{'task_notes(id_task)': {'label ILIKE %?% OR body ILIKE %?%': [x.note, x.note]}}]) 
 
