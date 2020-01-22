@@ -15,7 +15,8 @@ $_DRAW.tasks = async function (data) {
             if (v == $_USER.id) return me
             let fi = users [v]
             if (!fi) return '[закрыто]'
-            return fi.split (' ') [1]
+            let [f, i] = fi.split (' ')
+            return i + ' ' + f.charAt (0) + '.'
         }
     }
 
