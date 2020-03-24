@@ -16,7 +16,7 @@ $_DRAW.voc_projects = async function (data) {
         
         src: data.src,
         
-//        onRecordDblClick: (r) => open_tab ('/voc_projects/' + r.uuid),
+        onRecordDblClick: r => show_block ('voc_project_popup', r),
 
     })
     

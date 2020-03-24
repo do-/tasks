@@ -112,7 +112,7 @@ do_create_voc_projects:
             
         let d = {uuid: this.rq.id}
 
-        for (let k of ['uuid', 'label']) d [k] = data [k]        
+        for (let k of ['label']) d [k] = data [k]        
         
 		await this.db.insert ('voc_projects', d)
         
