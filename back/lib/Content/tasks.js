@@ -163,6 +163,8 @@ get_item_of_tasks:
             this.db.list ([{task_tasks: {id_task:    this.rq.id, ORDER: 'vw_tasks.ts'}},
                 'vw_tasks ON id_task_to',
             ]),
+            
+            this.db.select_vocabulary ('voc_projects'),
 
         ])
 

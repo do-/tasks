@@ -2,7 +2,7 @@
 
 $_DO.fork_task = function (e) {
 
-    show_block ('tasks_new', {body: 'Контекст: ' + location.href})
+    show_block ('tasks_new', {body: 'Контекст: ' + location.href, id_voc_project: $('body').data ('data').id_voc_project})
 
 }
 
@@ -10,11 +10,12 @@ $_DO.fork_task = function (e) {
 
 $_GET.task = async function (o) {
 
-    let [data, n, b, r] = await response ({})
+    let [data, n, b, r, p] = await response ({})
     
     data.task_notes = n
     data.back_refs = b
     data.refs = r
+    data.voc_projects = p
     
     data.author   = {id: data.id_user_author,   label: data.user_author_label}
     data.executor = {id: data.id_user_executor, label: data.user_executor_label} 
@@ -27,7 +28,7 @@ $_GET.task = async function (o) {
             data.users.unshift (data.executor)        
     }
     
-    add_vocabularies (data, {users: 1})
+    add_vocabularies (data, {users: 1, voc_projects: 1})
     
     $('body').data ('data', data)
 
