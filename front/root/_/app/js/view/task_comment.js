@@ -6,7 +6,7 @@ $_DRAW.task_comment = async function (data) {
     
         if (it.is_assigning) return users
         
-        if ($_USER.id == data.author.id) users.push ({id: "0", text: 'Никто. Дело окончно.'})
+        if ($_USER.id == data.author.id) users.push ({id: "0", text: 'Никто. Дело окончено.'})
         
         for (let i of users) if (i.id == $_USER.id) i.text = 'Я, ' + i.text
         
