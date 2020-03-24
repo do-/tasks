@@ -24,7 +24,10 @@ $_DRAW.tasks = async function (data) {
 
         columns: [
             {field: 'ts',                name: 'Дата',              width: 125, resizable: false, sortable: true, __cssClass: (r, c, d) => !d ? '' : 'status status-' + d.id_status, formatter: (r, c, v, o, d) => ({text: _ts (r, c, v), addClasses: 'status status-' + d.id_status}), filter: {type: 'dates', dt_from: 'YYYY-MM-01', dt_to: 'YYYY-MM-DD'}},
+
+            {field: 'id_voc_project',    name: 'Проект',            width: 50, voc: data.voc_projects, filter: {type: 'checkboxes'}},
             {field: 'label',             name: 'Тема',              width: 150, cssClass: 'clickable', filter: {type: 'text', title: 'Фильтр по теме'}},
+
             {field: 'id_user_author',    name: 'Автор',             width: 20, hidden: true, formatter: _io (data.users, 'я'), filter: {type: 'checkboxes', title: 'Автор', items: me_too ('[я]')}},
             {field: 'id_user_executor',  name: 'Адресат',           width: 20, hidden: true, formatter: _io (data.users, 'мне'), filter: {type: 'checkboxes', title: 'Адресат', items: me_too ('[мне]')}},
             {field: 'id_status',         name: 'Статус',            width: 104, resizable: false, hidden: true, voc: data.voc_task_status, filter: {type: 'checkboxes', items: data.voc_task_status.items, empty: '[не важно]'}},

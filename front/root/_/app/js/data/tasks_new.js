@@ -5,6 +5,8 @@ $_DO.update_tasks_new = async function (e) {
     let $this = get_popup ()
 
     let data = $this.valid_data ()
+darn (data)    
+    if (!data.id_voc_project) die ('id_voc_project', 'Вы забыли указать проект')
     
     $this.block ()
 
@@ -20,6 +22,6 @@ $_DO.update_tasks_new = async function (e) {
 
 $_GET.tasks_new = async function (o) {
 
-    return o
+    return {...clone ($('body').data ('data')), ...o}
 
 }

@@ -26,6 +26,7 @@ do_create_tasks:
                 uuid:    this.rq.id,
                 id_user: this.user.uuid,
                 label:   this.rq.data.label,
+                id_voc_project:   this.rq.data.id_voc_project,
             })
             
         }
@@ -121,6 +122,7 @@ get_vocs_of_tasks:
         return this.db.add_vocabularies ({}, {
             users: {filter: 'uuid IN (SELECT DISTINCT id_user FROM task_users)'},
             voc_task_status: {},
+            voc_projects: {},
         })
 
     },

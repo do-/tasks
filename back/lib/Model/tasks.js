@@ -14,6 +14,8 @@ module.exports = {
 
         id_last_task_note  : "(task_notes) // Последняя реплика",
 
+        id_voc_project     : "(voc_projects) // Проект",
+
     },
 
     keys : {

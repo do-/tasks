@@ -13,6 +13,8 @@ module.exports = {
 
         id_last_task_note   : "(task_notes) // Последняя реплика",
 
+        id_voc_project     : "(voc_projects) // Проект",
+
         user_author_label   : "text // Автор (имя)", 
         user_executor_label : "text // Адресат (имя)",
         

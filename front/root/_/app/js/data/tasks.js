@@ -33,7 +33,7 @@ $_GET.tasks = async function (o) {
 
     let data = await response ({part: 'vocs'})
     
-    add_vocabularies (data, {users: 1, voc_task_status: 1})
+    add_vocabularies (data, {users: 1, voc_task_status: 1, voc_projects: 1})
     
     data.others = data.users.items.filter ((r) => r.id != $_USER.id)
     

@@ -6,6 +6,13 @@
 			<td nowrap>Тема:
 			<td><input name=label required style="width:490px">
 		<tr>
+			<td nowrap>Проект:
+			<td>
+				<select name=id_voc_project style="width:490px;height:25px;" required>
+					<option value="">[проект?]</option>
+					<option data-list=voc_projects.items data-text=text data-value=id />
+				</select>
+		<tr>
 			<td nowrap valign=top>Суть:<br><span id=img />
 			<td><textarea name=body style="width:490px;height:400px;"></textarea>
 
