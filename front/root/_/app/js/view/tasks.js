@@ -45,7 +45,7 @@ $_DRAW.tasks = async function (data) {
         onRecordDblClick: (r) => open_tab ('/tasks/' + r.uuid),
         
         onClick: (e, a) => {
-        	if (a.cell == 1) open_tab ('/tasks/' + a.grid.getDataItem (a.row).uuid)
+        	if (a.cell == 2) open_tab ('/tasks/' + a.grid.getDataItem (a.row).uuid)
         },
 
         onKeyDown: (e, a) => {
