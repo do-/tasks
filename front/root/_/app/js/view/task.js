@@ -22,7 +22,8 @@ $_DRAW.task = async function (data) {
                 function (line) {
 
                     line = line
-                        .replace (/[<>]/g, "")
+                        .replace (/</g, "&lt;")
+                        .replace (/>/g, "&gt;")
                         .replace (/\*\*([^\*]*?)\*\*/, "<b>$1</b>")
                         .replace (/https?:\/\/\S+/g, function (url) {
                         
