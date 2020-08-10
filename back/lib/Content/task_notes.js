@@ -133,7 +133,7 @@ select_task_notes:
 
         let filter = this.w2ui_filter ()
         
-        if (note) filter ['label ILIKE %?% OR body ILIKE %?%'] = [note, note]
+        if (note) filter ['(label ILIKE %?% OR body ILIKE %?%)'] = [note, note]
                     
         return this.db.add_all_cnt ({}, [
             {task_notes: filter}, 

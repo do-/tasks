@@ -105,7 +105,7 @@ select_tasks:
         
         let filter = this.w2ui_filter ()
 
-        if (x.note != null) filter.uuid = this.db.query ([{'task_notes(id_task)': {'label ILIKE %?% OR body ILIKE %?%': [x.note, x.note]}}]) 
+        if (x.note != null) filter.uuid = this.db.query ([{'task_notes(id_task)': {'(label ILIKE %?% OR body ILIKE %?%)': [x.note, x.note]}}]) 
 
         return this.db.add_all_cnt ({}, [
             {vw_tasks : filter}, 
