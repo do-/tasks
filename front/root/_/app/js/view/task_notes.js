@@ -12,6 +12,7 @@ $_DRAW.task_notes = async function (data) {
             {field: 'id_user_from', name: 'Автор',     width: 30, voc: data.users, filter: {type: 'checkboxes'}},
             {field: 'id_user_to',   name: 'Адресат',   width: 30, voc: data.users, filter: {type: 'checkboxes'}},
             {field: 'tasks.label',  name: 'Тема задачи', width: 100, filter: {type: 'text', title: '[Поиск]'}},
+            {field: 'tasks.id_voc_project',    name: 'Проект',            width: 50, voc: data.voc_projects, filter: {type: 'checkboxes'}},
         ],
         
         searchInputs: 

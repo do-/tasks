@@ -96,6 +96,7 @@ get_vocs_of_task_notes:
     function () {
 
         return this.db.add_vocabularies ({}, {
+            voc_projects: {},
             users: {filter: 'login IS NOT NULL'}
         })
 
@@ -120,6 +121,9 @@ select_task_notes:
             case 'tasks.label':
                 task_filter ['label ILIKE %?%'] = s.value
                 break
+            case 'tasks.id_voc_project':
+                task_filter ['id_voc_project IN'] = s.value
+                break
             case 'status':
                 task_filter ['id_user' + (s.value == 1 ? '<>' : '=')] = null
                 break
@@ -137,7 +141,7 @@ select_task_notes:
                     
         return this.db.add_all_cnt ({}, [
             {task_notes: filter}, 
-            {'$tasks(uuid, label) ON task_notes.id_task': task_filter}
+            {'$tasks(uuid, label, id_voc_project) ON task_notes.id_task': task_filter}
         ])
         
     },
