@@ -4,7 +4,9 @@ $_DO.update_task_comment = async function (e) {
 
     let $this = $(e.target).closest ('.ui-dialog').find ('.ui-dialog-content')
 
-    let data = values ($this)    
+    let data = values ($this)
+
+    if (data.id_user_to == '...' || data.id_user_to == 'other') data.id_user_to = null
 
     var action = data.is_assigning ? 'assign': 'comment'
     
@@ -52,14 +54,15 @@ $_GET.task_comment = async function (o) {
     data.record = o
 
     if (o.is_assigning) {
-    
-        let d = await response ({type: 'users', id: undefined}, {search: [
-            {field: "uuid", operator: "not in", value: [{id: $_USER.uuid}]},
-            {field: "is_deleted", operator: "is", value: 0},
-        ], searchLogic: 'AND', limit: 100, offset: 0})
 
-        data.users = d.users.map (function (i) {return {id: i.uuid, label: i.label}})
-            
+        data.users = [
+        	{id: '...', label: '[укажите, пожалуйста, адресата]'},
+			...clone ($_USER.peers),
+        	{id: 'other', label: '...кто-то ещё'},
+        ]
+        
+        data.record.id_user_to = '...'
+	
         add_vocabularies (data, {users: 1})
                         
         return data
