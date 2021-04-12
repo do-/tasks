@@ -54,15 +54,20 @@ $_GET.task_comment = async function (o) {
     data.record = o
 
     if (o.is_assigning) {
-
+    
         data.users = [
-        	{id: '...', label: '[укажите, пожалуйста, адресата]'},
 			...clone ($_USER.peers),
         	{id: 'other', label: '...кто-то ещё'},
-        ]
-        
-        data.record.id_user_to = '...'
-	
+        ]        
+
+    	if (!data.record.id_user_to) {
+    	
+    		data.record.id_user_to = '...'
+    		
+    		data.users.unshift ({id: '...', label: '[укажите, пожалуйста, адресата]'})
+    	
+    	}
+        	
         add_vocabularies (data, {users: 1})
                         
         return data
