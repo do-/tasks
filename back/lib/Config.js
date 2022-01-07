@@ -3,13 +3,11 @@ const nodemailer = require ('nodemailer')
 const Dia        = require ('./Ext/Dia/Dia.js')
 const HashCalc   = require ('./Ext/Dia/Crypto/FileSaltHashCalculator.js')
 
-module.exports = class {
+module.exports = class extends Dia.Config {
 
     constructor () {
 
-        const conf = JSON.parse (fs.readFileSync ('../conf/elud.json', 'utf8'))
-
-        for (let k in conf) this [k] = conf [k]
+        super (process.argv [2] || '../conf/elud.json', 'utf8')
         
         this.check_pics ()
         
@@ -43,16 +41,16 @@ module.exports = class {
 
     setup_db () {
     
-        let model = new (require ('./Model.js')) ({path: './Model'})
+        let model = new (require ('./Model.js')) ({path: './Model', conf: this})
 
         return Dia.DB.Pool (this.db, model)
 
     }
 	
     async init () {
-    
+
 		let db = this.pools.db
-		
+
 		await db.load_schema ()
 
 		let patch = db.gen_sql_patch ()
