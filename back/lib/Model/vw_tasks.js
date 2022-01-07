@@ -19,7 +19,7 @@ module.exports = {
         user_executor_label : "text // Адресат (имя)",
         
         is_open             : 'int=0 // Открыто ли (0 — закрыто, 1 — в работе)', 
-        id_status           : "(task_status) // Статус",
+        id_status           : "(voc_task_status) // Статус",
 
         task_note_label     : "text // Заголовок последней реплики",
         task_note_ts        : "timestamp=now() // Когда была последняя реплика",
