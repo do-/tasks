@@ -8,7 +8,7 @@
   "dependencies": {
     "content-disposition": "^0.5.3",
     "jsonwebtoken": "^8.5.1",
-    "nodemailer": "^5.0.0",
+    "nodemailer": "^6.6.1",
     "pg": "^8.7.1"
   }
 }
