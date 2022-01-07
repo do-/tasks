@@ -5,7 +5,7 @@ const pools = conf.pools
 ;(async () => {
 
     try {
-        conf.init ()
+        await conf.init ()
     }
     catch (x) {
         return darn (['Initialization failed', x])
