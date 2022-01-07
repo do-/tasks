@@ -9,6 +9,6 @@
     "content-disposition": "^0.5.3",
     "jsonwebtoken": "^8.5.1",
     "nodemailer": "^5.0.0",
-    "pg": "^7.0.0"
+    "pg": "^8.7.1"
   }
 }
