@@ -9,16 +9,28 @@ $_DO.create_users = function (e) {
 ////////////////////////////////////////////////////////////////////////////////
 
 $_DO.load_users = async function (lo) {
-
-	const {skip, take, sort} = lo
+darn(lo)
+	const {skip, take, sort, filter} = lo
 
 	let o = {
 		searchLogic: "AND",
 		limit:take,
 		offset:skip,
-		search: [],
+		search: [
+			{
+				"field": "is_deleted",
+				"value": "0",
+				"operator": "is"
+			},
+		],
 	}
-
+	
+	if (filter) o.search.push ({
+        "field": "q",
+        "value": filter [0].filterValue,
+        "operator": "contains"
+	})
+	
 	if (sort) o.sort = sort.map (i => ({
 		field: i.selector,
 		direction: i.desc ? 'desc' : 'asc',

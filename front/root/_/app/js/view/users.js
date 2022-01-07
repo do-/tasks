@@ -19,6 +19,9 @@ $_DRAW.users = async function (data) {
 		scrolling: {
 			mode: 'virtual',
 		},
+		searchPanel: {
+			visible: true,
+		},
 		columns: [
 			{
 				dataField: 'label',
