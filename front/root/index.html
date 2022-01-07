@@ -11,7 +11,7 @@
 
 			window.autoExec = function () {};
 
-			var ver = '1.0.7392';
+			var ver = '1.0.7418';
 
 			sessionStorage.setItem ('staticRoot', '__' + ver.replace (/\./g, '_'));
 			sessionStorage.setItem ('dynamicRoot', '/_back');
@@ -28,7 +28,7 @@
 
 				function ahead (e) {document.head.appendChild (e)}
 
-				ahead (el ('link',   {href: r + '/libs/tasks/dx.light.css', rel: 'stylesheet', type: 'text/css'}))
+				ahead (el ('link',   {href: r + '/libs/tasks/dx.light.compact.css', rel: 'stylesheet', type: 'text/css'}))
 				ahead (el ('link',   {href: r + '/libs/tasks/tasks.css', rel: 'stylesheet', type: 'text/css'}))
 				ahead (el ('script', {src:  r + '/app/js/_.js'}))
 
