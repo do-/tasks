@@ -28,77 +28,76 @@ $_DRAW.users = async function (data) {
 		searchPanel: {
 			visible: true,
 		},
-/*		
-	onRowUpdating: async e => e.cancel = !await DevExpress.ui.dialog.confirm ('Сохранить изменения?', 'Вопрос'),
 
-	_onRowUpdating: function (e) {
-darn ({onRowUpdating: e})	
-	},
-*/	
-    editing: {
-      mode: 'popup',
-      allowUpdating: true,
-      useIcons: true,
-      popup: {
-        title: 'Пользователь',
-        showTitle: true,
-        width: 400,
-        height: 220,
-        toolbarItems: [
-			{
-				widget: "dxButton",
-				toolbar: 'bottom',
-				location: "after",
-				options: { 
-					text: "Установить пароль...", 
-					onClick: function (e) { /* ... */ }
-				}
-			},			
-			{
-				widget: "dxButton",
-				toolbar: 'bottom',
-				location: "after",
-				options: { 
-					text: "Сохранить", 
-					onClick: async () => {
-						if (!await DevExpress.ui.dialog.confirm ('Сохранить изменения?', 'Вопрос')) return
-						grid.saveEditData ()
+		editing: {
+		  mode: 'popup',
+		  allowUpdating: true,
+		  useIcons: true,
+		  popup: {
+			title: 'Пользователь',
+			showTitle: true,
+			width: 400,
+			height: 220,
+			toolbarItems: [
+				{
+					widget: "dxButton",
+					toolbar: 'bottom',
+					location: "after",
+					options: { 
+						text: "Установить пароль...", 
+						onClick: async e => {
+							const data = await grid.byKey (grid.option ('focusedRowKey'))
+							grid.cancelEditData ()
+							show_block ('user_password', data)
+						}
 					}
-				}
-			},
-			{
-				widget: "dxButton",
-				toolbar: 'bottom',
-				location: "after",
-				options: { 
-					text: "Удалить", 
-					onClick: function (e) { /* ... */ }
-				}
-			},
-        ],
-      }, 
-      form: {colCount: 1,
-        items: [
-        	{
-        		dataField: 'label',
-        		isRequired: true,
-        	},
-        	{
-        		dataField: 'login',
-        		isRequired: true,
-        	},        	
-        	{
-        		dataField: 'mail',
-        		isRequired: true,
-        		editorOptions: {
-	        		mode: 'email',
-        		},
-        	},        	
-        ], 
-      },
-//      allowDeleting: true,
-//      allowAdding: true,
-    },
+				},			
+				{
+					widget: "dxButton",
+					toolbar: 'bottom',
+					location: "after",
+					options: { 
+						text: "Сохранить", 
+						onClick: async () => {
+							if (!await DevExpress.ui.dialog.confirm ('Сохранить изменения?', 'Вопрос')) return
+							grid.saveEditData ()
+						}
+					}
+				},
+				{
+					widget: "dxButton",
+					toolbar: 'bottom',
+					location: "after",
+					options: { 
+						text: "Удалить", 
+						onClick: function (e) { /* ... */ }
+					}
+				},
+			],
+		  }, 
+		  form: {colCount: 1,
+			items: [
+				{
+					dataField: 'label',
+					isRequired: true,
+				},
+				{
+					dataField: 'login',
+					isRequired: true,
+				},        	
+				{
+					dataField: 'mail',
+					isRequired: true,
+					editorOptions: {
+						mode: 'email',
+					},
+				},        	
+			], 
+		  },
+	//      allowDeleting: true,
+	//      allowAdding: true,
+		},
+		
 		columns: [
 			{
 				dataField: 'label',
