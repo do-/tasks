@@ -1,10 +1,43 @@
 $_DRAW.users = async function (data) {
     
     $('title').text ('Пользователи системы')
-    
-//    let $result = $('main').html (await use.html ('users'))
 
-	const grid = $('body > main').dxDataGrid({
+	let toolbarItems = []
+		
+	function fill_in (is_new) {
+	
+		toolbarItems.splice (0, toolbarItems.length)
+		
+		if (!is_new) toolbarItems.push ({
+			widget: "dxButton",
+			toolbar: 'bottom',
+			location: "after",
+			options: { 
+				text: "Установить пароль...", 
+				onClick: async e => {
+					const data = await grid.byKey (grid.option ('focusedRowKey'))
+					grid.cancelEditData ()
+					show_block ('user_password', data)
+				}
+			}
+		})
+		
+		toolbarItems.push ({
+			widget: "dxButton",
+			toolbar: 'bottom',
+			location: "after",
+			options: { 
+				text: is_new ? 'Создать' : 'Сохранить', 
+				onClick: async () => {
+					if (!await DevExpress.ui.dialog.confirm ('Сохранить изменения?', 'Вопрос')) return
+					grid.saveEditData ()
+				}
+			}
+		})
+
+	}
+    
+	const grid = $('body > main').dxDataGrid ({
 
 		dataSource: data.src,
 
@@ -29,52 +62,22 @@ $_DRAW.users = async function (data) {
 			visible: true,
 		},
 
+		onInitNewRow: () => fill_in (true),	 
+		onEditingStart: () => fill_in (false),
+
 		editing: {
 		  mode: 'popup',
 		  allowUpdating: true,
 		  useIcons: true,
+		  
 		  popup: {
 			title: 'Пользователь',
 			showTitle: true,
 			width: 400,
 			height: 220,
-			toolbarItems: [
-				{
-					widget: "dxButton",
-					toolbar: 'bottom',
-					location: "after",
-					options: { 
-						text: "Установить пароль...", 
-						onClick: async e => {
-							const data = await grid.byKey (grid.option ('focusedRowKey'))
-							grid.cancelEditData ()
-							show_block ('user_password', data)
-						}
-					}
-				},			
-				{
-					widget: "dxButton",
-					toolbar: 'bottom',
-					location: "after",
-					options: { 
-						text: "Сохранить", 
-						onClick: async () => {
-							if (!await DevExpress.ui.dialog.confirm ('Сохранить изменения?', 'Вопрос')) return
-							grid.saveEditData ()
-						}
-					}
-				},
-				{
-					widget: "dxButton",
-					toolbar: 'bottom',
-					location: "after",
-					options: { 
-						text: "Удалить", 
-						onClick: function (e) { /* ... */ }
-					}
-				},
-			],
+			toolbarItems,
 		  }, 
+		  
 		  form: {colCount: 1,
 			items: [
 				{
@@ -95,7 +98,7 @@ $_DRAW.users = async function (data) {
 			], 
 		  },
 	//      allowDeleting: true,
-	//      allowAdding: true,
+			allowAdding: true,
 		},
 		
 		columns: [
@@ -126,19 +129,20 @@ $_DRAW.users = async function (data) {
 			},
 		],
 
-//		onRowDblClick: e => open_tab ('/users/' + e.data.uuid),    
-		onRowDblClick: function (e) {this.editRow (e.rowIndex)},    
+		onRowDblClick: e => $_DO.edit_users (),
 		
 		onKeyDown: e => {
 		
-			if (e.event.which !== 13) return
-			
-			open_tab ('/users/' + e.component.option ('focusedRowKey'))
+			if (e.event.which === 13) $_DO.edit_users ()
 		
 		}
 
-	}).dxDataGrid('instance');
+	}).dxDataGrid ('instance')
+	
+	$_DO.edit_users = function () {
 
-//    return $result
+		grid.editRow (grid.option ('focusedRowIndex'))
+
+	}	
 
 }

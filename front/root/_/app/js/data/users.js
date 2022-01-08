@@ -17,7 +17,7 @@ $_DO.update_users = async function (id, data) {
 ////////////////////////////////////////////////////////////////////////////////
 
 $_DO.load_users = async function (lo) {
-darn(lo)
+
 	const {skip, take, sort, filter} = lo
 
 	let o = {
