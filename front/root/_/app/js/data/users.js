@@ -8,6 +8,14 @@ $_DO.create_users = function (e) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+$_DO.update_users = async function (id, data) {
+
+	await response ({type: 'users', id, action: 'update'}, {data})
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 $_DO.load_users = async function (lo) {
 darn(lo)
 	const {skip, take, sort, filter} = lo
@@ -57,7 +65,8 @@ $_GET.users = async function (o) {
             
     data.src = new DevExpress.data.CustomStore ({
 		key: 'uuid',
-		load: $_DO.load_users
+		load: $_DO.load_users,
+		update: $_DO.update_users,
 	})
 
     return data

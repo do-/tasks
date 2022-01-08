@@ -28,7 +28,13 @@ $_DRAW.users = async function (data) {
 		searchPanel: {
 			visible: true,
 		},
-
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+      useIcons: true,
+//      allowDeleting: true,
+//      allowAdding: true,
+    },
 		columns: [
 			{
 				dataField: 'label',
@@ -57,7 +63,8 @@ $_DRAW.users = async function (data) {
 			},
 		],
 
-		onRowDblClick: e => open_tab ('/users/' + e.data.uuid),    
+//		onRowDblClick: e => open_tab ('/users/' + e.data.uuid),    
+		onRowDblClick: function (e) {this.editRow (e.rowIndex)},    
 		
 		onKeyDown: e => {
 		
