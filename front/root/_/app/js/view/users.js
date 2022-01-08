@@ -4,7 +4,7 @@ $_DRAW.users = async function (data) {
     
     let $result = $('main').html (await use.html ('users'))
 
-	$('#grid_users').dxDataGrid({
+	const grid = $('#grid_users').dxDataGrid({
 
 		dataSource: data.src,
 
@@ -28,6 +28,13 @@ $_DRAW.users = async function (data) {
 		searchPanel: {
 			visible: true,
 		},
+/*		
+	onRowUpdating: async e => e.cancel = !await DevExpress.ui.dialog.confirm ('Сохранить изменения?', 'Вопрос'),
+
+	_onRowUpdating: function (e) {
+darn ({onRowUpdating: e})	
+	},
+*/	
     editing: {
       mode: 'popup',
       allowUpdating: true,
@@ -37,6 +44,38 @@ $_DRAW.users = async function (data) {
         showTitle: true,
         width: 400,
         height: 220,
+        toolbarItems: [
+			{
+				widget: "dxButton",
+				toolbar: 'bottom',
+				location: "after",
+				options: { 
+					text: "Установить пароль...", 
+					onClick: function (e) { /* ... */ }
+				}
+			},			
+			{
+				widget: "dxButton",
+				toolbar: 'bottom',
+				location: "after",
+				options: { 
+					text: "Сохранить", 
+					onClick: async () => {
+						if (!await DevExpress.ui.dialog.confirm ('Сохранить изменения?', 'Вопрос')) return
+						grid.saveEditData ()
+					}
+				}
+			},
+			{
+				widget: "dxButton",
+				toolbar: 'bottom',
+				location: "after",
+				options: { 
+					text: "Удалить", 
+					onClick: function (e) { /* ... */ }
+				}
+			},
+        ],
       }, 
       form: {colCount: 1,
         items: [
