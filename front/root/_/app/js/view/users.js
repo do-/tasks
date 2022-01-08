@@ -29,9 +29,34 @@ $_DRAW.users = async function (data) {
 			visible: true,
 		},
     editing: {
-      mode: 'row',
+      mode: 'popup',
       allowUpdating: true,
       useIcons: true,
+      popup: {
+        title: 'Пользователь',
+        showTitle: true,
+        width: 400,
+        height: 220,
+      }, 
+      form: {colCount: 1,
+        items: [
+        	{
+        		dataField: 'label',
+        		isRequired: true,
+        	},
+        	{
+        		dataField: 'login',
+        		isRequired: true,
+        	},        	
+        	{
+        		dataField: 'mail',
+        		isRequired: true,
+        		editorOptions: {
+	        		mode: 'email',
+        		},
+        	},        	
+        ], 
+      },
 //      allowDeleting: true,
 //      allowAdding: true,
     },
