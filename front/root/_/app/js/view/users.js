@@ -2,9 +2,9 @@ $_DRAW.users = async function (data) {
     
     $('title').text ('Пользователи системы')
     
-    let $result = $('main').html (await use.html ('users'))
+//    let $result = $('main').html (await use.html ('users'))
 
-	const grid = $('#grid_users').dxDataGrid({
+	const grid = $('body > main').dxDataGrid({
 
 		dataSource: data.src,
 
@@ -140,6 +140,6 @@ darn ({onRowUpdating: e})
 
 	}).dxDataGrid('instance');
 
-    return $result
+//    return $result
 
 }
