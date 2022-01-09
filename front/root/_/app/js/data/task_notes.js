@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 $_DO.load_task_notes = async function (lo) {
-
+darn ({lo})
 	const {skip, take, sort, filter} = lo
 
 	let o = {

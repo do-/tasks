@@ -28,14 +28,18 @@ $_DRAW.task_notes = async function (data) {
 				dataField: 'ts',
 				caption: 'Дата',
 				dataType: 'datetime',
+				allowHeaderFiltering: false,
 			},
 			{
 				dataField: 'label',
 				caption: 'Заголовок сообщения',
+				allowHeaderFiltering: false,
 			},
 			{
 				dataField: 'id_user_from',
 				caption: 'Автор',
+				allowFiltering: false,
+				allowHeaderFiltering: true,
 				lookup: {
 					dataSource: data.users.items,
 					valueExpr: 'id',
@@ -45,6 +49,8 @@ $_DRAW.task_notes = async function (data) {
 			{
 				dataField: 'id_user_to',
 				caption: 'Адресат',
+				allowFiltering: false,
+				allowHeaderFiltering: true,
 				lookup: {
 					dataSource: data.users.items,
 					valueExpr: 'id',
@@ -54,18 +60,29 @@ $_DRAW.task_notes = async function (data) {
 			{
 				dataField: 'tasks_label',
 				caption: 'Тема задачи',
+				allowHeaderFiltering: false,
 			},
 			{
 				dataField: 'tasks_id_voc_project',
 				caption: 'Проект',
+				allowFiltering: false,
+				allowHeaderFiltering: true,
 				lookup: {
 					dataSource: data.voc_projects.items,
 					valueExpr: 'id',
 					displayExpr: 'label',
  				}
 			},
-		],		
-
+		],	
+		
+		filterRow: {
+			visible: true,
+		},
+		
+		headerFilter: {
+			visible: true,
+		},
+		
 		onRowDblClick: e => open_tab ('/tasks/' + e.data.id_task),
 
 	}).dxDataGrid ('instance')
