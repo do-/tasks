@@ -1,8 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.create_users = function (e) {
+$_DO.create_users = async function (data) {
 
-    show_block ('user_new')
+	data.uuid = new_uuid ()
+
+    const item = await response ({action: 'create'}, {data})
+    
+    await show_block ('user_password', item)
 
 }
 
@@ -65,8 +69,9 @@ $_GET.users = async function (o) {
             
     data.src = new DevExpress.data.CustomStore ({
 		key: 'uuid',
-		load: $_DO.load_users,
+		load:   $_DO.load_users,
 		update: $_DO.update_users,
+		insert: $_DO.create_users,
 	})
 
     return data

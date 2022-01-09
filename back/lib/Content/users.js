@@ -250,7 +250,7 @@ do_update_users:
 
         let d = {uuid}
 
-        for (let k of ['login', 'label', 'mail']) d [k] = data [k]
+        for (let k of ['login', 'label', 'mail', 'id_role']) d [k] = data [k]
 
 //        this.session.invalidate_user (this.rq.id)
 

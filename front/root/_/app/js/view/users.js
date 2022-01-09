@@ -8,10 +8,13 @@ $_DRAW.users = async function (data) {
 	
 		toolbarItems.splice (0, toolbarItems.length)
 		
-		if (!is_new) toolbarItems.push ({
+		const common = {
 			widget: "dxButton",
-			toolbar: 'bottom',
 			location: "after",
+		}
+		
+		if (!is_new) toolbarItems.push ({...common,
+			toolbar: 'top',
 			options: { 
 				text: "Установить пароль...", 
 				onClick: async e => {
@@ -22,22 +25,38 @@ $_DRAW.users = async function (data) {
 			}
 		})
 		
-		toolbarItems.push ({
-			widget: "dxButton",
-			toolbar: 'bottom',
-			location: "after",
-			options: { 
-				text: is_new ? 'Создать' : 'Сохранить', 
-				onClick: async () => {
-					if (!await DevExpress.ui.dialog.confirm ('Сохранить изменения?', 'Вопрос')) return
-					grid.saveEditData ()
-				}
-			}
-		})
+		if (is_new) {
 
+			toolbarItems.push ({...common,
+				toolbar: 'bottom',
+				options: { 
+					text: 'Создать', 
+					onClick: async () => {
+						if (!await DevExpress.ui.dialog.confirm ('Создать новую учётную запись?', 'Вопрос')) return
+						grid.saveEditData ()
+					}
+				}
+			})
+
+		}
+		else {
+
+			toolbarItems.push ({...common,
+				toolbar: 'bottom',
+				options: { 
+					text: 'Сохранить', 
+					onClick: async () => {
+						if (!await DevExpress.ui.dialog.confirm ('Сохранить изменения?', 'Вопрос')) return
+						grid.saveEditData ()
+					}
+				}
+			})
+
+		}
+		
 	}
     
-	const grid = $('body > main').dxDataGrid ({
+	const grid = $('body > main').css ({'margin-top': 5}).dxDataGrid ({
 
 		dataSource: data.src,
 
@@ -73,8 +92,9 @@ $_DRAW.users = async function (data) {
 		  popup: {
 			title: 'Пользователь',
 			showTitle: true,
+			closeOnOutsideClick: true,
 			width: 400,
-			height: 220,
+			height: 240,
 			toolbarItems,
 		  }, 
 		  
@@ -94,6 +114,10 @@ $_DRAW.users = async function (data) {
 					editorOptions: {
 						mode: 'email',
 					},
+				},        	
+				{
+					dataField: 'id_role',
+					isRequired: true,
 				},        	
 			], 
 		  },
