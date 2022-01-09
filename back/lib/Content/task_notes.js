@@ -107,12 +107,14 @@ get_vocs_of_task_notes:
 select_task_notes: 
 
     function () {
-        
+
+        let task_filter = {}
+
+/*        
         let label
         let note
 
         let r = []
-        let task_filter = {}
 
         for (let s of this.rq.search) switch (darn(s).field) {
             case 'q':
@@ -134,14 +136,17 @@ select_task_notes:
         this.rq.search = r
         
         this.rq.sort = [{field: "ts", direction: "desc"}];
+*/
 
-        let filter = this.w2ui_filter ()
+		this.rq.loadOptions.sort = [{selector: 'ts', desc: true}]
+darn (this.rq.loadOptions)
         
-        if (note) filter ['(label ILIKE %?% OR body ILIKE %?%)'] = [note, note]
+        let filter = this.dx_filter ()
+darn (filter)        
+//        if (note) filter ['(label ILIKE %?% OR body ILIKE %?%)'] = [note, note]
                     
         return this.db.add_all_cnt ({}, [
-            {task_notes: filter}, 
-            {'$tasks(uuid, label, id_voc_project) ON task_notes.id_task': task_filter}
+            {'vw_task_notes AS task_notes': filter},
         ])
         
     },

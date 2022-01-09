@@ -1,5 +1,6 @@
 const Session       = require ('../../Ext/Dia/Content/Handler/HTTP/Session/JWTCookieSession.js')
 const DiaW2uiFilter = require ('../../Ext/Dia/Content/Handler/HTTP/Ext/w2ui/Filter.js')
+const DxFilter = require ('../../Ext/Dia/Content/Handler/HTTP/Ext/dx/Filter.js')
 
 module.exports = class extends require ('../../Ext/Dia/Content/Handler/HTTP.js').Handler {
 
@@ -46,6 +47,7 @@ module.exports = class extends require ('../../Ext/Dia/Content/Handler/HTTP.js')
     }
 
     w2ui_filter () {return new DiaW2uiFilter (this.rq)}
+    dx_filter () {return new DxFilter (this.rq.loadOptions)}
 
     async password_hash (salt, password) { 
 		return this.pwd_calc.encrypt (password, salt)

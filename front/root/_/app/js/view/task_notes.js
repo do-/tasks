@@ -58,12 +58,12 @@ $_DRAW.task_notes = async function (data) {
  				}
 			},
 			{
-				dataField: 'tasks_label',
+				dataField: 'task_label',
 				caption: 'Тема задачи',
 				allowHeaderFiltering: false,
 			},
 			{
-				dataField: 'tasks_id_voc_project',
+				dataField: 'id_voc_project',
 				caption: 'Проект',
 				allowFiltering: false,
 				allowHeaderFiltering: true,
