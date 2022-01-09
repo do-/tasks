@@ -123,6 +123,7 @@ $_GET.nav = async function (o) {
                 label: "Корреспонденты",
                 icon: "users",
             },
+/*            
             {
                 id: "open_user_password",
                 label: "Смена пароля",
@@ -134,6 +135,7 @@ $_GET.nav = async function (o) {
                 label: "Настройки",
                 icon: "settings",
             },
+*/
             {
                 id: "logout",
                 label: "Выход",
