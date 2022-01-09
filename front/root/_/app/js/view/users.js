@@ -4,7 +4,9 @@ $_DRAW.users = async function (data) {
 
 	let toolbarItems = []
 		
-	function fill_in (is_new) {
+	function fill_in (data) {
+	
+		const is_new = data == null
 	
 		toolbarItems.splice (0, toolbarItems.length)
 		
@@ -12,8 +14,8 @@ $_DRAW.users = async function (data) {
 			widget: "dxButton",
 			location: "after",
 		}
-		
-		if (!is_new) toolbarItems.push ({...common,
+
+		if (data && data.is_deleted != 1) toolbarItems.push ({...common,
 			toolbar: 'top',
 			options: { 
 				text: "Установить пароль...", 
@@ -40,17 +42,50 @@ $_DRAW.users = async function (data) {
 
 		}
 		else {
-
-			toolbarItems.push ({...common,
-				toolbar: 'bottom',
-				options: { 
-					text: 'Сохранить', 
-					onClick: async () => {
-						if (!await DevExpress.ui.dialog.confirm ('Сохранить изменения?', 'Вопрос')) return
-						grid.saveEditData ()
+		
+			if (data.is_deleted == 1) {
+			
+				toolbarItems.push ({...common,
+					toolbar: 'bottom',
+					options: { 
+						text: 'Восстановить', 
+						onClick: async () => {
+							if (!await DevExpress.ui.dialog.confirm ('Восстановить эту учётную запись?', 'Вопрос')) return
+							await $_DO.undelete_users (data.uuid)
+							grid.cancelEditData ()
+							grid.refresh ()
+						}
 					}
-				}
-			})
+				})			
+			
+			}
+			else {
+
+				toolbarItems.push ({...common,
+					toolbar: 'bottom',
+					options: { 
+						text: 'Сохранить', 
+						onClick: async () => {
+							if (!await DevExpress.ui.dialog.confirm ('Сохранить изменения?', 'Вопрос')) return
+							grid.saveEditData ()
+						}
+					}
+				})
+				
+				toolbarItems.push ({...common,
+					toolbar: 'top',
+					options: { 
+						text: "Удалить", 
+						onClick: async e => {
+							if (!await DevExpress.ui.dialog.confirm ('Удалить эту учётную запись?', 'Вопрос')) return
+							await $_DO.delete_users (data.uuid)
+							grid.cancelEditData ()
+							grid.refresh ()
+						}
+					}
+				})				
+
+			}
 
 		}
 		
@@ -83,10 +118,12 @@ $_DRAW.users = async function (data) {
 
 		onInitNewRow: e => {
 			e.data.id_role = 2
-			fill_in (true) 
+			fill_in () 
 		},
 		
-		onEditingStart: () => fill_in (false),
+		onEditingStart: e => {
+			fill_in (e.data)
+		},
 
 		editing: {
 		  mode: 'popup',

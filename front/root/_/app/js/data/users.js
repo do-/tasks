@@ -20,6 +20,22 @@ $_DO.update_users = async function (id, data) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+$_DO.undelete_users = async function (id) {  
+
+    await response ({type: 'users', action: 'undelete', id}, {})
+    
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+$_DO.delete_users = async function (id) {  
+
+    await response ({type: 'users', action: 'delete', id}, {})
+    
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 $_DO.load_users = async function (lo) {
 //darn (lo)
 	const {skip, take, sort, filter} = lo
