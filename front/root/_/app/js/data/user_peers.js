@@ -1,39 +1,8 @@
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
-$_DO.add_user_peers = async function () {
+$_DO.update_user_peers = async function (data) {
 
-	$('#grid_available').data ('grid').moveSelectedDataTo ($('#grid_selected').data ('grid'))
-
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-$_DO.del_user_peers = async function () {
-
-	$('#grid_selected').data ('grid').moveSelectedDataTo ($('#grid_available').data ('grid'))
-
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-$_DO.move_user_peers = async function (from, to) {
-
-	let grid_from = $(from).data ('grid')
-	let grid_to = $(to).data ('grid')
-	
-	grid_from.moveSelectedDataTo (grid_to)
-	
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-$_DO.update_user_peers = async function (e) {
-
-    get_popup ().block ()
-
-    await response ({type: 'users', action: 'set_peers'}, {data: {
-    	ids: $('#grid_selected').data ('grid').getData ().map (i => i.uuid)
-    }})
+    await response ({type: 'users', action: 'set_peers'}, {data})
 
     $_USER.peers = (await response ({type: 'users', id: null, part: 'peers'}))
         .users.filter (i => i ['user_user.id_user'])
@@ -50,11 +19,9 @@ $_DO.update_user_peers = async function (e) {
 $_GET.user_peers = async function (o) {
 
     let data = await response ({type: 'users', id: null, part: 'peers'})
+    
+    data.ids = data.users.filter (i => i ['user_user.id_user']).map (i => i.uuid)
 
-    data.u = [[], []]
-
-    for (let user of data.users) data.u [user ['user_user.id_user'] ? 1 : 0].push (user)
-darn (data)    
     return data
 
 }
