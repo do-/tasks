@@ -189,6 +189,12 @@ $_DRAW.users = async function (data) {
 			},
 		],
 
+		onCellPrepared: e => {
+
+			if (e.rowType === 'data' && e.data.is_deleted == 1 && !e.column.type) e.cellElement.addClass ('deleted')
+		
+		},
+
 		onRowDblClick: e => $_DO.edit_users (),
 		
 		onKeyDown: e => {
