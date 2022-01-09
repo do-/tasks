@@ -48,8 +48,6 @@ $_GET.task_notes = async function (o) {
     
     add_vocabularies (data, {users: 1, voc_projects: 1})
     
-//    data.src = $_REQUEST.type
-
     data.src = new DevExpress.data.CustomStore ({
 		key: 'uuid',
 		load:   $_DO.load_task_notes,
