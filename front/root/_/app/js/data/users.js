@@ -21,7 +21,7 @@ $_DO.update_users = async function (id, data) {
 ////////////////////////////////////////////////////////////////////////////////
 
 $_DO.load_users = async function (lo) {
-
+//darn (lo)
 	const {skip, take, sort, filter} = lo
 
 	let o = {
@@ -31,7 +31,7 @@ $_DO.load_users = async function (lo) {
 		search: [
 			{
 				"field": "is_deleted",
-				"value": "0",
+				"value": $_SESSION.get ('is_deleted') || null,
 				"operator": "is"
 			},
 		],
@@ -66,6 +66,8 @@ $_GET.users = async function (o) {
     add_vocabularies (data, {roles: 1})
     
     $('body').data ('data', data)
+    
+    $_SESSION.set ('is_deleted', '0')
             
     data.src = new DevExpress.data.CustomStore ({
 		key: 'uuid',

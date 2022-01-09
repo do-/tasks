@@ -56,7 +56,7 @@ $_DRAW.users = async function (data) {
 		
 	}
     
-	const grid = $('body > main').css ({'margin-top': 5}).dxDataGrid ({
+	const grid = $('body > main').css ({'padding-top': 5}).dxDataGrid ({
 
 		dataSource: data.src,
 
@@ -124,6 +124,38 @@ $_DRAW.users = async function (data) {
 	//      allowDeleting: true,
 			allowAdding: true,
 		},
+		
+        toolbar: {
+            items: [ 
+            	{
+	            	name: 'searchPanel',
+	            	location: 'before',
+            	},
+            	{
+	            	name: 'is_deleted', 
+	            	location: 'before',
+	            	widget: 'dxSelectBox',
+	            	options: {
+	            		dataSource: [
+	            			{id: '0', label: 'Актуальные'},
+	            			{id: '1', label: 'Удалённые'},
+	            			{id: '',  label: 'Все'},
+	            		],
+	            		displayExpr: 'label',
+	            		valueExpr: 'id',
+	            		value: '0',
+	            		onValueChanged: e => {
+	            			$_SESSION.set ('is_deleted', e.value)
+	            			grid.refresh ()
+	            		}
+	            	},
+            	},
+            	{
+	            	name: 'addRowButton', 
+	            	location: 'before',
+            	},
+            ]  
+        },	
 		
 		columns: [
 			{
