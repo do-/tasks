@@ -81,7 +81,11 @@ $_DRAW.users = async function (data) {
 			visible: true,
 		},
 
-		onInitNewRow: () => fill_in (true),	 
+		onInitNewRow: e => {
+			e.data.id_role = 2
+			fill_in (true) 
+		},
+		
 		onEditingStart: () => fill_in (false),
 
 		editing: {
