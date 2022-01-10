@@ -10,9 +10,7 @@ $_DO.create_tasks = function (e) {
 
 $_DO.show_required_tasks = function () {
 
-    show_block ('tasks', {
-        id_user: [$_USER.id],
-    })
+	$('body > main').dxDataGrid ('instance').option ('filterValue', ['id_user', '=', $_USER.id])
     
 }    
 
@@ -20,11 +18,20 @@ $_DO.show_required_tasks = function () {
 
 $_DO.show_created_tasks = function () {
 
+	$('body > main').dxDataGrid ('instance').option ('filterValue', 
+		[
+			['id_status', '=', 101],
+			'and',
+			['id_user_author', '=', $_USER.id],
+		]
+	)
+
+/*
     show_block ('tasks', {
         id_status: [101],
         id_user_author: [$_USER.id]
     })
-
+*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////

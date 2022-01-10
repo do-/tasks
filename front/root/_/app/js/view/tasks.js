@@ -142,6 +142,41 @@ $_DRAW.tasks = async function (data) {
 
 		onRowDblClick: e => open_tab ('/tasks/' + e.key),
 		
+		toolbar: {
+		    items: [             
+		    	{
+		        	text: '\xa0\xa0\xa0Задачи (+ последняя реплика для каждой)',
+		       		location: 'before',
+		    	},
+		    	{
+		        	widget: 'dxButton',
+		       		location: 'after',
+		       		options: {
+		       			text: 'Что на мне?',
+		       			onClick: $_DO.show_required_tasks,
+		       		},
+		    	},
+		    	
+		    	{
+		        	widget: 'dxButton',
+		       		location: 'after',
+		       		options: {
+		       			text: 'Чего я жду?',
+		       			onClick: $_DO.show_created_tasks,
+		       		},
+		    	},
+		    	
+		    	{
+		        	name: 'searchPanel',
+		       		location: 'after',
+		    	},
+		    	{
+		        	text: '',
+		       		location: 'after',
+		    	},
+		    ]  
+		},
+		
 	}).dxDataGrid ('instance')
 
 /*    
