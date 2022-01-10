@@ -21,6 +21,7 @@ module.exports = {
 
         id_voc_project     : "(voc_projects) // Проект",
         task_label         : "text // Тема",
+        is_open            : 'bool // Открыто ли (0 — закрыто, 1 — в работе)', 
 
     },
 
@@ -29,10 +30,11 @@ module.exports = {
 		SELECT
 			tn.*,
 			t.label AS task_label, 
-			t.id_voc_project
+			t.id_voc_project,
+			t.is_open
 		FROM
 			task_notes tn
-			JOIN tasks t ON tn.id_task = t.uuid
+			JOIN vw_tasks t ON tn.id_task = t.uuid
 		
 	`,
 

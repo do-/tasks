@@ -17,9 +17,7 @@ darn ({loadOptions})
 $_GET.task_notes = async function (o) {
 
     let data = await response ({part: 'vocs'})
-    
-    add_vocabularies (data, {users: 1, voc_projects: 1})
-    
+        
     data.src = new DevExpress.data.CustomStore ({
 		key: 'uuid',
 		load:   $_DO.load_task_notes,

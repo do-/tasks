@@ -18,7 +18,7 @@ module.exports = {
         user_author_label   : "text // Автор (имя)", 
         user_executor_label : "text // Адресат (имя)",
         
-        is_open             : 'int=0 // Открыто ли (0 — закрыто, 1 — в работе)', 
+        is_open             : 'bool // Открыто ли (0 — закрыто, 1 — в работе)', 
         id_status           : "(voc_task_status) // Статус",
 
         task_note_label     : "text // Заголовок последней реплики",
@@ -32,7 +32,7 @@ module.exports = {
             tasks.*
             , a.label AS user_author_label
             , e.label AS user_executor_label
-            , CASE WHEN id_user IS NULL then 0 ELSE 1 END AS is_open
+            , id_user IS NOT NULL AS is_open
             , CASE 
                 WHEN id_user IS NULL                   THEN 300 
                 WHEN id_user_executor = id_user_author THEN 100 

@@ -29,19 +29,22 @@ $_DRAW.task_notes = async function (data) {
 				caption: 'Дата',
 				dataType: 'datetime',
 				allowHeaderFiltering: false,
+				allowSorting: false,
 			},
 			{
 				dataField: 'label',
 				caption: 'Заголовок сообщения',
 				allowHeaderFiltering: false,
+				allowSorting: false,
 			},
 			{
 				dataField: 'id_user_from',
 				caption: 'Автор',
+				allowSorting: false,
 				allowFiltering: false,
 				allowHeaderFiltering: true,
 				lookup: {
-					dataSource: data.users.items,
+					dataSource: data.users,
 					valueExpr: 'id',
 					displayExpr: 'label',
  				}
@@ -49,10 +52,11 @@ $_DRAW.task_notes = async function (data) {
 			{
 				dataField: 'id_user_to',
 				caption: 'Адресат',
+				allowSorting: false,
 				allowFiltering: false,
 				allowHeaderFiltering: true,
 				lookup: {
-					dataSource: data.users.items,
+					dataSource: data.users,
 					valueExpr: 'id',
 					displayExpr: 'label',
  				}
@@ -60,18 +64,30 @@ $_DRAW.task_notes = async function (data) {
 			{
 				dataField: 'task_label',
 				caption: 'Тема задачи',
+				allowSorting: false,
 				allowHeaderFiltering: false,
 			},
 			{
 				dataField: 'id_voc_project',
 				caption: 'Проект',
+				allowSorting: false,
 				allowFiltering: false,
 				allowHeaderFiltering: true,
 				lookup: {
-					dataSource: data.voc_projects.items,
+					dataSource: data.voc_projects,
 					valueExpr: 'id',
 					displayExpr: 'label',
  				}
+			},
+			{
+				dataField: 'is_open',
+				dataType: 'boolean',
+				caption: 'Статус задачи',
+				allowSorting: false,
+				allowHeaderFiltering: false,
+				trueText: 'В работе',
+				falseText: 'Закрыта',
+				showEditorAlways: false,
 			},
 		],	
 		
