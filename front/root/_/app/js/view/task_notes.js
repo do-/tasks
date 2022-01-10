@@ -95,10 +95,32 @@ $_DRAW.task_notes = async function (data) {
 			visible: true,
 		},
 		
+		filterPanel: { 
+			visible: true 
+		},
+		
 		headerFilter: {
 			visible: true,
 		},
 		
+		searchPanel: {
+			visible: true,
+			width: 500,
+		},
+		
+        toolbar: {
+            items: [             
+            	{
+	            	text: '\xa0\xa0\xa0Переписка (отдельные реплики, не задачи)',
+	           		location: 'before',
+            	},
+            	{
+	            	name: 'searchPanel',
+	           		location: 'after',
+            	},
+            ]  
+        },	
+        
 		onRowDblClick: e => open_tab ('/tasks/' + e.data.id_task),
 
 	}).dxDataGrid ('instance')
