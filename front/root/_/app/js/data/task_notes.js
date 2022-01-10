@@ -17,7 +17,17 @@ $_DO.load_task_notes = async function (loadOptions) {
 $_GET.task_notes = async function (o) {
 
     let data = await response ({part: 'vocs'})
-        
+    
+    {
+    
+    	const {id} = $_USER
+    
+		data.users = data.users.filter (i => i.id !== id)
+
+		data.users.unshift ({id, label: '(Я)'})
+    
+    }
+            
     data.src = new DevExpress.data.CustomStore ({
 		key: 'uuid',
 		load:   $_DO.load_task_notes,

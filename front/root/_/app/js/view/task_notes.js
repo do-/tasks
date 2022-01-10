@@ -43,6 +43,9 @@ $_DRAW.task_notes = async function (data) {
 				allowSorting: false,
 				allowFiltering: false,
 				allowHeaderFiltering: true,
+				headerFilter: {
+					allowSearch: true,
+				},
 				lookup: {
 					dataSource: data.users,
 					valueExpr: 'id',
@@ -55,6 +58,9 @@ $_DRAW.task_notes = async function (data) {
 				allowSorting: false,
 				allowFiltering: false,
 				allowHeaderFiltering: true,
+				headerFilter: {
+					allowSearch: true,
+				},
 				lookup: {
 					dataSource: data.users,
 					valueExpr: 'id',
@@ -116,6 +122,10 @@ $_DRAW.task_notes = async function (data) {
             	},
             	{
 	            	name: 'searchPanel',
+	           		location: 'after',
+            	},
+            	{
+	            	text: '',
 	           		location: 'after',
             	},
             ]  
