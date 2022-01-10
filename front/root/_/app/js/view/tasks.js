@@ -1,12 +1,156 @@
 $_DRAW.tasks = async function (data) {
+
+    $('title').text ('Дела')
     
+	const grid = $('body > main').css ({'padding-top': 5}).dxDataGrid ({
+
+		dataSource: data.src,
+
+		showBorders: true,
+		showRowLines: true,
+		hoverStateEnabled: true,
+		focusedRowEnabled: true,
+		remoteOperations: true, 
+		allowColumnResizing: true,
+
+		pager: {
+			visible: true,
+			showInfo: true,
+			showNavigationButtons: false,
+		},
+
+		scrolling: {
+			mode: 'virtual',
+		},
+
+		columns: [
+			{
+				dataField: 'ts',
+				caption: 'Дата',
+				dataType: 'datetime',
+				allowHeaderFiltering: false,
+				allowSorting: false,
+			},
+			{
+				dataField: 'id_voc_project',
+				caption: 'Проект',
+				allowSorting: false,
+				allowFiltering: false,
+				allowHeaderFiltering: true,
+				lookup: {
+					dataSource: data.voc_projects,
+					valueExpr: 'id',
+					displayExpr: 'label',
+ 				}
+			},
+			{
+				dataField: 'label',
+				caption: 'Тема',
+				allowHeaderFiltering: false,
+				allowSorting: false,
+			},
+			{
+				dataField: 'id_user_author',
+				caption: 'Автор',
+				allowSorting: false,
+				allowFiltering: false,
+				allowHeaderFiltering: true,
+				headerFilter: {
+					allowSearch: true,
+				},
+				lookup: {
+					dataSource: data.authors,
+					valueExpr: 'id',
+					displayExpr: 'label',
+ 				}
+			},		
+			{
+				dataField: 'id_user_executor',
+				caption: 'Адресат',
+				allowSorting: false,
+				allowFiltering: false,
+				allowHeaderFiltering: true,
+				headerFilter: {
+					allowSearch: true,
+				},
+				lookup: {
+					dataSource: data.executors,
+					valueExpr: 'id',
+					displayExpr: 'label',
+ 				}
+			},	
+			{
+				dataField: 'id_status',
+				caption: 'Статус',
+				allowSorting: false,
+				allowFiltering: false,
+				allowHeaderFiltering: true,
+				lookup: {
+					dataSource: data.voc_task_status,
+					valueExpr: 'id',
+					displayExpr: 'label',
+ 				}
+			},			
+			{
+				dataField: 'id_user',
+				caption: 'На ком',
+				allowSorting: false,
+				allowFiltering: false,
+				allowHeaderFiltering: true,
+				headerFilter: {
+					allowSearch: true,
+				},
+				lookup: {
+					dataSource: data.users,
+					valueExpr: 'id',
+					displayExpr: 'label',
+ 				}
+			},
+			{
+				dataField: 'task_note_label',
+				caption: 'Последняя реплика',
+				allowHeaderFiltering: false,
+				allowSorting: false,
+			},			
+			{
+				dataField: 'task_note_ts',
+				caption: 'от',
+				dataType: 'datetime',
+				allowHeaderFiltering: false,
+				allowSorting: false,
+			},			
+		],
+		
+		filterValue: ['id_user', '=', $_USER.id],		
+		
+		filterRow: {
+			visible: true,
+		},
+		
+		filterPanel: { 
+			visible: true 
+		},
+		
+		headerFilter: {
+			visible: true,
+		},
+		
+		searchPanel: {
+			visible: true,
+			width: 500,
+		},
+
+		onRowDblClick: e => open_tab ('/tasks/' + e.key),
+		
+	}).dxDataGrid ('instance')
+
+/*    
     function me_too (label) {
         let a = clone (data.others)
         a.unshift ({id: $_USER.id, label: label})
         return a
     }
 
-    $('title').text ('Дела')
     
     let $result = $('main').html (await to_fill ('tasks', data))
         
@@ -95,5 +239,5 @@ $_DRAW.tasks = async function (data) {
     })
 
     return $result
-    
+*/    
 }

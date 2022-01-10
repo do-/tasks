@@ -110,40 +110,9 @@ select_task_notes:
 
         let task_filter = {}
 
-/*        
-        let label
-        let note
-
-        let r = []
-
-        for (let s of this.rq.search) switch (darn(s).field) {
-            case 'q':
-                note = s.value
-                break
-            case 'tasks.label':
-                task_filter ['label ILIKE %?%'] = s.value
-                break
-            case 'tasks.id_voc_project':
-                task_filter ['id_voc_project IN'] = s.value
-                break
-            case 'status':
-                task_filter ['id_user' + (s.value == 1 ? '<>' : '=')] = null
-                break
-            default:
-                r.push (s)
-        }
-
-        this.rq.search = r
-        
-        this.rq.sort = [{field: "ts", direction: "desc"}];
-*/
-
 		this.rq.loadOptions.sort = [{selector: 'ts', desc: true}]
-darn (this.rq.loadOptions)
         
         let filter = this.dx_filter ()
-darn (filter)        
-//        if (note) filter ['(label ILIKE %?% OR body ILIKE %?%)'] = [note, note]
                     
         return this.db.add_all_cnt ({}, [
             {'vw_task_notes AS task_notes': filter},

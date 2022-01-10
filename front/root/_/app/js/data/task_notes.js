@@ -11,7 +11,6 @@ $_DO.load_task_notes = async function (loadOptions) {
 
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////
 
 $_GET.task_notes = async function (o) {

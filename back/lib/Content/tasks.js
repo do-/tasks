@@ -87,28 +87,15 @@ do_assign_tasks:
 select_tasks: 
 
     function () {
-    
-        if (!this.rq.sort) this.rq.sort = [{field: "ts", direction: "asc"}]
-        
-        let x = {}        
-        let r = []
 
-        for (let s of this.rq.search) switch (s.field) {
-            case 'note':
-                x [s.field] = s.value
-                break
-            default:
-                r.push (s)
-        }
+		this.rq.loadOptions.sort = [{selector: 'ts'}]
 
-        this.rq.search = r
-        
-        let filter = this.w2ui_filter ()
+        let filter = this.dx_filter ()
 
-        if (x.note != null) filter.uuid = this.db.query ([{'task_notes(id_task)': {'(label ILIKE %?% OR body ILIKE %?%)': [x.note, x.note]}}]) 
+//        if (x.note != null) filter.uuid = this.db.query ([{'task_notes(id_task)': {'(label ILIKE %?% OR body ILIKE %?%)': [x.note, x.note]}}]) 
 
         return this.db.add_all_cnt ({}, [
-            {vw_tasks : filter}, 
+            {'vw_tasks AS tasks' : filter}, 
         ])
 
     },
