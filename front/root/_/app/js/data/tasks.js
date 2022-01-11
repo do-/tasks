@@ -20,18 +20,12 @@ $_DO.show_created_tasks = function () {
 
 	$('body > main').dxDataGrid ('instance').option ('filterValue', 
 		[
-			['id_status', '=', 101],
-			'and',
 			['id_user_author', '=', $_USER.id],
+			'and',
+			['id_status', '=', 101],
 		]
 	)
 
-/*
-    show_block ('tasks', {
-        id_status: [101],
-        id_user_author: [$_USER.id]
-    })
-*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////
