@@ -46,6 +46,7 @@ $_DRAW.tasks = async function (data) {
 			{
 				dataField: 'label',
 				caption: 'Тема',
+				allowSearch: false,
 				allowHeaderFiltering: false,
 				allowSorting: false,
 			},
@@ -109,6 +110,7 @@ $_DRAW.tasks = async function (data) {
 			{
 				dataField: 'task_note_label',
 				caption: 'Последняя реплика',
+				allowSearch: false,
 				allowHeaderFiltering: false,
 				allowSorting: false,
 			},			
@@ -118,6 +120,12 @@ $_DRAW.tasks = async function (data) {
 				dataType: 'datetime',
 				allowHeaderFiltering: false,
 				allowSorting: false,
+			},			
+			{
+				dataField: 'note',
+				caption: '???',
+				allowSearch: true,
+				visible: false,
 			},			
 		],
 		
@@ -226,6 +234,9 @@ $_DRAW.tasks = async function (data) {
 		    	{
 		        	name: 'searchPanel',
 		       		location: 'after',
+		       		options: {
+		       			placeholder: 'Поиск с учётом переписки',
+		       		},
 		    	},
 		    	{
 		        	text: '',

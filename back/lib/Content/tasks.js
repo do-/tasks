@@ -86,18 +86,47 @@ do_assign_tasks:
     
 select_tasks: 
 
-    function () {
+    async function () {
+        
+        let where = 'true', params = [], limit, offset
+        
+        for (const [k, v] of Object.entries (this.dx_filter ())) switch (k) {
+        
+        	case 'LIMIT':
+        		[limit, offset] = v
 
-		this.rq.loadOptions.sort = [{selector: 'ts'}]
+        	case 'ORDER':
+        		break
 
-        let filter = this.dx_filter ()
+        	default:
+        		where  = k.replace ('note=?',
+        			`uuid IN (
+        				WITH t AS (SELECT CONCAT ('%', ?::text, '%') AS mask)
+        				SELECT
+        					n.id_task
+        				FROM
+        					t
+        					JOIN task_notes n ON (n.label ILIKE t.mask OR n.body ILIKE t.mask)
+        			)`
+        		)
+        		params = v
 
+        }
+darn({where})        
+        const [tasks, cnt] = await this.db.select_all_cnt ('SELECT * FROM vw_tasks WHERE ' + where + ' ORDER BY ts', params, limit, offset = 0)
+        
+        return {tasks, cnt, portion: limit}
+//darn (filter)
 //        if (x.note != null) filter.uuid = this.db.query ([{'task_notes(id_task)': {'(label ILIKE %?% OR body ILIKE %?%)': [x.note, x.note]}}]) 
 
+//darn (this.db.query ({'vw_tasks AS tasks' : filter}))
+//async select_all_cnt (original_sql, original_params, limit, offset = 0) {
+
+/*
         return this.db.add_all_cnt ({}, [
             {'vw_tasks AS tasks' : filter}, 
         ])
-
+*/
     },
 
 ////////////////////////////////////////////////////////////////////////////////
