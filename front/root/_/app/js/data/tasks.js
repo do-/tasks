@@ -62,9 +62,7 @@ $_GET.tasks = async function (o) {
 		data.users [0].label = '(на мне)'
     
     }    
-    
-//    add_vocabularies (data, {users: 1, voc_task_status: 1, voc_projects: 1})
-    
+        
     data.others = data.users.filter ((r) => r.id != $_USER.id)
     
     data.note = $_SESSION.delete ('note')
@@ -72,10 +70,6 @@ $_GET.tasks = async function (o) {
     $('body').data ('data', data)
 
     let e = Object.entries (o); if (!e.length && !data.note) e = [['id_user', [$_USER.uuid]]]
-
-//	let search = e.map (fv => {[field, value] = fv; darn ({field, value}); return {field, value, operator: 'in'}})
-
-//    data.src = [$_REQUEST.type, {search}]
     
     data.src = new DevExpress.data.CustomStore ({
 		key: 'uuid',

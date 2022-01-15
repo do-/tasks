@@ -22,7 +22,7 @@ $_DRAW.tasks = async function (data) {
 		scrolling: {
 			mode: 'virtual',
 		},
-
+		
 		columns: [
 			{
 				dataField: 'ts',
@@ -34,6 +34,7 @@ $_DRAW.tasks = async function (data) {
 			{
 				dataField: 'id_voc_project',
 				caption: 'Проект',
+				dataType: 'text',
 				allowSorting: false,
 				allowFiltering: false,
 				allowHeaderFiltering: true,
@@ -45,6 +46,7 @@ $_DRAW.tasks = async function (data) {
 			},
 			{
 				dataField: 'label',
+				dataType: 'text',
 				caption: 'Тема',
 				allowSearch: false,
 				allowHeaderFiltering: false,
@@ -52,6 +54,7 @@ $_DRAW.tasks = async function (data) {
 			},
 			{
 				dataField: 'id_user_author',
+				dataType: 'text',
 				caption: 'Автор',
 				allowSorting: false,
 				allowFiltering: false,
@@ -67,6 +70,7 @@ $_DRAW.tasks = async function (data) {
 			},		
 			{
 				dataField: 'id_user_executor',
+				dataType: 'text',
 				caption: 'Адресат',
 				allowSorting: false,
 				allowFiltering: false,
@@ -82,6 +86,7 @@ $_DRAW.tasks = async function (data) {
 			},	
 			{
 				dataField: 'id_status',
+				dataType: 'int',
 				caption: 'Статус',
 				allowSorting: false,
 				allowFiltering: false,
@@ -94,6 +99,7 @@ $_DRAW.tasks = async function (data) {
 			},			
 			{
 				dataField: 'id_user',
+				dataType: 'text',
 				caption: 'На ком',
 				allowSorting: false,
 				allowFiltering: false,
@@ -109,6 +115,7 @@ $_DRAW.tasks = async function (data) {
 			},
 			{
 				dataField: 'task_note_label',
+				dataType: 'text',
 				caption: 'Последняя реплика',
 				allowSearch: false,
 				allowHeaderFiltering: false,
@@ -116,6 +123,7 @@ $_DRAW.tasks = async function (data) {
 			},			
 			{
 				dataField: 'task_note_ts',
+				dataType: 'datetime',
 				caption: 'от',
 				dataType: 'datetime',
 				allowHeaderFiltering: false,
@@ -123,8 +131,13 @@ $_DRAW.tasks = async function (data) {
 			},			
 			{
 				dataField: 'note',
+				dataType: 'text',
 				caption: 'Ключевое слово',
 				allowSearch: true,
+				visible: false,
+			},			
+			{
+				type: 'buttons',
 				visible: false,
 			},			
 		],
@@ -238,6 +251,14 @@ $_DRAW.tasks = async function (data) {
 		       		location: 'after',
 		       		options: {
 		       			placeholder: 'Поиск с учётом переписки',
+		       		},
+		    	},
+		    	{
+		        	widget: 'dxButton',
+		       		location: 'after',
+		       		options: {
+		       			text: 'Создать...',
+		       			onClick: $_DO.create_tasks,
 		       		},
 		    	},
 		    	{

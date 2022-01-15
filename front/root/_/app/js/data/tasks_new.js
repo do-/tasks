@@ -1,18 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.update_tasks_new = async function (e) {
+$_DO.update_tasks_new = async function (data) {
 
-    let $this = get_popup ()
-
-    let data = $this.valid_data ()
 darn (data)    
-    if (!data.id_voc_project) die ('id_voc_project', 'Вы забыли указать проект')
     
-    $this.block ()
-
     data = await response ({action: 'create', id: new_uuid ()}, {data})
 
-    if (confirm ('Задача зарегистрирована. Открыть её страницу?')) open_tab ('/tasks/' + data.uuid)
+    if (await DevExpress.ui.dialog.confirm ('Задача зарегистрирована. Открыть её страницу?', 'Вопрос')) open_tab ('/tasks/' + data.uuid)
  
     reload_page ()
 
@@ -22,6 +16,8 @@ darn (data)
 
 $_GET.tasks_new = async function (o) {
 
-    return {...clone ($('body').data ('data')), ...o}
+	const {voc_projects} = $('body').data ('data')
+
+    return {voc_projects, ...o}
 
 }
