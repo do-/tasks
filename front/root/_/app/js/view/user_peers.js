@@ -1,5 +1,5 @@
 $_DRAW.user_peers = async function (data) {
-darn(data)
+
 	let form
 	
 	const $div = $('<div>').appendTo ($('main'))

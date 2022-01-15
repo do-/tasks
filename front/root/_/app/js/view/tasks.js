@@ -123,13 +123,13 @@ $_DRAW.tasks = async function (data) {
 			},			
 			{
 				dataField: 'note',
-				caption: '???',
+				caption: 'Ключевое слово',
 				allowSearch: true,
 				visible: false,
 			},			
 		],
 		
-		filterValue: ['id_user', '=', $_USER.id],		
+		filterValue: data.note ? [] : ['id_user', '=', $_USER.id],		
 		
 		filterRow: {
 			visible: true,
@@ -146,6 +146,8 @@ $_DRAW.tasks = async function (data) {
 		searchPanel: {
 			visible: true,
 			width: 500,
+			text: data.note,
+			placeholder: 'Поиск с учётом переписки',
 		},
 
 		onRowDblClick: e => open_tab ('/tasks/' + e.key),

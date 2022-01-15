@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.update_tasks_search = async function (e) {
+$_DO.update_tasks_search = async function (data) {
 
-    let {q} = get_popup ().valid_data (); close_popup ()
-
+    let {q} = data
+    
     let [id] = q.match (/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/) || []
 
     if (id) {
