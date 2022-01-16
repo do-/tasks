@@ -1,10 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.update_task_comment = async function (e) {
-
-    let $this = $(e.target).closest ('.ui-dialog').find ('.ui-dialog-content')
-
-    let data = values ($this)
+$_DO.update_task_comment = async function (data) {
 
     if (data.id_user_to == '...' || data.id_user_to == 'other') data.id_user_to = null
 
@@ -25,8 +21,6 @@ $_DO.update_task_comment = async function (e) {
         
     }        
 
-    $this.dialog ("close")
-
     $('body').block ()
 
     await response ({action}, {data})
@@ -39,7 +33,7 @@ $_DO.update_task_comment = async function (e) {
 
         to == $_USER.id ? reload_page : 
 
-        () => confirm ('Задача ' + (to == 0 ? 'завершена' : 'передана') + '. Закрыть эту страницу?') ? window.close () : reload_page ()
+        () => confirm ('Задача ' + (to == '0' ? 'завершена' : 'передана') + '. Закрыть эту страницу?') ? window.close () : reload_page ()
 
     , 10)
 
@@ -57,7 +51,7 @@ $_GET.task_comment = async function (o) {
     
         data.users = [
 			...clone ($_USER.peers),
-        	{id: 'other', label: '...кто-то ещё'},
+  //      	{id: 'other', label: '...кто-то ещё'},
         ]        
 
     	if (!data.record.id_user_to) {
@@ -76,7 +70,7 @@ $_GET.task_comment = async function (o) {
 
     if (o.close) {
     
-        data.record.id_user_to = 0
+        data.record.id_user_to = '0'
     
     }
     else if (o.id_user_to) {

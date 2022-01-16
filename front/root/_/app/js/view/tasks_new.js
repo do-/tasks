@@ -67,7 +67,7 @@ darn (data)
 			{
 				dataField: 'body',
 				isRequired: true,
-				editorType: 'dxTextArea',				
+				editorType: 'dxHtmlEditor',				
                 label: {
                     text: 'Суть',
                 },
@@ -79,6 +79,6 @@ darn (data)
 		]
 	}).dxForm ('instance')
 
-//    $('#img', $view).show_block ('img')
+//		$('#img', $view).show_block ('img')
 
 }

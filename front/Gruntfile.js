@@ -50,7 +50,8 @@ module.exports = function (grunt) {
         js: {
             src: [
 //                'root/_/libs/SlickGrid/lib/jquery-2.2.4.js',
-                'root/_/libs/jquery/jquery-3.5.1.min.js',                               
+                'root/_/libs/jquery/jquery-3.5.1.min.js', 
+                'root/_/libs/dx/dx-quill.min.js',
                 'root/_/libs/dx/dx.all.js',
                 'root/_/libs/dx/dx.messages.ru.js',
                 'root/_/libs/SlickGrid/lib/jquery-migrate-1.2.1.min.js',
