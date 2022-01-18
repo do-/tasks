@@ -183,13 +183,14 @@ do_set_peers_users:
 do_set_password_users: 
 
     async function () {
+    
+    	const {db, rq: {id, p1, p2}, user} = this
 
-        if (this.rq.p1 == undefined) throw '#p1#: Получено пустое значение пароля'
-        if (this.rq.p1 != this.rq.p2) throw '#p2#: Повторное значение пароля не сходится'
+        if (p1 == null) throw '#p1#: Получено пустое значение пароля'
+        if (p1 != p2)   throw '#p2#: Повторное значение пароля не сходится'
 
-        let uuid = 
-                   this.user.role == 'admin' ? this.rq.id : 
-                   this.user.uuid
+        let uuid = id || user.uuid        
+        if (user.role !== 'admin') uuid = user.uuid
 
         let salt     = await this.password_hash (Math.random (), new Date ().toJSON ())
         let password = await this.password_hash (salt, this.rq.p1)
