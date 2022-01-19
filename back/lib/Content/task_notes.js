@@ -12,6 +12,9 @@ do_create_task_notes:
 		
         if (data.id_user_to <= 0) data.id_user_to = null
         
+        let todo = []
+        
+/*        
         data.label = (data.label || '').trim ()
         
         if (data.body == null) {
@@ -20,7 +23,6 @@ do_create_task_notes:
             data.body  = lines.join ("\n")
         }
         
-        let todo = []
                 
         if (data.img) {
         
@@ -31,8 +33,8 @@ do_create_task_notes:
 	        todo.push (this.fork ({type: 'task_note_images', id: data.uuid}, data))
 
         }
-
-        todo.push (this.db.insert ('task_notes', data))
+*/
+        todo.push (this.db.insert ('task_notes', {...data, is_html: true}))
 
 		await Promise.all (todo)
 		

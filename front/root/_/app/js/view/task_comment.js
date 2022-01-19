@@ -123,9 +123,15 @@ $_DRAW.task_comment = async function (data) {
 			{
 				dataField: 'label',
 				isRequired: true,
+                label: {
+                    text: 'Заголовок',
+                },
+			},			
+			{
+				dataField: 'body',
 				editorType: 'dxHtmlEditor',				
                 label: {
-                    text: 'Ваше замечание',
+                    text: 'Сообщение',
                 },
                 editorOptions: {
                 	height: 220,

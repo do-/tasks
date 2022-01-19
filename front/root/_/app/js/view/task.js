@@ -129,8 +129,10 @@ $_DRAW.task = async function (data) {
             let $a = $('<article />')
 
             if (i.is_illustrated) $a.append (i.ext == 'mp4' ? video () : img ())
+            
+            if (!i.is_html) i.body = txt2html (i.body)
 
-            $a.append (body (txt2html (i.body)))
+            $a.append (body (i.body))
 
             $a.append ($('<br clear=all style="height:0px;">'))
 

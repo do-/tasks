@@ -16,6 +16,7 @@ module.exports = {
         body               : "text // Текст",
 
         is_illustrated     : 'int=0 // Есть ли картинка', 
+        is_html            : 'bool=0 // HTML ли это', 
         ext                : "text // Расширение файла",
         path               : "text // Путь к файлу",
 
