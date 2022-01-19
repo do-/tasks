@@ -13,27 +13,35 @@ do_create_task_notes:
         if (data.id_user_to <= 0) data.id_user_to = null
         
         let todo = []
-        
-/*        
-        data.label = (data.label || '').trim ()
-        
-        if (data.body == null) {
-            let lines  = data.label.split (/[\n\r]+/)
-            data.label = lines.shift ()
-            data.body  = lines.join ("\n")
-        }
-        
-                
-        if (data.img) {
-        
-            data.is_illustrated = 1
-            
-            let [yyyy, mm, dd] = new Date ().toJSON ().substr (0, 10).split ('-'); data.path = `/${yyyy}/${mm}/${dd}/${data.uuid}.${data.ext}`
-	        
-	        todo.push (this.fork ({type: 'task_note_images', id: data.uuid}, data))
 
-        }
-*/
+		if (data.body != null) {
+
+			const RE = /(src="data:image\/png;base64,.*?")/
+			
+			let html = '', cnt = 0; for (let part of data.body.split (RE)) {
+			
+				if (RE.test (part)) {
+				
+					const pos = part.indexOf (',')
+					
+					const id = this.uuid + '_' + (cnt ++)
+					
+					const path = await this.f_s.new_path (id, '1.png')
+					
+					await this.f_s.append (path, part.slice (pos + 1, -1), 'base64')
+					
+					part = `src="/_pics/${path}"`
+					
+				}
+				
+				html += part
+			
+			}
+			
+			data.body = html
+		
+		}
+
         todo.push (this.db.insert ('task_notes', {...data, is_html: true}))
 
 		await Promise.all (todo)

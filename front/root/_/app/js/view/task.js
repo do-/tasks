@@ -112,7 +112,7 @@ $_DRAW.task = async function (data) {
                 function img () {            
                     let src = url ()
                     let $img = $(`<img src="${src}" align=right width=33% style="border:solid #999 1px;">`)
-                    clickOn ($img, () => openTab (src))
+//                    clickOn ($img, () => openTab (src))
                     return $img                    
                 }
 
@@ -173,6 +173,8 @@ $_DRAW.task = async function (data) {
     setTimeout (() => window.scrollTo (0, document.body.scrollHeight), 10)
 
     $footer.show_block ('task_footer')
+
+    clickOn ($('article img', $main).css ('max-width', '30%'), e => open_tab (e.target.src))
 
     return $main
     

@@ -2,6 +2,7 @@ const fs         = require ('fs')
 const nodemailer = require ('nodemailer')
 const Dia        = require ('./Ext/Dia/Dia.js')
 const HashCalc   = require ('./Ext/Dia/Crypto/FileSaltHashCalculator.js')
+const FileSystem = require ('./Ext/Dia/FileSystem/Base.js')
 
 module.exports = class extends Dia.Config {
 
@@ -15,6 +16,9 @@ module.exports = class extends Dia.Config {
             mail      : this.setup_mail (),
             db        : this.setup_db (),
 			pwd_calc  : new HashCalc (this.auth),
+			f_s 	  : new Dia.factory (FileSystem, { 
+				root  : this.pics,   
+			}),			
         }
 
     }
