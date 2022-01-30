@@ -2,7 +2,7 @@
 
 $_DO.update_tasks_new = async function (data) {
 
-darn (data)    
+	data.body = href2a (data.body)
     
     data = await response ({action: 'create', id: new_uuid ()}, {data})
 

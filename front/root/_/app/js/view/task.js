@@ -9,48 +9,6 @@ $_DRAW.task = async function (data) {
 
     }
     
-    function href2a (s) {
-    
-        if (s == null) s = ''; s = String (s)
-        
-        const RE = /(\<[^\>]*\>)/
-        
-        let h = ''; for (let c of s.split (RE)) {
-
-        	if (!RE.test (c)) c = c.replace (/https?:\/\/.+[^\s\.\,\!\?\;\:]/g, function (url) {
-
-				url = url.replace (/[\.\,\!\?]+$/g, "")
-
-				var txt = 'URL'
-
-				if (/https?:\/\/wiki/.test (url)) {
-
-					var parts = url.split ('/').pop ().split ('#')
-
-					txt = decodeURIComponent (parts [0]).replace (/_/g, ' ')
-
-					if (parts [1]) txt += ' / ' + decodeURIComponent (parts [1].replace (/\.([0-9A-F]{2})/g, '%$1'))
-
-				}
-				else {
-
-					url = url.replace (/[\(\)]+$/, "")
-					txt = url.split ('/') [2] + '/...'
-
-				}
-
-				return "<a target=_blank href='" + url + "'>[" + txt + "]</a>"
-
-			})
-			
-			h += c
-        
-        }
-        
-        return h
-    
-    }
-
     function txt2html (s) {
         
         if (s == null) s = ''; s = String (s)
@@ -147,9 +105,7 @@ $_DRAW.task = async function (data) {
 
             if (i.is_illustrated) $a.append (i.ext == 'mp4' ? video () : img ())
             
-            if (!i.is_html) i.body = txt2html (i.body)
-            
-            i.body = href2a (i.body)
+            if (!i.is_html) i.body = href2a (txt2html (i.body))
 
             $a.append (body (i.body))
 

@@ -2,6 +2,8 @@
 
 $_DO.update_task_comment = async function (data) {
 
+	data.body = href2a (data.body)
+
     if (data.id_user_to == '...' || data.id_user_to == 'other') data.id_user_to = null
 
     var action = data.is_assigning ? 'assign': 'comment'
