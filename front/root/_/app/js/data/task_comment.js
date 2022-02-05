@@ -15,8 +15,8 @@ $_DO.update_task_comment = async function () {
     if (action == 'assign') {
 
         if (!data.id_user_to) die ('id_user_to', 'Вы забыли указать адресата')
-        
-        if (!confirm ('Адресат - ' + $('select option:selected', $this).text () + ', так?')) die ('id_user_to', 'Хорошо, давайте уточним')
+
+        if (!confirm ('Адресат - ' + data.users.find (i => i.uuid === data.id_user_to).label + ', так?')) die ('id_user_to', 'Хорошо, давайте уточним')
 
     }
     else {

@@ -19,8 +19,7 @@ module.exports = class extends require ('../../Ext/Dia/Content/Handler/HTTP.js')
         super.check_params ()
         let h = this.http.request.headers
         let rq = this.rq
-        this.uri = `${h.scheme}://${h.host}/${rq.type}/`
-        if (rq.id) this.uri += rq.id
+        this.base_uri = `${h.scheme}://${h.host}/`
     }
     
     get_method_name () {

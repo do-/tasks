@@ -1,5 +1,3 @@
-const nodemailer = require ('nodemailer')
-
 module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,25 +73,22 @@ do_notify_on_task_notes:
                 name:    data ['users.label'],
                 address: data ['users.mail'],
             },        
-            text: '',            
-            attachments: [],
+            html: `<html><head><base href="${this.base_uri}"></head><body>`,            
         }
 
         for (let note of notes) {
 
             if (msg.subject) {
-                msg.text += `\n${note.label}\n${note.body}`
+                msg.html += `<h1>${note.label}</h2>${note.body}`
             }
             else {
                 msg.subject = note.label
-                msg.text += `\n${note.body}`
+                msg.html += note.body
             }
-
-            if (note.ext) msg.attachments.push ({path: `${this.conf.pics}${note.path}`})
-
+            
         }
-        
-        msg.text += `\n\n${this.uri}\n`
+
+        msg.html += `<br><br><small><a href="/tasks/${data.id_task}">${this.uuid}</a></small></body>`
 
         this.mail.sendMail (msg, darn)
 
