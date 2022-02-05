@@ -27,12 +27,7 @@ darn (data)
 				location: "after",
 				options: { 
 					text: "Ctrl-Enter", 
-					onClick: async () => {
-						const data = form.option ('formData')
-						await $_DO.update_tasks_new (data)
-						popup.dispose ()
-						$div.remove ()
-					}
+					onClick: $_DO.update_tasks_new
 				}
 			},
 		],
@@ -40,6 +35,11 @@ darn (data)
 		onShown: () => form.getEditor ('label').focus ()
 
 	}).dxPopup ('instance')
+
+	popup.on ('hiding', ({component}) => {
+		component.dispose ()
+		component._$element.remove ()
+	})
 
 	form = popup.content().dxForm ({
 		formData: data,
@@ -79,6 +79,12 @@ darn (data)
 		]
 	}).dxForm ('instance')
 
-//		$('#img', $view).show_block ('img')
+	popup._$element.on ('keyup', e => {
+	
+		if (e.key === 'Escape') return popup.hide ()
+
+		if (e.ctrlKey && e.key === 'Enter') $_DO.update_task_comment ()
+		
+	})
 
 }

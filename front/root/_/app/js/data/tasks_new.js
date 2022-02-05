@@ -1,6 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.update_tasks_new = async function (data) {
+$_DO.update_tasks_new = async function () {
+
+	let data = $('div.dx-popup.dx-widget').dxPopup ('instance').content ().dxForm ('instance').option ('formData')
+
+	if (!data.label) die ('label', 'Напишите что-нибудь, пожалуйста')
+	
+	if (!data.id_voc_project) die ('id_voc_project', 'Проект?')
 
 	data.body = href2a (data.body)
     

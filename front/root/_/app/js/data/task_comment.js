@@ -1,6 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.update_task_comment = async function (data) {
+$_DO.update_task_comment = async function () {
+
+	let data = $('div.dx-popup.dx-widget').dxPopup ('instance').content ().dxForm ('instance').option ('formData')
 
 	data.body = href2a (data.body)
 

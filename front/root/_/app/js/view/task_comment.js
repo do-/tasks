@@ -67,9 +67,7 @@ $_DRAW.task_comment = async function (data) {
 
 	let form
 	
-	const $div = $('<div>').appendTo ($('main'))
-
-	const popup = $div.dxPopup({
+	const popup = $('<div>').appendTo ($('main')).dxPopup({
 	    width: 650,
 	    height: 400,
 	    container: 'main',
@@ -90,12 +88,7 @@ $_DRAW.task_comment = async function (data) {
 				location: "after",
 				options: { 
 					text: "Ctrl-Enter", 
-					onClick: async () => {
-						const data = form.option ('formData')
-						await $_DO.update_task_comment (data)
-						popup.dispose ()
-						$div.remove ()
-					}
+					onClick: $_DO.update_task_comment
 				}
 			},
 		],
@@ -103,6 +96,11 @@ $_DRAW.task_comment = async function (data) {
 		onShown: () => form.getEditor ('label').focus ()
 
 	}).dxPopup ('instance')
+	
+	popup.on ('hiding', ({component}) => {
+		component.dispose ()
+		component._$element.remove ()
+	})	
 
 	form = popup.content().dxForm ({
 		formData: it,
@@ -140,5 +138,13 @@ $_DRAW.task_comment = async function (data) {
 
 		]
 	}).dxForm ('instance')	
+
+	popup._$element.on ('keyup', e => {
+	
+		if (e.key === 'Escape') return popup.hide ()
+
+		if (e.ctrlKey && e.key === 'Enter') $_DO.update_task_comment ()
+		
+	})
 
 }
