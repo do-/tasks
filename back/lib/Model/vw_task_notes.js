@@ -13,7 +13,8 @@ module.exports = {
         id_user_to         : "(users) // Адресат",
 
         label              : "text // Заголовок",
-        body               : "text // Текст",
+        body               : "text // Текст сообщения",
+        txt                : "text // Полный текст",
 
         is_illustrated     : 'int=0 // Есть ли картинка', 
         ext                : "text // Расширение файла",

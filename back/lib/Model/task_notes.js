@@ -13,7 +13,8 @@ module.exports = {
         id_user_to         : "(users) // Адресат",
 
         label              : "text // Заголовок",
-        body               : "text // Текст",
+        body               : "text // Текст сообщения",
+        txt                : "text // Полный текст",
 
         is_illustrated     : 'int=0 // Есть ли картинка', 
         is_html            : 'bool=0 // HTML ли это', 
@@ -62,6 +63,10 @@ module.exports = {
     
         path: [
             {sql: "UPDATE task_notes SET path = TO_CHAR(ts, 'YYYY/MM/DD/') || uuid || '.' || COALESCE (ext, 'png') WHERE is_illustrated = 1", params: []}
+        ],
+
+        txt: [
+            {sql: "UPDATE task_notes SET txt = CONCAT_WS (' ', label, body)", params: []}
         ],
     
     }

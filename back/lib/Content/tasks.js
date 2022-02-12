@@ -99,34 +99,24 @@ select_tasks:
         		break
 
         	default:
-        		where  = k.replace ('note=?',
+        		where  = k.replace (/\bnote.*?\?/,
         			`uuid IN (
         				WITH t AS (SELECT CONCAT ('%', ?::text, '%') AS mask)
         				SELECT
         					n.id_task
         				FROM
         					t
-        					JOIN task_notes n ON (n.label ILIKE t.mask OR n.body ILIKE t.mask)
+        					JOIN task_notes n ON (n.txt ILIKE t.mask)
         			)`
         		)
         		params = v
 
         }
-darn({where})        
+
         const [tasks, cnt] = await this.db.select_all_cnt ('SELECT * FROM vw_tasks WHERE ' + where + ' ORDER BY ts', params, limit, offset = 0)
         
         return {tasks, cnt, portion: limit}
-//darn (filter)
-//        if (x.note != null) filter.uuid = this.db.query ([{'task_notes(id_task)': {'(label ILIKE %?% OR body ILIKE %?%)': [x.note, x.note]}}]) 
 
-//darn (this.db.query ({'vw_tasks AS tasks' : filter}))
-//async select_all_cnt (original_sql, original_params, limit, offset = 0) {
-
-/*
-        return this.db.add_all_cnt ({}, [
-            {'vw_tasks AS tasks' : filter}, 
-        ])
-*/
     },
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -154,11 +144,6 @@ get_item_of_tasks:
             this.db.get  ([{vw_tasks:   {uuid:       this.rq.id}}]),
 
             this.db.list ([{task_notes: {id_task:    this.rq.id, ORDER: 'ts'}}]),
-/*
-            this.db.list ([{task_tasks: {id_task_to: this.rq.id, ORDER: 'vw_tasks.ts'}},
-                'vw_tasks ON id_task',
-            ]),
-*/
 
 			this.db.select_all (`
 
@@ -187,7 +172,5 @@ get_item_of_tasks:
         return data
 
     }
-
-////////////////////////////////////////////////////////////////////////////////
 
 }

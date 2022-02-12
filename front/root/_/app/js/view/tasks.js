@@ -134,6 +134,7 @@ $_DRAW.tasks = async function (data) {
 				dataType: 'text',
 				caption: 'Ключевое слово',
 				allowSearch: true,
+				filterOperations: ['contains'],
 				visible: false,
 			},			
 			{
