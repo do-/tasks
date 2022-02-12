@@ -47,6 +47,9 @@ darn (data)
 			{
 				dataField: 'label',
 				isRequired: true,
+                editorOptions: {
+					maxLength: 40,
+				},
                 label: {
                     text: 'Тема',
                 },

@@ -1,5 +1,19 @@
 clearTimeout (window.alarm); if (window.__LOGOUT__) delete window.__LOGOUT__
 
+{
+
+    $.blockUI.defaults.message = null
+    $.blockUI.defaults.overlayCSS.opacity = 0.8
+    $.blockUI.defaults.overlayCSS.backgroundColor = '#fff'
+
+    let _do_apologize = $_DO.apologize
+    $_DO.apologize = function (o, fail) {
+        $('.blockUI').remove ()
+        _do_apologize (o, fail)
+    }
+
+}
+
 function setup_request () {
 
     let [type, id] = location.pathname.split ('/').filter (i => i)
@@ -73,6 +87,39 @@ function href2a (s) {
     }
     
     return h
+
+}
+
+function reload_page () {
+
+  if ($_SESSION.delete ('is_confirm_unload')) $(window).off('beforeunload')
+  location.reload ()
+
+}
+
+function add_vocabularies (data, o) {
+
+    for (var name in o) {
+
+        let raw = data [name]; if (!raw) continue
+
+        let idx = {}, items = []
+
+        for (let r of raw) {
+
+        	idx [r.id] = r.text = r.label
+
+        	if (r.is_deleted == 1) continue
+
+        	items.push (r)
+
+        }
+
+        idx.items = items
+
+        data [name] = idx
+
+    }
 
 }
 

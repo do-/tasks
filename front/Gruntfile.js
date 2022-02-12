@@ -49,21 +49,12 @@ module.exports = function (grunt) {
         },
         js: {
             src: [
-//                'root/_/libs/SlickGrid/lib/jquery-2.2.4.js',
                 'root/_/libs/jquery/jquery-3.5.1.min.js', 
                 'root/_/libs/dx/dx-quill.min.js',
                 'root/_/libs/dx/dx.all.js',
                 'root/_/libs/dx/dx.messages.ru.js',
-                'root/_/libs/SlickGrid/lib/jquery-migrate-1.2.1.min.js',
-                'root/_/libs/SlickGrid/lib/jquery.event.drag-2.3.0.js',
-                'root/_/libs/SlickGrid/lib/jquery-ui-1.11.3.min.js',
                 'root/_/libs/blockUI/jquery.blockUI.min.js',                 
-                'root/_/libs/SlickGrid/slick.core.js',
-                'root/_/libs/SlickGrid/slick.grid.js',
-                'root/_/libs/SlickGrid/plugins/slick.rowselectionmodel.js',
-				'root/_/libs/SlickGrid/plugins/slick.checkboxselectcolumn.js',
                 'root/_/libs/elu/elu.js',
-                'root/_/libs/elu_slick/elu_slick.js',
                 'root/_/app/handler.js',
                 'root/_/app/js/data/*.js',
                 'root/_/app/js/view/*.js',
@@ -100,7 +91,6 @@ module.exports = function (grunt) {
       styles: {
         files: [
             'root/_/libs/tasks/*.less',
-            'root/_/libs/BtrMilk/*.less',
             'root/_/app/less/*.less',
         ],
         tasks: ['bump', 'replace', 'less'],
