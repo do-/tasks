@@ -83,7 +83,7 @@ darn (data)
 	
 		if (e.key === 'Escape') return popup.hide ()
 
-		if (e.ctrlKey && e.key === 'Enter') $_DO.update_task_comment ()
+		if (e.ctrlKey && e.key === 'Enter') $_DO.update_tasks_new ()
 		
 	})
 

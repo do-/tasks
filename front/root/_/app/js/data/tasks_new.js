@@ -9,7 +9,9 @@ $_DO.update_tasks_new = async function () {
 	if (!data.id_voc_project) die ('id_voc_project', 'Проект?')
 
 	data.body = href2a (data.body)
-    
+
+    data.txt = (data.label + ' ' + $('.dx-htmleditor-content') [0].innerText).replace (/\s+/gsm, ' ').trim ()
+
     data = await response ({action: 'create', id: new_uuid ()}, {data})
 
     if (await DevExpress.ui.dialog.confirm ('Задача зарегистрирована. Открыть её страницу?', 'Вопрос')) open_tab ('/tasks/' + data.uuid)

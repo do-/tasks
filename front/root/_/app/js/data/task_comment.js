@@ -25,6 +25,8 @@ $_DO.update_task_comment = async function () {
         
     }        
 
+    data.txt = (data.label + ' ' + $('.dx-htmleditor-content') [0].innerText).replace (/\s+/gsm, ' ').trim ()
+
     $('body').block ()
 
     await response ({action}, {data})
