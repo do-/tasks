@@ -2,7 +2,18 @@
 
 $_DO.fork_task = function (e) {
 
-    show_block ('tasks_new', {body: 'Контекст: ' + location.href, id_voc_project: $('body').data ('data').id_voc_project})
+	const task = $('body').data ('data'), {id_voc_project} = task
+
+    show_block ('tasks_new', {
+    
+     	id_voc_project,
+     	
+     	label: task.label + ' / ',
+   		
+   		body: 'Контекст: ' + location.href,    	
+    	
+
+    })
 
 }
 
