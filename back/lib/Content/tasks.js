@@ -114,8 +114,8 @@ select_tasks:
         		params = v
 
         }
-
-        const [tasks, cnt] = await this.db.select_all_cnt ('SELECT * FROM vw_tasks WHERE ' + where + ' ORDER BY ts', params, limit, offset = 0)
+        
+        const [tasks, cnt] = await this.db.select_all_cnt ('SELECT * FROM vw_tasks WHERE ' + where + ' ORDER BY ts', params, limit, offset || 0)
         
         return {tasks, cnt, portion: limit}
 
