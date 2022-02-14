@@ -28,7 +28,7 @@ $_GET.task = async function (o) {
             data.users.unshift (data.executor)        
     }
     
-    add_vocabularies (data, {users: 1, voc_projects: 1})
+	add_vocabularies (data, {users: 1})
     
     $('body').data ('data', data)
 
