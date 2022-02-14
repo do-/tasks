@@ -46,11 +46,13 @@ do_create_tasks:
 
 			this.fork ({type: 'task_notes', action: 'create'}, this.rq),
 
-			this.db.insert ('task_users', [0, 1].map ((i) => {return {
-				id_task    : data.id_task,
-				id_user    : this.user.uuid,
-				is_author  : i,
-			}}))
+			...[0, 1].map (i => this.db.insert ('task_users', 
+				{
+					id_task    : data.id_task,
+					id_user    : this.user.uuid,
+					is_author  : i,
+				}
+			))
 
 		])
         
