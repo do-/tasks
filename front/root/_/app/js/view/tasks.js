@@ -173,7 +173,7 @@ $_DRAW.tasks = async function (data) {
 		
 		searchPanel: {
 			visible: true,
-			width: 500,
+			width: 200,
 			text: data.note,
 			placeholder: 'Поиск с учётом переписки',
 		},
@@ -248,7 +248,7 @@ $_DRAW.tasks = async function (data) {
 		       		location: 'before',
 		    	},
 		    	{
-		        	text: 'Задачи (+ последняя реплика для каждой)',
+		        	text: 'Задачи',
 		       		location: 'before',
 		    	},
 		    	{
@@ -280,10 +280,8 @@ $_DRAW.tasks = async function (data) {
 		    	{
 		        	name: 'searchPanel',
 		       		location: 'after',
-		       		options: {
-		       			placeholder: 'Поиск с учётом переписки',
-		       		},
 		    	},
+
 		    	{
 		        	text: '',
 		       		location: 'after',
