@@ -271,4 +271,10 @@ $_DRAW.tasks = async function (data) {
 		
 	}).dxDataGrid ('instance')
 
+    window.addEventListener ('storage', e => {
+
+    	if (e.key == 'task_comment') grid.refresh ()
+
+    })	
+
 }

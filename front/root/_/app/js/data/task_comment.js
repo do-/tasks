@@ -31,7 +31,7 @@ $_DO.update_task_comment = async function () {
 
     await response ({action}, {data})
     
-    try {opener.tasks_grid.reload ()} catch (e) {}
+    localStorage.setItem ('task_comment', data.uuid)
     
     let to = data.id_user_to
 
