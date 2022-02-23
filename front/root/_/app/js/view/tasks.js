@@ -12,6 +12,7 @@ $_DRAW.tasks = async function (data) {
 		focusedRowEnabled: true,
 		remoteOperations: true, 
 		allowColumnResizing: true,
+		allowColumnReordering: true,
 
 		pager: {
 			visible: true,
@@ -21,6 +22,17 @@ $_DRAW.tasks = async function (data) {
 
 		scrolling: {
 			mode: 'virtual',
+		},
+		
+		columnChooser: { 
+			enabled: true,
+			mode: 'select',
+			height: 300,
+		},
+		
+		stateStoring: {
+			enabled: true,
+			storageKey: 'tasks_grid_state',
 		},
 		
 		columns: [
@@ -136,10 +148,12 @@ $_DRAW.tasks = async function (data) {
 				allowSearch: true,
 				filterOperations: ['contains'],
 				visible: false,
+				showInColumnChooser: false,
 			},			
 			{
 				type: 'buttons',
 				visible: false,
+				showInColumnChooser: false,
 			},			
 		],
 		
@@ -226,8 +240,24 @@ $_DRAW.tasks = async function (data) {
 		toolbar: {
 		    items: [             
 		    	{
-		        	text: '\xa0\xa0\xa0Задачи (+ последняя реплика для каждой)',
+		        	text: '',
 		       		location: 'before',
+		    	},
+		    	{
+		        	name: 'columnChooserButton',
+		       		location: 'before',
+		    	},
+		    	{
+		        	text: 'Задачи (+ последняя реплика для каждой)',
+		       		location: 'before',
+		    	},
+		    	{
+		        	widget: 'dxButton',
+		       		location: 'after',
+		       		options: {
+		       			text: 'Создать...',
+		       			onClick: $_DO.create_tasks,
+		       		},
 		    	},
 		    	{
 		        	widget: 'dxButton',
@@ -252,14 +282,6 @@ $_DRAW.tasks = async function (data) {
 		       		location: 'after',
 		       		options: {
 		       			placeholder: 'Поиск с учётом переписки',
-		       		},
-		    	},
-		    	{
-		        	widget: 'dxButton',
-		       		location: 'after',
-		       		options: {
-		       			text: 'Создать...',
-		       			onClick: $_DO.create_tasks,
 		       		},
 		    	},
 		    	{
