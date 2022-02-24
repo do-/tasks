@@ -23,6 +23,8 @@ $_DO.update_tasks_new = async function () {
 	if ($_REQUEST.type == 'tasks' && !$_REQUEST.id) {
 
 		$('body > main').dxDataGrid ('instance').refresh ()
+		
+		reload_page ()
 
 	} 
 	else {
