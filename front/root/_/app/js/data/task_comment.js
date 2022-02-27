@@ -39,7 +39,33 @@ $_DO.update_task_comment = async function () {
 
         to == $_USER.id ? reload_page : 
 
-        () => confirm ('Задача ' + (to == '0' ? 'завершена' : 'передана') + '. Закрыть эту страницу?') ? window.close () : reload_page ()
+        () => {
+
+			let done = 'Задача '
+			done += to == '0' ? 'завершена' : 'передана'
+			done += '. '
+
+			let next = 'Закрыть эту страницу?', todo = () => window.close ()
+
+			const {refs} = $('body').data ('data'); if (refs && refs.length === 1) {
+
+				next = 'Перейти к задаче "' + refs [0] ['vw_tasks.label'] + '"?'
+
+				todo = () => {
+				
+					const w = window
+					
+					open_tab (refs [0].uri)
+					
+					w.close ()
+					
+				}
+
+			}
+
+        	confirm (done + next) ? todo () : reload_page ()
+
+        }
 
     , 10)
 
