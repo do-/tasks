@@ -17,5 +17,38 @@ get_vocs_of_users:
         return data
 
     },
-    
+
+////////////////////////////////////////////////////////////////////////////////
+
+select_users: 
+
+    async function () {
+
+    	const {db, rq} = this
+	
+        if (rq.searchLogic === 'OR') {
+
+            const {value} = rq.search [0]
+
+            rq.search = ['label', 'login', 'mail'].map (field => ({field, operator: 'contains', value}))
+
+        }
+        
+		const q = db.w2uiQuery (
+			[
+				['users'],
+				['roles', {as: 'role'}]
+			], 
+			{order: ['label']}
+		)
+
+		q.tables [0].filters.push ({
+			sql: '(users.is_deleted=0 AND users.uuid <> ?)', 
+			params: ['00000000-0000-0000-0000-000000000000']
+		})
+
+		return db.getArray (q)
+
+    },
+
 }
