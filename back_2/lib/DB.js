@@ -8,6 +8,8 @@ module.exports = class extends DbPoolPg {
 
 		super ({db, logger})
 
+		this.noModelUpdate = !!db.noModelUpdate
+
 		w2ui.plugInto (this)
 
 		new Model (this)
@@ -17,6 +19,8 @@ module.exports = class extends DbPoolPg {
 	}
 
 	async updateModel () {
+
+		if (this.pool.noModelUpdate) return
 
 		const {job, pool} = this
 
