@@ -4,8 +4,8 @@ module.exports = {
 
     columns: {
         id       : 'int',
-        name     : 'string // Символическое имя',
-        label    : 'string // Наименование',
+        name     : 'text // Символическое имя',
+        label    : 'text // Наименование',
     },
 
     pk: 'id',

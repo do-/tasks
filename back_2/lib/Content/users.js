@@ -1,5 +1,3 @@
-const { error } = require("winston")
-
 module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -7,9 +5,7 @@ module.exports = {
 get_vocs_of_users: 
 
     async function () {
-//console.log (this)
 
-throw Error ('OK')
     	const {db: {model}, rq: {type}} = this
 
 		const data = {		

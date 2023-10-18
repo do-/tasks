@@ -14,3 +14,5 @@
 /back/package-lock.json
 /back/node_modules
 /back_2/node_modules/
+/back_2/conf/elud.json
+/back_2/logs
