@@ -25,6 +25,8 @@ select_users:
     async function () {
 
     	const {db, rq} = this
+
+		rq.search = rq.search.filter (i => i.value !== null || i.field !== 'is_deleted')
 	
         if (rq.searchLogic === 'OR') {
 
