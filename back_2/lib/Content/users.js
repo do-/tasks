@@ -1,3 +1,5 @@
+const {DbQueryTableColumnComparison, DbQueryOr} = require ('doix-db')
+
 module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -24,18 +26,10 @@ select_users:
 
     async function () {
 
-    	const {db, rq} = this
+    	const {db, rq} = this, {search} = rq
 
-		rq.search = rq.search.filter (i => i.value !== null || i.field !== 'is_deleted')
-	
-        if (rq.searchLogic === 'OR') {
+		rq.search = [{field: 'uuid', operator: 'is not', value: '00000000-0000-0000-0000-000000000000'}]
 
-            const {value} = rq.search [0]
-
-            rq.search = ['label', 'login', 'mail'].map (field => ({field, operator: 'contains', value}))
-
-        }
-        
 		const q = db.w2uiQuery (
 			[
 				['users'],
@@ -44,10 +38,25 @@ select_users:
 			{order: ['label']}
 		)
 
-		q.tables [0].filters.push ({
-			sql: '(users.is_deleted=0 AND users.uuid <> ?)', 
-			params: ['00000000-0000-0000-0000-000000000000']
-		})
+		const [root] = q.tables
+
+		for (const {field, value} of search) switch (field) {
+
+			case 'is_deleted':
+				if (value !== null) new DbQueryTableColumnComparison (root, field, '=', value)
+				break
+
+			case 'q':
+				const params = [value + '%']
+				root.filters.push (new DbQueryOr (
+					['label', 'login', 'mail'].map (field => ({
+						sql: `${root.sql}.${field} ILIKE ?`,
+						params,
+					})),	
+				))
+				break
+
+		}
 
 		return db.getArray (q)
 

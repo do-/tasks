@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "doix": "^1.0.3",
-    "doix-db": "^1.0.16",
+    "doix-db": "^1.0.17",
     "doix-db-postgresql": "^1.0.11",
     "doix-http": "^1.0.0",
     "doix-w2ui": "^0.0.3",
