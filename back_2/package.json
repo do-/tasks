@@ -9,10 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "doix": "^1.0.3",
-    "doix-db": "^1.0.17",
-    "doix-db-postgresql": "^1.0.11",
-    "doix-http": "^1.0.0",
+    "doix": "^1.0.5",
+    "doix-db": "^1.0.31",
+    "doix-db-postgresql": "^1.0.18",
+    "doix-http": "^1.0.1",
     "doix-w2ui": "^0.0.3",
     "winston": "^3.11.0"
   }

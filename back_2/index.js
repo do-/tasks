@@ -1,14 +1,9 @@
-const {HttpRouter} = require ('doix-http')
-
-const conf         = require ('./lib/Conf.js'), {listen} = conf
+const process      = require ('process')
+const conf         = require ('./lib/Conf.js')
 const Application  = require ('./lib/Application.js')
 
-const app = new Application (conf), {logger} = app, svc = app.createBackService ()
+const app = new Application (conf), exit = _ => app.perform ('stop')
 
-app.init ().then (() => 
+for (const signal of ['SIGTERM', 'SIGINT', 'SIGBREAK']) process.on (signal, exit)
 
-	new HttpRouter ({listen, logger}).add (svc).listen (),
-
-	x => console.error (x)
-
-)
+app.perform ('start')

@@ -4,13 +4,14 @@ const {
 } = require ('doix')
 //const {DbPoolPg} = require ('doix-db-postgresql')
 
+const process      = require ('process')
 const createLogger                  = require ('./Logger.js')
 const DB                            = require ('./DB.js')
 const BackService                   = require ('./BackService.js')
 
 module.exports = class extends Application {
 
-	constructor (conf) {
+	constructor (conf) {		
 	
 		const log = name => createLogger (conf, name)
 				
@@ -49,9 +50,9 @@ module.exports = class extends Application {
 	
 	}
 	
-	async init () {
+	async perform (action) {
 
-		await this.createJob ({type: 'app', action: 'init'}).toComplete ()
+		await this.createJob ({type: 'app', action}).toComplete ()
 	
 	}
 

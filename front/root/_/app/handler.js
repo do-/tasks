@@ -134,4 +134,5 @@ $(window).keydown (check_hotkeys)
 
 DevExpress.localization.locale ('ru')
 
-show_block ($_USER ? 'main' : 'login')
+//show_block ($_USER ? 'main' : 'login')
+show_block ('main')

@@ -30,8 +30,9 @@ module.exports = class extends require ('../../Ext/Dia/Content/Handler/HTTP.js')
     }
     
     is_anonymous () {
-        let rq = this.rq
-        return rq.type == 'sessions' && rq.action == 'create'
+        return true
+//        let rq = this.rq
+//        return rq.type == 'sessions' && rq.action == 'create'
     }
     
     get_session () {
