@@ -30,7 +30,18 @@ do_update_users:
 
 		data.uuid = id
 
-		await db.update (type, data)
+		try {
+
+			await db.update (type, data)
+
+		}
+		catch (err) {
+
+			if (err.constraint === 'ix_users_login') throw Error ('#login#: Этот login уже занят')
+
+			throw err
+
+		}
 
 	},
 	
