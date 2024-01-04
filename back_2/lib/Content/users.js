@@ -37,7 +37,7 @@ do_update_users:
 		}
 		catch (err) {
 
-			if (err.constraint === 'ix_users_login') throw Error ('#login#: Этот login уже занят')
+			if (err.constraint === 'users_u_login') throw Error ('#login#: Этот login уже занят')
 
 			throw err
 

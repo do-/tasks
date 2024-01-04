@@ -14,6 +14,21 @@ module.exports = {
     },
 
     pk: 'uuid',
+
+    keys: {
+
+        ix_users_login: null,
+
+        u_login: {
+            parts: ['login'],
+            options:  [
+                'UNIQUE',
+                'WHERE is_deleted = 0',
+            ],
+        },        
+
+    },
+
 /*
     keys : {
         login    : 'UNIQUE (login)',

@@ -32,7 +32,7 @@ module.exports = class extends DbPoolPg {
 
         plan.inspectStructure ()
 
-    	for (const [sql, params] of plan.genDDL ()) await db.do (sql, params)
+		await db.doAll (plan.genDDL ())
 
 	}
 
