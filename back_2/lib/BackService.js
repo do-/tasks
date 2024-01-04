@@ -38,25 +38,21 @@ module.exports = class extends WebService {
 
 				start: function () {
 
-					if (this.rq.action) for (const [k, v] of this.app.pools.entries ()) if (v instanceof DbPool) {
+					if (this.rq.action)
+					
+						for (const db of this.resources (DbPool))
 
-						const db = this [k]
-
-						if (typeof db.begin === 'function') this.waitFor (db.begin ())
-
-					}
+							if (typeof db.begin === 'function')
+						
+								this.waitFor (db.begin ())
 
 				},
 
 				finish: function () {
-
-					for (const [k, v] of this.app.pools.entries ()) if (v instanceof DbPool) {
-
-						const db = this [k]
+				
+					for (const db of this.resources (DbPool))
 
 						if (db.txn) this.waitFor (db.commit ()); else db.txn = null
-
-					}
 
 				},
 
