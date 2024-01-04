@@ -22,6 +22,20 @@ get_vocs_of_users:
 
 ////////////////////////////////////////////////////////////////////////////////
 
+do_update_users: 
+
+	async function () {
+
+    	const {db, rq} = this, {type, data} = rq
+
+		data.uuid = rq.id
+
+		await db.update (type, data)
+
+	},
+
+////////////////////////////////////////////////////////////////////////////////
+
 select_users: 
 
     async function () {
