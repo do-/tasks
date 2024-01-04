@@ -54,7 +54,7 @@ module.exports = class extends WebService {
 
 						const db = this [k]
 
-						if (db.txn) this.waitFor (db.commit ())
+						if (db.txn) this.waitFor (db.commit ()); else db.txn = null
 
 					}
 
