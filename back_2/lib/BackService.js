@@ -1,4 +1,5 @@
 const {WebService, HttpParamReader, HttpResultWriter} = require ('doix-http')
+const {DbPool} = require ('doix-db')
 //const {CookieRedis} = require ('doix-http-cookie-redis')
 
 const QUERY = Symbol.for ('query')
@@ -34,6 +35,30 @@ module.exports = class extends WebService {
 			on: {
 
 //				module: job => {if (!job.user && !job.module.allowAnonymous) throw new UnauthorizedError ()},
+
+				start: function () {
+
+					if (this.rq.action) for (const [k, v] of this.app.pools.entries ()) if (v instanceof DbPool) {
+
+						const db = this [k]
+
+						if (typeof db.begin === 'function') this.waitFor (db.begin ())
+
+					}
+
+				},
+
+				finish: function () {
+
+					for (const [k, v] of this.app.pools.entries ()) if (v instanceof DbPool) {
+
+						const db = this [k]
+
+						if (db.txn) this.waitFor (db.commit ())
+
+					}
+
+				},
 
 				error : function (error) {
 
