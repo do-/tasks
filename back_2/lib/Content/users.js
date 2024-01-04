@@ -26,12 +26,38 @@ do_update_users:
 
 	async function () {
 
-    	const {db, rq} = this, {type, data} = rq
+    	const {db, rq} = this, {type, data, id} = rq
 
-		data.uuid = rq.id
+		data.uuid = id
 
 		await db.update (type, data)
 
+	},
+	
+////////////////////////////////////////////////////////////////////////////////
+
+do_delete_users:
+	
+	async function () {
+
+		const {db, rq} = this, {id} = rq
+
+		await db.do ('DELETE FROM user_users WHERE id_user_ref = ?', [id])
+
+        await db.do ('UPDATE users SET is_deleted = 1 WHERE uuid = ?', [id])
+	
+	},
+
+////////////////////////////////////////////////////////////////////////////////
+
+do_undelete_users: 
+	
+	async function () {
+	
+		const {db, rq} = this
+
+        await db.do ('UPDATE users SET is_deleted = 0 WHERE uuid = ?', [rq.id])
+	
 	},
 
 ////////////////////////////////////////////////////////////////////////////////

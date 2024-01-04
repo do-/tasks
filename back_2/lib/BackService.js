@@ -50,9 +50,13 @@ module.exports = class extends WebService {
 
 				finish: function () {
 				
-					for (const db of this.resources (DbPool))
+					for (const db of this.resources (DbPool)) {
 
-						if (db.txn) this.waitFor (db.commit ()); else db.txn = null
+						if (db.txn) this.waitFor (db.commit ())
+						
+						db.txn = null
+
+					}
 
 				},
 
