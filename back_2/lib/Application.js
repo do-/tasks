@@ -1,10 +1,5 @@
-const {
-	Application, 
-//	PasswordShaker
-} = require ('doix')
-//const {DbPoolPg} = require ('doix-db-postgresql')
+const {Application, PasswordShaker} = require ('doix')
 
-const process      = require ('process')
 const createLogger                  = require ('./Logger.js')
 const DB                            = require ('./DB.js')
 const BackService                   = require ('./BackService.js')
@@ -21,7 +16,7 @@ module.exports = class extends Application {
 	    
 			globals: {
 				conf,
-//			    pwd: new PasswordShaker ({path: conf.auth.salt_file}),
+			    pwd: new PasswordShaker ({path: conf.auth.salt_file}),
 			},
 
 			pools: {
