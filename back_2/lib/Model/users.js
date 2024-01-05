@@ -25,15 +25,12 @@ module.exports = {
                 'UNIQUE',
                 'WHERE is_deleted = 0',
             ],
-        },        
+            message: e => `#login#: login "${/\(login\)=\((.*?)\)/.exec (e.detail) [1]}" уже занят`,
+        },
 
     },
 
 /*
-    keys : {
-        login    : 'UNIQUE (login)',
-    },
-
     data : [
         {uuid: '00000000-0000-0000-0000-000000000000', id_role: 1},
     ],

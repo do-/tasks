@@ -29,19 +29,8 @@ do_update_users:
     	const {db, rq} = this, {type, data, id} = rq
 
 		data.uuid = id
-
-		try {
-
-			await db.update (type, data)
-
-		}
-		catch (err) {
-
-			if (err.constraint === 'users_u_login') throw Error ('#login#: Этот login уже занят')
-
-			throw err
-
-		}
+		
+		await db.update (type, data)
 
 	},
 	
