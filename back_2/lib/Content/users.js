@@ -22,6 +22,18 @@ get_vocs_of_users:
 
 ////////////////////////////////////////////////////////////////////////////////
 
+do_create_users: 
+
+	async function () {
+
+    	const {db, rq} = this, {type, data, id} = rq
+		
+		await db.insert (type, data, {onlyIfMissing: true})
+
+	},
+
+////////////////////////////////////////////////////////////////////////////////
+
 do_update_users: 
 
 	async function () {
