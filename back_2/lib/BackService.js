@@ -1,6 +1,6 @@
 const {WebService, HttpParamReader, HttpResultWriter} = require ('doix-http')
 const {DbPool} = require ('doix-db')
-//const {CookieRedis} = require ('doix-http-cookie-redis')
+const {CookieJWT} = require ('doix-http-cookie-jwt')
 
 const QUERY = Symbol.for ('query')
 const COUNT = Symbol.for ('count')
@@ -19,7 +19,7 @@ class UnauthorizedError extends Error {
 
 module.exports = class extends WebService {
 
-	constructor (app, o) {
+	constructor (app, {sessions: {timeout}}) {
 		
 	    super (app, {
 	    
@@ -34,8 +34,6 @@ module.exports = class extends WebService {
 
 			on: {
 
-//				module: job => {if (!job.user && !job.module.allowAnonymous) throw new UnauthorizedError ()},
-
 				start: function () {
 
 					if (this.rq.action)
@@ -45,6 +43,12 @@ module.exports = class extends WebService {
 							if (typeof db.begin === 'function')
 						
 								this.waitFor (db.begin ())
+
+				},
+
+				module: function () {
+console.log (this)
+					if (!this.user && !this.module.allowAnonymous) this.fail (new UnauthorizedError ())
 
 				},
 
@@ -123,12 +127,10 @@ module.exports = class extends WebService {
 				)
 				
 			}),
-			
-			...o
 
 	    })
 
-//	    new CookieRedis ({prefix: 'session_', ...o.sessions}).plugInto (this)
+	    new CookieJWT ({ttl: timeout}).plugInto (this)
 
 	}
 

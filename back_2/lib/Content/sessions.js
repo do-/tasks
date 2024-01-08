@@ -1,5 +1,17 @@
 module.exports = {
 
+allowAnonymous: true,
+
+////////////////////////////////////////////////////////////////////////////////
+
+do_delete_sessions: 
+
+    async function () {
+
+        this.user = null
+
+    },
+
 ////////////////////////////////////////////////////////////////////////////////
 
 do_create_sessions: 
@@ -17,6 +29,16 @@ do_create_sessions:
         for (const r of db.model.find ('roles').data) if (user.id_role == r.id) user.role = r.name
 
         for (const k of ['salt', 'password', 'roles.name']) delete user [k]
+
+        {
+
+            const {uuid, role} = user
+
+            this.user = {uuid, role}
+
+        }
+
+        user.id = user.uuid
 
         return {user, timeout}
 

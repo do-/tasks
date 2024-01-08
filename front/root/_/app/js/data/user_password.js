@@ -6,7 +6,9 @@ $_DO.update_user_password = async function (data) {
 
     $_REQUEST._secret = ['p1', 'p2']
     
-    if ($_USER.role != 'admin') delete data.id; const {id} = data
+//    if ($_USER.role != 'admin') delete data.id; 
+
+    const {id} = data
     
     await response ({type: 'users', id, action: 'set_password'}, {data})
     
