@@ -79,15 +79,17 @@ do_set_password_users:
 
     async function () {
 
-    	const {db, rq: {id}, pwd, http: {request: {headers}}} = this, p1 = headers ['x-request-param-p1'], p2 = headers ['x-request-param-p1']
+    	const {db, rq, user, pwd, http: {request: {headers}}} = this, p1 = headers ['x-request-param-p1'], p2 = headers ['x-request-param-p1']
 
-        if (p1 == null) throw '#p1#: Получено пустое значение пароля'
+		if (p1 == null) throw '#p1#: Получено пустое значение пароля'
         if (p1 != p2)   throw '#p2#: Повторное значение пароля не сходится'
 
         const salt     = pwd.sprinkle (32)
         const password = pwd.cook (p1, salt)
 
-		await db.update ('users', {uuid: id, salt, password})
+		const uuid = (user.role === 'admin' ? rq.id : null) || user.uuid
+
+		await db.update ('users', {uuid, salt, password})
 
     },
 
