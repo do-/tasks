@@ -47,7 +47,7 @@ module.exports = class extends WebService {
 				},
 
 				module: function () {
-console.log (this)
+
 					if (!this.user && !this.module.allowAnonymous) this.fail (new UnauthorizedError ())
 
 				},
