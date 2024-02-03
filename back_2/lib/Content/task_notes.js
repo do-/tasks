@@ -117,19 +117,18 @@ select_task_notes:
 
     function () {
 
-        return {t:[], cnt: 0, portion: 50}
+    	const {db} = this
 
-/*        
-        let task_filter = {}
+        this.rq.loadOptions.sort = [{selector: 'ts', desc: true}]
 
-		this.rq.loadOptions.sort = [{selector: 'ts', desc: true}]
-        
-        let filter = this.dx_filter ()
-                    
-        return this.db.add_all_cnt ({}, [
-            {'vw_task_notes AS task_notes': filter},
-        ])
-*/        
+		const q = db.dxQuery (
+			[
+				['vw_task_notes', {as: 'task_notes'}],
+			]
+        )
+
+		return db.getArray (q)
+
     },
        
 }

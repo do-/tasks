@@ -11,7 +11,8 @@
   "dependencies": {
     "doix": "^1.0.7",
     "doix-db": "^1.0.31",
-    "doix-db-postgresql": "^1.0.22",
+    "doix-db-postgresql": "^1.0.25",
+    "doix-devextreme": "^0.0.1",
     "doix-http": "^1.0.2",
     "doix-http-cookie-jwt": "^1.0.0",
     "doix-w2ui": "^0.0.3",

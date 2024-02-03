@@ -1,5 +1,6 @@
 const {DbPoolPg} = require ('doix-db-postgresql')
 const w2ui       = require ('doix-w2ui')
+const dx         = require ('doix-devextreme')
 const Model      = require ('./Model.js')
 
 module.exports = class extends DbPoolPg {
@@ -11,6 +12,7 @@ module.exports = class extends DbPoolPg {
 		this.noModelUpdate = !!db.noModelUpdate
 
 		w2ui.plugInto (this)
+		dx.plugInto (this)
 
 		new Model (this)
 
@@ -31,6 +33,8 @@ module.exports = class extends DbPoolPg {
         await plan.loadStructure ()
 
         plan.inspectStructure ()
+
+		plan.toDo.delete ('comment')
 
 		await db.doAll (plan.genDDL ())
 
