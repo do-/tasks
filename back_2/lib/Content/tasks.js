@@ -27,9 +27,29 @@ select_tasks:
 
     function () {
 
-    	const {db} = this
+    	const {db, rq: {loadOptions}} = this
 
-        this.rq.loadOptions.sort = [{selector: 'ts'}]
+        loadOptions.sort = [{selector: 'ts'}]
+
+        const {filter} = loadOptions; if (filter) {
+
+            const head = filter [0]; if (head [0] === 'note') {
+
+                head [0] = 'uuid'
+
+                head [1] = 'IN'
+
+                head [2] = {
+
+                    sql: `SELECT id_task FROM task_notes WHERE txt ILIKE ?`,
+
+                    params: ['%' + head [2] + '%']
+
+                }
+
+            }
+
+        }
 
 		const q = db.dxQuery (
 			[
