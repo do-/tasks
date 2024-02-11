@@ -23,39 +23,23 @@ get_vocs_of_tasks:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-select_tasks: 
+select_tasks:
 
     function () {
 
-    	const {db, rq: {loadOptions}} = this
+    	const {db} = this
 
-        loadOptions.sort = [{selector: 'ts'}]
+        const q = db.dxQuery ([['vw_tasks', {as: 'tasks'}]], {order: ['ts']}), root = q.tables [0]
+        
+        for (const [k, _, v] of root.unknownColumnComparisons) if (k === 'note') root.addColumnComparison ('uuid', 'IN', {
+            
+            sql: `SELECT id_task FROM task_notes WHERE txt ILIKE ?`,
 
-        const {filter} = loadOptions; if (filter) {
+            params: ['%' + v + '%']
 
-            const head = filter [0]; if (head [0] === 'note') {
+        })
 
-                head [0] = 'uuid'
-
-                head [1] = 'IN'
-
-                head [2] = {
-
-                    sql: `SELECT id_task FROM task_notes WHERE txt ILIKE ?`,
-
-                    params: ['%' + head [2] + '%']
-
-                }
-
-            }
-
-        }
-
-		const q = db.dxQuery (
-			[
-				['vw_tasks', {as: 'tasks'}],
-			]
-        )
+        q.order = []; q.orderBy ('ts')
 
 		return db.getArray (q)
 
