@@ -176,7 +176,7 @@ select_users:
 		for (const {field, value} of search) switch (field) {
 
 			case 'is_deleted':
-				if (value !== null) new DbQueryTableColumnComparison (root, field, '=', value)
+				if (value !== null) root.addColumnComparison (field, '=', value)
 				break
 
 			case 'q':
