@@ -159,13 +159,11 @@ select_users:
 
     async function () {
 
-    	const {db, rq} = this, {search} = rq
-
-		rq.search = [{field: 'uuid', operator: 'is not', value: '00000000-0000-0000-0000-000000000000'}]
+    	const {db} = this
 
 		const q = db.w2uiQuery (
 			[
-				['users'],
+				['users', {filters: [['uuid', '<>', '00000000-0000-0000-0000-000000000000']]}],
 				['roles', {as: 'role'}]
 			], 
 			{order: ['label']}
@@ -173,21 +171,11 @@ select_users:
 
 		const [root] = q.tables
 
-		for (const {field, value} of search) switch (field) {
+		for (const [k, op, v] of root.unknownColumnComparisons) if (k === 'q') {
 
-			case 'is_deleted':
-				if (value !== null) root.addColumnComparison (field, '=', value)
-				break
+			const value = v.slice (1), terms = ['label', 'login', 'mail'].map (field => root.createColumnComparison (field, op, value))
 
-			case 'q':
-				const params = [value + '%']
-				root.filters.push (new DbQueryOr (
-					['label', 'login', 'mail'].map (field => ({
-						sql: `${root.sql}.${field} ILIKE ?`,
-						params,
-					})),	
-				))
-				break
+			root.filters.push (new DbQueryOr (terms))
 
 		}
 
