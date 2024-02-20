@@ -29,7 +29,7 @@ select_tasks:
 
     	const {db} = this
 
-        const q = db.dxQuery ([['vw_tasks', {as: 'tasks'}]], {order: ['ts']}), root = q.tables [0]
+        const q = db.dxQuery ([['vw_tasks', {as: 'tasks'}]], {order: ['ts']}), {root} = q
         
         for (const [k, _, v] of root.unknownColumnComparisons) if (k === 'note') root.addColumnComparison ('uuid', 'IN', {
             

@@ -113,22 +113,18 @@ get_vocs_of_task_notes:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-select_task_notes: 
+select_task_notes:
 
     function () {
 
     	const {db} = this
 
-        this.rq.loadOptions.sort = [{selector: 'ts', desc: true}]
+		const q = db.dxQuery ([['vw_task_notes', {as: 'task_notes'}]])
 
-		const q = db.dxQuery (
-			[
-				['vw_task_notes', {as: 'task_notes'}],
-			]
-        )
+        q.order = []; q.orderBy ('ts', true)
 
-		return db.getArray (q)
+        return db.getArray (q)
 
     },
-       
+
 }

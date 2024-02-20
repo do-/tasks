@@ -1,4 +1,4 @@
-const {DbQueryTableColumnComparison, DbQueryOr} = require ('doix-db')
+const {DbQueryOr} = require ('doix-db')
 
 module.exports = {
 
@@ -169,13 +169,19 @@ select_users:
 			{order: ['label']}
 		)
 
-		const [root] = q.tables
+		{
 
-		for (const [k, op, v] of root.unknownColumnComparisons) if (k === 'q') {
+			const {root} = q; for (const [k, op, v] of root.unknownColumnComparisons) if (k === 'q') {
 
-			const value = v.slice (1), terms = ['label', 'login', 'mail'].map (field => root.createColumnComparison (field, op, value))
+				const value = v.slice (1); root.addFilter (DbQueryOr.from (
+					[
+						'label', 
+						'login', 
+						'mail'
+					].map (field => root.createColumnComparison (field, op, value))
+				))
 
-			root.filters.push (new DbQueryOr (terms))
+			}
 
 		}
 
