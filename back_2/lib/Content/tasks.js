@@ -30,14 +30,16 @@ select_tasks:
     	const {db} = this
 
         const q = db.dxQuery ([['vw_tasks', {as: 'tasks'}]], {order: ['ts']}), {root} = q
-        
-        for (const [k, _, v] of root.unknownColumnComparisons) if (k === 'note') root.addColumnComparison ('uuid', 'IN', {
-            
-            sql: `SELECT id_task FROM task_notes WHERE txt ILIKE ?`,
 
-            params: ['%' + v + '%']
+        for (const [k, _, v] of root.unknownColumnComparisons) if (k === 'note') root.addColumnComparison ('uuid', 'IN',
 
-        })
+            db.model.createQuery ([
+                ['vw_task_notes', {
+                    columns: ['id_task'],
+                    filters: [['txt', 'ILIKE', '%' + v + '%']]
+                }]
+            ])
+        )
 
         q.order = []; q.orderBy ('ts')
 
