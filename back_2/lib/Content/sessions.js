@@ -55,7 +55,18 @@ do_create_sessions:
 
         }
 
-        user.id = user.uuid
+        user.peers = await db.getArray (/*sql*/`
+            SELECT
+                u.uuid id
+                , u.label
+            FROM
+                user_users t
+                JOIN users u ON t.id_user_ref = u.uuid AND u.login IS NOT NULL
+            WHERE
+                id_user = ?
+            ORDER BY
+                2
+        `, [user.id = user.uuid])
 
         return {user, timeout}
 
