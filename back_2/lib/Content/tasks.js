@@ -8,18 +8,14 @@ get_vocs_of_tasks:
 
     async function () {
 
-		const {db} = this, {model}= db
+		const {db} = this, {model} = db
 
-        const data = await db.getScalar (/*sql*/`
+        return model.assignData (await db.getScalar (/*sql*/`
             SELECT JSONB_BUILD_OBJECT (
                 'users',        (${SELECT_FROM} users WHERE uuid IN (SELECT DISTINCT id_user FROM task_users)),
                 'voc_projects', (${SELECT_FROM} voc_projects)
             )
-        `)
-
-        for (const k of ['voc_task_status']) data [k] = model.find (k).data
-
-        return data
+        `), ['voc_task_status'])
 
     },
 
