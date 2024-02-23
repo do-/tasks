@@ -30,11 +30,25 @@ module.exports = {
 
     },
 
-/*
-    data : [
-        {uuid: '00000000-0000-0000-0000-000000000000', id_role: 1},
+    triggers: [
+
+    	{
+			phase  : 'AFTER UPDATE',
+			action : 'FOR EACH ROW',
+			sql    : /*sql*/`
+				BEGIN
+                    IF OLD.is_deleted = 0 AND NEW.is_deleted = 1 THEN
+                        DELETE FROM user_users WHERE id_user_ref = NEW.uuid;
+                    END IF;
+					RETURN NEW;
+				END;
+			`,
+    	},
+
     ],
-    
+
+
+/*    
     triggers : {
 
         before_insert_update : function () {

@@ -66,7 +66,7 @@ do_create_users:
 
 	async function () {
 
-    	const {db, rq} = this, {type, data, id} = rq
+    	const {db, rq} = this, {type, data} = rq
 		
 		await db.insert (type, data, {onlyIfMissing: true})
 
@@ -92,26 +92,19 @@ do_delete_users:
 	
 	async function () {
 
-		const {db, rq} = this, {id} = rq
-
-		await db.do ('DELETE FROM user_users WHERE id_user_ref = ?', [id])
-
-        await db.do ('UPDATE users SET is_deleted = 1 WHERE uuid = ?', [id])
+        await this.db.do ('UPDATE users SET is_deleted = 1 WHERE uuid = ?', [this.rq.id])
 	
 	},
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_undelete_users: 
+do_undelete_users:
 	
 	async function () {
-	
-		const {db, rq} = this
 
-        await db.do ('UPDATE users SET is_deleted = 0 WHERE uuid = ?', [rq.id])
+        await this.db.do ('UPDATE users SET is_deleted = 0 WHERE uuid = ?', [this.rq.id])
 	
 	},
-
 
 ////////////////////////////////////////////////////////////////////////////////
 
