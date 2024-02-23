@@ -25,13 +25,13 @@ get_vocs_of_tasks:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-get_item_of_tasks: 
+get_item_of_tasks:
 
     async function () {
 
     	const {db, rq: {id}} = this
 
-        return db.getScalar (`SELECT get_item_of_tasks (?)`, [id])
+        return db.invoke ('get_item_of_tasks', [id])
 
     },
 

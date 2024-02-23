@@ -100,7 +100,7 @@ get_vocs_of_task_notes:
 
     function () {
 
-        return this.db.getScalar (`SELECT get_vocs_of_task_notes ()`)
+        return this.db.invoke ('get_vocs_of_task_notes')
 
     },
 

@@ -26,27 +26,7 @@ get_peers_of_users:
 
 	async function () {
 
-    	const {db, user} = this
-
-		const users = await db.getArray (/*sql*/`
-			SELECT 
-				t.uuid, 
-				t.label, 
-				t.uuid id, 
-				m.id_user "user_user.id_user", 
-				m.id_user_ref "user_user.id_user_ref" 
-			FROM 
-				users t 
-				LEFT JOIN user_users m ON m.id_user_ref = t.uuid AND m.id_user = $1
-			WHERE 
-				t.login IS NOT NULL
-				AND t.uuid <> $1 
-				AND t.is_deleted = 0
-			ORDER BY 
-				2
-		`, [user.uuid])
-
-		return {users}
+		return this.db.invoke ('get_peers_of_users', [this.user.uuid])
 
 	},
 
