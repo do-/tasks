@@ -44,13 +44,21 @@ $_DO.load_users = async function (lo) {
 		searchLogic: "AND",
 		limit:take,
 		offset:skip,
-		search: [
-			{
-				"field": "is_deleted",
-				"value": $_SESSION.get ('is_deleted') || null,
-				"operator": "is"
-			},
-		],
+		search: [],
+	}
+
+	{
+
+		const value = $_SESSION.get ('is_deleted'); if (value) {
+
+			o.search.push ({
+				field: 'is_deleted',
+				operator: 'is',
+				value,
+			})
+
+		}
+
 	}
 	
 	if (filter) o.search.push ({
