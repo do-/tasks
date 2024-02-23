@@ -100,14 +100,7 @@ get_vocs_of_task_notes:
 
     function () {
 
-		const {db} = this, SELECT_FROM = "SELECT JSONB_AGG (JSONB_BUILD_OBJECT ('id', uuid, 'label', label) ORDER BY label) FROM"
-
-        return db.getScalar (/*sql*/`
-            SELECT JSONB_BUILD_OBJECT (
-                'users',        (${SELECT_FROM} users WHERE label IS NOT NULL),
-                'voc_projects', (${SELECT_FROM} voc_projects)
-            )
-        `)
+        return this.db.getScalar (`SELECT get_vocs_of_task_notes ()`)
 
     },
 
