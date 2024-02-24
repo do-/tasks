@@ -34,27 +34,7 @@ do_set_peers_users:
 
 	async function () {
 
-		const {db, rq: {data: {ids}}, user: {uuid}} = this
-
-		await db.do (/*sql*/ `CREATE TEMP TABLE _ (uuid uuid not null) ON COMMIT DROP`)
-
-		await db.insertArray ('_', ids.map (uuid => ({uuid})), {columns: {uuid: 'text'}})
-
-		await db.do (/*sql*/ `DELETE FROM user_users WHERE id_user = ? AND id_user_ref NOT IN (SELECT uuid FROM _)`, [uuid])
-
-		await db.do (/*sql*/ `
-			INSERT INTO user_users (
-				id_user
-				, id_user_ref
-			)
-			SELECT
-				? id_user
-				, uuid id_user_ref
-			FROM
-				_
-			ON CONFLICT
-				DO NOTHING
-		`, [uuid])
+		await this.db.invoke ('do_set_peers_users', [this.user.uuid, JSON.stringify (this.rq.data.ids)])
 
 	},
 
