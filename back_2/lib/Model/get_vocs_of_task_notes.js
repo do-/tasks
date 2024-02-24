@@ -12,7 +12,7 @@ module.exports = {
 
         SELECT JSONB_BUILD_OBJECT (
             'users',        (${SELECT_FROM} users WHERE label IS NOT NULL),
-            'voc_projects', (${SELECT_FROM} voc_projects)
+            'voc_projects', get_voc_projects__actual ()
         )
 
     `,
