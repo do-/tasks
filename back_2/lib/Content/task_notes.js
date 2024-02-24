@@ -1,20 +1,21 @@
+//const RE = /(src="data:image\/png;base64,.*?")/
+
 module.exports = {
-/*
+
 ////////////////////////////////////////////////////////////////////////////////
 
-do_create_task_notes: 
+do_create_task_notes:
 
     async function () {
 
-		let data = this.rq.data
+        const {db, rq: {data}, user} = this
 		
         if (data.id_user_to <= 0) data.id_user_to = null
+
+        data.id_user_from = user.uuid
         
-        let todo = []
-
+/*        
 		if (data.body != null) {
-
-			const RE = /(src="data:image\/png;base64,.*?")/
 			
 			let html = '', cnt = 0; for (let part of data.body.split (RE)) {
 			
@@ -39,7 +40,11 @@ do_create_task_notes:
 			data.body = html
 		
 		}
+*/        
 
+        await db.insert ('task_notes', data)
+
+/*
         todo.push (this.db.insert ('task_notes', {...data, is_html: true}))
 
 		await Promise.all (todo)
@@ -55,9 +60,9 @@ do_create_task_notes:
         ])
         
         this.fork ({action: 'notify_on'}, {notes})
-
+*/
     },
-
+/*
 ////////////////////////////////////////////////////////////////////////////////
 
 do_notify_on_task_notes:

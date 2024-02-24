@@ -54,5 +54,25 @@ select_tasks:
 		return db.getArray (q)
 
     },
-       
+
+////////////////////////////////////////////////////////////////////////////////
+
+do_comment_tasks:
+
+    async function () {
+
+        const child = this.clone ({
+            type: 'task_notes',
+            action: 'create',
+            id: undefined
+        })
+
+        child.user = this.user
+
+        child.rq.data.id_task = this.rq.id
+
+        await child.toComplete ()
+
+    },
+
 }
