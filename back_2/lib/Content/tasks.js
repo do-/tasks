@@ -1,5 +1,3 @@
-const SELECT_FROM = "SELECT JSONB_AGG (JSONB_BUILD_OBJECT ('id', uuid, 'label', label) ORDER BY label) FROM"
-
 module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -10,12 +8,12 @@ get_vocs_of_tasks:
 
 		const {db} = this, {model} = db
 
-        return model.assignData (await db.getScalar (/*sql*/`
-            SELECT JSONB_BUILD_OBJECT (
-                'users',        (${SELECT_FROM} users WHERE uuid IN (SELECT DISTINCT id_user FROM task_users)),
-                'voc_projects', (${SELECT_FROM} voc_projects)
-            )
-        `), ['voc_task_status'])
+        return model.assignData (
+            await db.invoke ('get_vocs_of_task_notes'),
+            [
+                'voc_task_status',
+            ]
+        )
 
     },
 
