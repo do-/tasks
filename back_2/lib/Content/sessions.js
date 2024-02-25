@@ -58,6 +58,7 @@ do_create_sessions:
         user.peers = await db.getArray (/*sql*/`
             SELECT
                 u.uuid id
+                , u.uuid
                 , u.label
             FROM
                 user_users t
