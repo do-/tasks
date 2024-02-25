@@ -94,24 +94,21 @@ do_assign_tasks:
 
     },
 
-
 ////////////////////////////////////////////////////////////////////////////////
 
 do_comment_tasks:
 
     async function () {
 
-        const child = this.clone ({
-            type: 'task_notes',
-            action: 'create',
-            id: undefined
+        const {db, rq: {id, data}, user} = this
+
+        if (data.id_user_to <= 0) data.id_user_to = null
+
+        await db.insert ('task_notes', {
+            ...data,
+            id_task: id,
+            id_user_from: user.uuid,
         })
-
-        child.user = this.user
-
-        child.rq.data.id_task = this.rq.id
-
-        await child.toComplete ()
 
     },
 

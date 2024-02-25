@@ -1,7 +1,7 @@
 //const RE = /(src="data:image\/png;base64,.*?")/
 
 module.exports = {
-
+/*
 ////////////////////////////////////////////////////////////////////////////////
 
 do_create_task_notes:
@@ -14,7 +14,6 @@ do_create_task_notes:
 
         data.id_user_from = user.uuid
         
-/*        
 		if (data.body != null) {
 			
 			let html = '', cnt = 0; for (let part of data.body.split (RE)) {
@@ -40,11 +39,9 @@ do_create_task_notes:
 			data.body = html
 		
 		}
-*/        
 
         await db.insert ('task_notes', data)
 
-/*
         todo.push (this.db.insert ('task_notes', {...data, is_html: true}))
 
 		await Promise.all (todo)
@@ -60,9 +57,8 @@ do_create_task_notes:
         ])
         
         this.fork ({action: 'notify_on'}, {notes})
-*/
     },
-/*
+
 ////////////////////////////////////////////////////////////////////////////////
 
 do_notify_on_task_notes:
