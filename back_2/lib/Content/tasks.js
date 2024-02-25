@@ -1,3 +1,39 @@
+const fs   = require ('fs')
+const Path = require ('path')
+const {randomUUID} = require ('crypto')
+
+const RE = /(src="data:image\/png;base64,.*?")/
+const SLASH = '/'.charCodeAt (0)
+
+const extractPics = (src, uuid, root) => {
+
+    if (!src) return src
+
+    const parts = src.split (RE); if (parts.length === 1) return src
+
+    const bymd = Buffer.from (new Date ().toISOString ().slice (0, 10)); bymd [4] = bymd [7] = SLASH
+
+    const ymd = bymd.toString (); root = Path.join (root, 'task_notes', ymd); fs.mkdirSync (root, {recursive: true})
+
+    let i = 0; html = ''; for (const part of parts) {
+
+        if (RE.test (part)) {
+
+            const fn = `${uuid}_${i ++}.png`
+
+            fs.writeFileSync (Path.join (root, fn), src.slice (src.indexOf (','), -1), {encoding: 'base64'})
+
+            html += `src="/_pics/task_notes/${ymd}/${fn}"`
+
+        }
+        else html += part
+
+    }
+
+    return html
+
+}
+
 module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -100,15 +136,20 @@ do_comment_tasks:
 
     async function () {
 
-        const {db, rq: {id, data}, user} = this
+        const {conf, db, rq: {id, data}, user} = this
 
-        if (data.id_user_to <= 0) data.id_user_to = null
-
-        await db.insert ('task_notes', {
+        const task_note = {
+            uuid: randomUUID (),
             ...data,
             id_task: id,
             id_user_from: user.uuid,
-        })
+        }
+
+        if (task_note.id_user_to <= 0) task_note.id_user_to = null
+
+        data.body = extractPics (data.body, task_note.uuid, conf.pics)
+
+        await db.insert ('task_notes', task_note)
 
     },
 
