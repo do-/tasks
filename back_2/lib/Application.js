@@ -1,3 +1,4 @@
+const nodemailer                    = require ('nodemailer')
 const {Application, PasswordShaker} = require ('doix')
 
 const createLogger                  = require ('./Logger.js')
@@ -17,6 +18,7 @@ module.exports = class extends Application {
 			globals: {
 				conf,
 			    pwd: new PasswordShaker ({path: conf.auth.salt_file}),
+				smtp: nodemailer.createTransport (conf.mail),
 			},
 
 			pools: {

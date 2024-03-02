@@ -16,6 +16,7 @@
     "doix-http": "^1.0.2",
     "doix-http-cookie-jwt": "^1.0.2",
     "doix-w2ui": "^1.0.1",
+    "nodemailer": "^6.9.11",
     "winston": "^3.11.0"
   }
 }
