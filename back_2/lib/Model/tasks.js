@@ -55,19 +55,33 @@ module.exports = {
 
     	{
 			phase  : 'AFTER UPDATE',
-			action : 'FOR EACH ROW',
+			action : 'FOR EACH ROW WHEN (NEW.id_user_executor <> OLD.id_user_executor)',
 			sql    : /*sql*/`
 				BEGIN
-                    IF NEW.id_user_executor <> OLD.id_user_executor THEN
 
-                        IF NEW.id_user_author <> OLD.id_user_executor THEN
-                            RAISE '#_#:Исполнитель этой задачи уже был назначен';
-                        END IF;
-
-                        UPDATE task_users SET id_user    = NEW.id_user_executor WHERE id_task = NEW.uuid AND is_author = 0;
-                        UPDATE task_notes SET id_user_to = NEW.id_user_executor WHERE id_task = NEW.uuid;
-
+                    IF NEW.id_user_author <> OLD.id_user_executor THEN
+                        RAISE '#_#:Исполнитель этой задачи уже был назначен';
                     END IF;
+
+                    UPDATE task_users SET id_user    = NEW.id_user_executor WHERE id_task = NEW.uuid AND is_author = 0;
+                    UPDATE task_notes SET id_user_to = NEW.id_user_executor WHERE id_task = NEW.uuid;
+
+                    IF NEW.id_user_author <> NEW.id_user_executor THEN
+                        PERFORM pg_notify ('mail', NEW.uuid::TEXT);
+                    END IF;
+
+                    RETURN NEW;
+
+				END;
+			`,
+    	},
+
+        {
+			phase  : 'AFTER UPDATE',
+			action : 'FOR EACH ROW WHEN (NEW.id_user <> OLD.id_user)',
+			sql    : /*sql*/`
+				BEGIN
+                    PERFORM pg_notify ('mail', NEW.uuid::TEXT);
                     RETURN NEW;
 				END;
 			`,

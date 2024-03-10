@@ -151,6 +151,18 @@ do_comment_tasks:
 
         await db.insert ('task_notes', task_note)
 
+//        await db.do (`SELECT pg_notify (?, ?)`, ['mail', id])
+
+    },
+
+////////////////////////////////////////////////////////////////////////////////
+
+do_notify_tasks:
+
+    async function () {
+
+        const {db, rq: {id}} = this
+
         const notes = await db.getArray (/*sql*/`
             SELECT 
                 t.*                
@@ -189,7 +201,7 @@ do_comment_tasks:
             
         }
 
-        msg.html += `<br><br><small><a href="/tasks/${data.id_task}">${this.uuid}</a></small></body>`
+        msg.html += `<br><br><small><a href="/tasks/${id}">${this.uuid}</a></small></body>`
 
         await this.smtp.sendMail (msg)
 

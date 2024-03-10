@@ -6,6 +6,7 @@ function createLogger (conf, name) {
 	const filename = Path.join (conf.logs, name + '.log')
 
 	return winston.createLogger ({
+		levels: winston.config.syslog.levels,
 		transports: [
 //			new winston.transports.Console(),
 			new winston.transports.File ({filename})

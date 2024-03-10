@@ -9,14 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "doix": "^1.0.8",
+    "doix": "^1.0.9",
     "doix-db": "^1.0.43",
-    "doix-db-postgresql": "^1.0.26",
+    "doix-db-postgresql": "^1.0.29",
     "doix-devextreme": "^1.0.2",
     "doix-http": "^1.0.2",
     "doix-http-cookie-jwt": "^1.0.2",
     "doix-w2ui": "^1.0.1",
     "nodemailer": "^6.9.11",
-    "winston": "^3.11.0"
+    "winston": "^3.12.0"
   }
 }
