@@ -15,7 +15,9 @@ module.exports = class extends DbListenerPg {
 
                 start: function () {
 
-                    this.rq = {type: 'tasks', action: 'notify', id: this.notification.payload}
+                    const [id, one] = JSON.parse (this.notification.payload)
+
+                    this.rq = {type: 'tasks', action: 'notify', id, one}
 
                 },
 

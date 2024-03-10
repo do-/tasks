@@ -66,10 +66,6 @@ module.exports = {
                     UPDATE task_users SET id_user    = NEW.id_user_executor WHERE id_task = NEW.uuid AND is_author = 0;
                     UPDATE task_notes SET id_user_to = NEW.id_user_executor WHERE id_task = NEW.uuid;
 
-                    IF NEW.id_user_author <> NEW.id_user_executor THEN
-                        PERFORM pg_notify ('mail', NEW.uuid::TEXT);
-                    END IF;
-
                     RETURN NEW;
 
 				END;
@@ -81,7 +77,7 @@ module.exports = {
 			action : `FOR EACH ROW WHEN (NEW.id_user <> current_setting ('app.user')::UUID)`,
 			sql    : /*sql*/`
 				BEGIN
-                    PERFORM pg_notify ('mail', NEW.uuid::TEXT);
+                    PERFORM pg_notify ('mail', JSON_BUILD_ARRAY (NEW.uuid, NEW.id_user_executor = OLD.id_user_executor)::TEXT);
                     RETURN NEW;
 				END;
 			`,

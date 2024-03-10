@@ -159,9 +159,9 @@ do_notify_tasks:
 
     async function () {
 
-        const {db, rq: {id}} = this
+        const {db, rq: {id, one}} = this
 
-        const notes = await db.getArray (/*sql*/`
+        let sql = /*sql*/`
             SELECT 
                 t.*                
                 , u.label AS name
@@ -172,10 +172,12 @@ do_notify_tasks:
             WHERE
                 t.id_task = ?
             ORDER BY
-                t.ts DESC
-            LIMIT 
-                1
-        `, [id])
+                t.ts
+        `
+
+        if (one) sql += ' DESC LIMIT 1'
+
+        const notes = await db.getArray (sql, [id])
 
         if (notes.length === 0) return
 
