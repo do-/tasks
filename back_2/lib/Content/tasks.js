@@ -151,8 +151,6 @@ do_comment_tasks:
 
         await db.insert ('task_notes', task_note)
 
-//        await db.do (`SELECT pg_notify (?, ?)`, ['mail', id])
-
     },
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -186,7 +184,6 @@ do_notify_tasks:
         const msg = {        
             to: {name, address},
             html: `<html><body>`,
-//            html: `<html><head><base href="${this.base_uri}"></head><body>`,
         }
 
         for (let note of notes) {

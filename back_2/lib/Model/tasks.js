@@ -78,7 +78,7 @@ module.exports = {
 
         {
 			phase  : 'AFTER UPDATE',
-			action : 'FOR EACH ROW WHEN (NEW.id_user <> OLD.id_user)',
+			action : `FOR EACH ROW WHEN (NEW.id_user <> current_setting ('app.user')::UUID)`,
 			sql    : /*sql*/`
 				BEGIN
                     PERFORM pg_notify ('mail', NEW.uuid::TEXT);
