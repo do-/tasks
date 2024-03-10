@@ -198,9 +198,9 @@ do_notify_tasks:
             
         }
 
-        msg.html += `<br><br><small><a href="/tasks/${id}">${this.uuid}</a></small></body>`
+        msg.html += `<br><br><small><a href="/tasks/${id}">${id}</a></small></body>`
 
-        await this.smtp.sendMail (msg)
+        return msg
 
     },
 
