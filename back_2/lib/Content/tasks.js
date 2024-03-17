@@ -120,11 +120,15 @@ do_assign_tasks:
 
     async function () {
 
-        const {db, rq} = this, {id, data} = rq, {id_user_to} = data
+        const {db, rq, user} = this, {id, data} = rq, {id_user_to} = data; if (!id_user_to) throw Error ('#id_user_to#:Не указан адресат')
 
-        if (!id_user_to) throw Error ('#id_user_to#:Не указан адресат')
+        {
 
-        await this.module.do_comment_tasks.call (this)
+            data.id_user_to = user.uuid
+
+            await this.module.do_comment_tasks.call (this)
+
+        }
 
         await db.do ('UPDATE tasks SET id_user_executor = ? WHERE uuid = ?', [id_user_to, id])
 

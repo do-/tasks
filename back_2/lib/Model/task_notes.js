@@ -65,6 +65,17 @@ module.exports = {
 			`,
     	},
 
+        {
+			phase  : 'BEFORE INSERT',
+			action : `FOR EACH ROW WHEN (NEW.id_user_to <> current_setting ('app.user')::UUID)`,
+			sql    : /*sql*/`
+				BEGIN
+                    PERFORM notify_on_task (NEW.id_task);
+                    RETURN NEW;
+				END;
+			`,
+    	},
+
     ],
 
 }
