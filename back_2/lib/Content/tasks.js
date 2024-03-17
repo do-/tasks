@@ -2,30 +2,39 @@ const fs = require ('fs')
 const {randomUUID} = require ('crypto')
 const {FilePathMaker} = require ('file-path-maker')
 
-const RE = /(src="data:image\/png;base64,.*?")/
-
 const extractPics = (src, uuid, root) => {
 
     if (!src) return src
 
-    const parts = src.split (RE); if (parts.length === 1) return src
+    const BRA = '"data:image/png;base64,', KET = '"', fpm = new FilePathMaker ({root})
 
-    const fpm = new FilePathMaker ({root})
+    let from = 0, i = 0; function * chunks () {
 
-    let i = 0; html = ''; for (const part of parts) {
+        while (true) {
 
-        if (RE.test (part)) {
+            const pos = src.indexOf (BRA, from)
+
+            if (pos < 0) return yield src.slice (from)
+
+            yield src.slice (from, pos)
+            
+            const to = src.indexOf (KET, pos + 1)	
+            
+            const b64 = src.slice (pos + BRA.length, to)
 
             const fn = `${uuid}_${i ++}.png`, {rel, abs} = fpm.make (fn, 'task_notes')
 
-            fs.writeFileSync (abs, src.slice (src.indexOf (','), -1), {encoding: 'base64'})
+            fs.writeFileSync (abs, b64, {encoding: 'base64'})
 
-            html += `src="/_pics/${rel}"`
-
+            yield `"/_pics/${rel}"`
+    
+            from = 1 + to
+    
         }
-        else html += part
-
+    
     }
+    
+    let html = ''; for (const chunk of chunks ()) html += chunk
 
     return html
 
