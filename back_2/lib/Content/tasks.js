@@ -1,9 +1,8 @@
-const fs   = require ('fs')
-const Path = require ('path')
+const fs = require ('fs')
 const {randomUUID} = require ('crypto')
+const {FilePathMaker} = require ('file-path-maker')
 
 const RE = /(src="data:image\/png;base64,.*?")/
-const SLASH = '/'.charCodeAt (0)
 
 const extractPics = (src, uuid, root) => {
 
@@ -11,19 +10,17 @@ const extractPics = (src, uuid, root) => {
 
     const parts = src.split (RE); if (parts.length === 1) return src
 
-    const bymd = Buffer.from (new Date ().toISOString ().slice (0, 10)); bymd [4] = bymd [7] = SLASH
-
-    const ymd = bymd.toString (); root = Path.join (root, 'task_notes', ymd); fs.mkdirSync (root, {recursive: true})
+    const fpm = new FilePathMaker ({root})
 
     let i = 0; html = ''; for (const part of parts) {
 
         if (RE.test (part)) {
 
-            const fn = `${uuid}_${i ++}.png`
+            const fn = `${uuid}_${i ++}.png`, {rel, abs} = fpm.make (fn, 'task_notes')
 
-            fs.writeFileSync (Path.join (root, fn), src.slice (src.indexOf (','), -1), {encoding: 'base64'})
+            fs.writeFileSync (abs, src.slice (src.indexOf (','), -1), {encoding: 'base64'})
 
-            html += `src="/_pics/task_notes/${ymd}/${fn}"`
+            html += `src="/_pics/${rel}"`
 
         }
         else html += part
