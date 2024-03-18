@@ -1,5 +1,4 @@
 const {WebService, HttpParamReader, HttpResultWriter} = require ('doix-http')
-const {DbPool} = require ('doix-db')
 const {CookieJWT} = require ('doix-http-cookie-jwt')
 
 const QUERY = Symbol.for ('query')
@@ -34,18 +33,6 @@ module.exports = class extends WebService {
 
 			on: {
 
-				start: function () {
-
-					if (this.rq.action)
-					
-						for (const db of this.resources (DbPool))
-
-							if (typeof db.begin === 'function')
-						
-								this.waitFor (db.begin ())
-
-				},
-
 				module: function () {
 
 					if (this.user) {
@@ -58,33 +45,6 @@ module.exports = class extends WebService {
 						if (!this.module.allowAnonymous) this.fail (new UnauthorizedError ())
 
 					}
-
-				},
-
-				finish: function () {
-				
-					for (const db of this.resources (DbPool)) {
-
-						if (db.txn) this.waitFor (db.commit ())
-						
-						db.txn = null
-
-					}
-
-				},
-
-				error : function (error) {
-
-					if (typeof error === 'string') error = Error (error)
-					
-					while (error.cause) error = error.cause
-
-					const m = /^#(.*?)#:(.*)/.exec (error.message); if (m) {					
-						error.field   = m [1]
-						error.message = m [2].trim ()
-					}
-					
-					this.error = error
 
 				},
 

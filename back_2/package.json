@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "doix": "^1.0.9",
+    "doix": "^1.0.10",
     "doix-db": "^1.0.43",
     "doix-db-postgresql": "^1.0.29",
     "doix-devextreme": "^1.0.2",
