@@ -17,10 +17,6 @@ module.exports = {
 
     body: /*sql*/`
 
-        DECLARE
-            _to JSONB;
-            _notes JSONB;
-
         BEGIN
 
             IF _one THEN
@@ -29,29 +25,9 @@ module.exports = {
                 ${notes ('ORDER BY ts')};
             END IF;
 
-            SELECT
-                JSONB_BUILD_OBJECT (
-                    'name',     u.label,
-                    'address',  u.mail
-                )
-            INTO
-                _to 
-            FROM 
-                _ 
-                JOIN users u ON _.id_user_to = u.uuid
-            LIMIT 
-                1;
-
-            SELECT
-                JSONB_AGG (mail_content ORDER BY ts)
-            INTO
-                _notes
-            FROM 
-                _;
-
             RETURN JSONB_BUILD_OBJECT (
-                'to', _to,
-                'notes', _notes
+                'to',    (SELECT mail_to FROM vw_users WHERE uuid = (SELECT id_user_to FROM _ LIMIT 1)),
+                'notes', (SELECT JSONB_AGG (mail_content ORDER BY ts) FROM _)
             );
 
         END;
