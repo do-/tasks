@@ -171,48 +171,27 @@ do_notify_tasks:
 
         const {db, rq: {id, one}} = this
 
-        let sql = /*sql*/`
-            SELECT 
-                t.*                
-                , u.label AS name
-                , u.mail  AS address
-            FROM
-                task_notes t
-                JOIN users u ON t.id_user_to = u.uuid
-            WHERE
-                t.id_task = ?
-            ORDER BY
-                t.ts
-        `
+        const {to, notes} = await db.invoke ('get_mail_of_tasks', [id, one])
 
-        if (one) sql += ' DESC LIMIT 1'
+        let subject, html = `
+        <html>
+            <body>`
 
-        const notes = await db.getArray (sql, [id])
+            for (const {label, body} of notes) {
 
-        if (notes.length === 0) return
+                if (!subject) subject = label; else html += `<h1>${label}</h1>`
 
-        const [first] = notes, {name, address} = first
+                html += body
 
-        const msg = {        
-            to: {name, address},
-            html: `<html><body>`,
-        }
-
-        for (let note of notes) {
-
-            if (msg.subject) {
-                msg.html += `<h1>${note.label}</h2>${note.body}`
             }
-            else {
-                msg.subject = note.label
-                msg.html += note.body
-            }
-            
-        }
 
-        msg.html += `<br><br><small><a href="/tasks/${id}">${id}</a></small></body>`
+        html += `
+                <br><br>
+                <small><a href="/tasks/${id}">${id}</a></small>
+            </body>
+        </html>`
 
-        return msg
+        return {to, subject, html}
 
     },
 
