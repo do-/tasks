@@ -22,7 +22,9 @@ module.exports = {
 
         id_voc_project     : "(voc_projects) // Проект",
         task_label         : "text // Тема",
-        is_open            : 'bool // Открыто ли (0 — закрыто, 1 — в работе)', 
+        is_open            : 'bool // Открыто ли (0 — закрыто, 1 — в работе)',
+
+        mail_content       : "jsonb // Содержимое для извещения",
 
     },
 
@@ -34,7 +36,11 @@ module.exports = {
 			tn.*,
 			t.label AS task_label, 
 			t.id_voc_project,
-			t.is_open
+			t.is_open,
+            JSONB_BUILD_OBJECT (
+                'label', tn.label, 
+                'body',  tn.body
+            ) mail_content
 		FROM
 			task_notes tn
 			JOIN vw_tasks t ON tn.id_task = t.uuid

@@ -1,5 +1,5 @@
 const notes = order => /*sql*/`
-    CREATE TEMPORARY TABLE _ ON COMMIT DROP AS SELECT ts, id_user_to, label, body FROM task_notes WHERE id_task = _uuid ${order}
+    CREATE TEMPORARY TABLE _ ON COMMIT DROP AS SELECT ts, id_user_to, mail_content FROM vw_task_notes WHERE id_task = _uuid ${order}
 `
 
 module.exports = {
@@ -43,10 +43,7 @@ module.exports = {
                 1;
 
             SELECT
-                JSONB_AGG (JSONB_BUILD_OBJECT (
-                    'label', label, 
-                    'body',  body
-                ) ORDER BY ts)
+                JSONB_AGG (mail_content ORDER BY ts)
             INTO
                 _notes
             FROM 
