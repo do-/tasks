@@ -1,37 +1,4 @@
-const fs = require ('fs')
 const {randomUUID} = require ('crypto')
-const {FilePathMaker} = require ('file-path-maker')
-const TagProcessor = require ('string-replace-balanced')
-
-const extractPics = (src, uuid, root) => {
-
-    let i = 0
-
-    const fpm = new FilePathMaker ({root})
-
-    const processor = new TagProcessor ({
-
-        start     : '"data:image/png;base64,',
-
-        end       :  '"',
-
-        transform : b64 => {
-
-            const fn = `${uuid}_${i ++}.png`, {rel, abs} = fpm.make (fn, 'task_notes')
-
-            fs.writeFileSync (abs, b64, {encoding: 'base64'})
-
-            return `"/_pics/${rel}"`
-
-        }
-
-    })    
-
-    const result = processor.process (src || '')
-
-    return result
-
-}
 
 module.exports = {
 
@@ -139,9 +106,9 @@ do_comment_tasks:
 
     async function () {
 
-        const {conf, db, rq: {id, data}, user} = this, uuid = randomUUID ()
+        const {db, rq: {id, data}, user, pix} = this, uuid = randomUUID ()
 
-        data.body = extractPics (data.body, uuid, conf.pics)
+        data.body = pix.process (data.body || '', uuid)
 
         const task_note = {
             uuid,

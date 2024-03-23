@@ -5,6 +5,7 @@ const {DbPool}                      = require ('doix-db')
 const createLogger                  = require ('./Logger.js')
 const DB                            = require ('./DB.js')
 const BackService                   = require ('./BackService.js')
+const PictureExtractor              = require ('./PictureExtractor.js')
 
 module.exports = class extends Application {
 
@@ -20,6 +21,7 @@ module.exports = class extends Application {
 				conf,
 			    pwd: new PasswordShaker ({path: conf.auth.salt_file}),
 				smtp: nodemailer.createTransport (conf.mail),
+				pix: new PictureExtractor (conf.pics),
 			},
 
 			pools: {
