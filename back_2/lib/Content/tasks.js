@@ -1,42 +1,35 @@
 const fs = require ('fs')
 const {randomUUID} = require ('crypto')
 const {FilePathMaker} = require ('file-path-maker')
+const TagProcessor = require ('string-replace-balanced')
 
 const extractPics = (src, uuid, root) => {
 
-    if (!src) return src
+    let i = 0
 
-    const BRA = '"data:image/png;base64,', KET = '"', fpm = new FilePathMaker ({root})
+    const fpm = new FilePathMaker ({root})
 
-    let from = 0, i = 0; function * chunks () {
+    const processor = new TagProcessor ({
 
-        while (true) {
+        start     : '"data:image/png;base64,',
 
-            const pos = src.indexOf (BRA, from)
+        end       :  '"',
 
-            if (pos < 0) return yield src.slice (from)
-
-            yield src.slice (from, pos)
-            
-            const to = src.indexOf (KET, pos + 1)	
-            
-            const b64 = src.slice (pos + BRA.length, to)
+        transform : b64 => {
 
             const fn = `${uuid}_${i ++}.png`, {rel, abs} = fpm.make (fn, 'task_notes')
 
             fs.writeFileSync (abs, b64, {encoding: 'base64'})
 
-            yield `"/_pics/${rel}"`
-    
-            from = 1 + to
-    
-        }
-    
-    }
-    
-    let html = ''; for (const chunk of chunks ()) html += chunk
+            return `"/_pics/${rel}"`
 
-    return html
+        }
+
+    })    
+
+    const result = processor.process (src || '')
+
+    return result
 
 }
 
@@ -146,18 +139,18 @@ do_comment_tasks:
 
     async function () {
 
-        const {conf, db, rq: {id, data}, user} = this
+        const {conf, db, rq: {id, data}, user} = this, uuid = randomUUID ()
+
+        data.body = extractPics (data.body, uuid, conf.pics)
 
         const task_note = {
-            uuid: randomUUID (),
+            uuid,
             ...data,
             id_task: id,
             id_user_from: user.uuid,
         }
 
         if (task_note.id_user_to <= 0) task_note.id_user_to = null
-
-        data.body = extractPics (data.body, task_note.uuid, conf.pics)
 
         await db.insert ('task_notes', task_note)
 
