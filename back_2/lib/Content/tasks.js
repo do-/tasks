@@ -63,22 +63,21 @@ do_create_tasks:
 
     async function () {
 
-        const {uuid, db, rq} = this, {data} = rq, {id_voc_project, label} = data
+        const {db, rq} = this, {id, data} = rq, {id_voc_project, label} = data
 
-        const result = {uuid}
+        const result = {uuid: id}
 
         const task = {...result, label, id_voc_project, id_user_author: this.user.uuid}
 
-        await db.insert ('tasks', task)
+        if (!await db.insert ('tasks', task, {onlyIfMissing: true})) return result
 
-        rq.id              = task.uuid
         rq.data.id_user_to = task.id_user_author
 
         await this.module.do_comment_tasks.call (this)
 
         return result
 
-    },    
+    },
 
 ////////////////////////////////////////////////////////////////////////////////
 
