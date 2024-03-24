@@ -4,6 +4,6 @@ const Application  = require ('./lib/Application.js')
 
 const app = new Application (conf), exit = _ => app.perform ('stop')
 
-//for (const signal of ['SIGTERM', 'SIGINT', 'SIGBREAK']) process.on (signal, exit)
+for (const signal of ['SIGTERM', 'SIGINT', 'SIGBREAK']) process.on (signal, exit)
 
 app.perform ('start')

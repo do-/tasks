@@ -31,7 +31,7 @@ do_stop_app:
 
         const {app} = this       
 
-//      await app.dbListener.close () // ?
+        await app.mailChannel.close ()
 
         await app.httpRouter.close ()
 
