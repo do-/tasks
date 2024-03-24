@@ -2,7 +2,7 @@
 
 $_DO.update_task_comment = async function () {
 
-    const {uuid, label, body, id_user_to} = $('div.dx-popup.dx-widget').dxPopup ('instance').content ().dxForm ('instance').option ('formData')
+    const {uuid, label, body, id_user_to, is_assigning, users} = $('div.dx-popup.dx-widget').dxPopup ('instance').content ().dxForm ('instance').option ('formData')
 
     const data = {uuid, label, body, id_user_to}
 
@@ -10,13 +10,13 @@ $_DO.update_task_comment = async function () {
 
     if (data.id_user_to == '...' || data.id_user_to == 'other') data.id_user_to = null
 
-    var action = data.is_assigning ? 'assign': 'comment'
+    var action = is_assigning ? 'assign': 'comment'
     
     if (action == 'assign') {
 
         if (!data.id_user_to) die ('id_user_to', 'Вы забыли указать адресата')
 
-        if (!confirm ('Адресат - ' + data.users.find (i => i.uuid === data.id_user_to).label + ', так?')) die ('id_user_to', 'Хорошо, давайте уточним')
+        if (!confirm ('Адресат - ' + users.find (i => i.uuid === data.id_user_to).label + ', так?')) die ('id_user_to', 'Хорошо, давайте уточним')
 
     }
     else {
