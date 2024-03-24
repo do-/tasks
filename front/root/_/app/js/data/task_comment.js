@@ -2,7 +2,9 @@
 
 $_DO.update_task_comment = async function () {
 
-	let data = $('div.dx-popup.dx-widget').dxPopup ('instance').content ().dxForm ('instance').option ('formData')
+    const {uuid, label, body, id_user_to} = $('div.dx-popup.dx-widget').dxPopup ('instance').content ().dxForm ('instance').option ('formData')
+
+    const data = {uuid, label, body, id_user_to}
 
 	data.body = href2a (data.body)
 
@@ -10,8 +12,6 @@ $_DO.update_task_comment = async function () {
 
     var action = data.is_assigning ? 'assign': 'comment'
     
-    data.uuid = new_uuid ()
-
     if (action == 'assign') {
 
         if (!data.id_user_to) die ('id_user_to', 'Вы забыли указать адресата')
@@ -78,6 +78,7 @@ $_GET.task_comment = async function (o) {
     var data = clone ($('body').data ('data'))
     
     data.record = o
+    data.record.uuid = new_uuid ()
 
     if (o.is_assigning) {
     

@@ -72,6 +72,7 @@ do_create_tasks:
         if (!await db.insert ('tasks', task, {onlyIfMissing: true})) return result
 
         rq.data.id_user_to = task.id_user_author
+        rq.data.uuid       = task.uuid
 
         await this.module.do_comment_tasks.call (this)
 
@@ -105,12 +106,11 @@ do_comment_tasks:
 
     async function () {
 
-        const {db, rq: {id, data}, user, pix} = this, uuid = randomUUID ()
+        const {db, rq: {id, data}, user, pix} = this, {uuid} = data
 
         data.body = pix.process (data.body || '', uuid)
 
         const task_note = {
-            uuid,
             ...data,
             id_task: id,
             id_user_from: user.uuid,
@@ -118,7 +118,7 @@ do_comment_tasks:
 
         if (task_note.id_user_to <= 0) task_note.id_user_to = null
 
-        await db.insert ('task_notes', task_note)
+        return db.insert ('task_notes', task_note, {onlyIfMissing: true})
 
     },
 
