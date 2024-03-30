@@ -7,15 +7,18 @@ const DB                            = require ('./DB.js')
 const BackService                   = require ('./BackService.js')
 const PictureExtractor              = require ('./PictureExtractor.js')
 
+const {HttpRouter}                  = require ('doix-http')
+const MailChannel                   = require ('./MailChannel.js')
+
 module.exports = class extends Application {
 
 	constructor (conf) {		
 	
-		const log = name => createLogger (conf, name)
+		const log = name => createLogger (conf, name), logger = log ('app')
 				
 	    super ({
 	    	
-	    	logger: log ('app'),
+	    	logger,
 	    
 			globals: {
 				conf,
@@ -81,16 +84,18 @@ module.exports = class extends Application {
 
 		})
 
+		this.mailChannel = new MailChannel (this)
+
+		{
+
+			const {listen, auth: {sessions}} = conf
+
+			this.httpRouter = new HttpRouter ({listen, logger}).add (new BackService (this, {sessions}))
+
+		}
+
 	}
-	
-	createBackService () {
-	
-		const {sessions} = this.globals.get ('conf').auth
-	
-		return new BackService (this, {sessions})
-	
-	}
-	
+		
 	async perform (action) {
 
 		await this.createJob ({type: 'app', action}).toComplete ()

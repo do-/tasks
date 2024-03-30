@@ -1,7 +1,3 @@
-const {HttpRouter} = require ('doix-http')
-const MailChannel = require ('../MailChannel.js')
-const {DbListenerPg, DbChannelPg} = require ('doix-db-postgresql')
-
 module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -10,15 +6,12 @@ do_start_app:
 
     async function () {
 
-        await this.db.updateModel ()
+        const {app, db} = this
 
-        const {app, conf: {listen}} = this, {logger} = app
+        await db.updateModel ()
 
-        app.mailChannel = new MailChannel (app)
         await app.mailChannel.listen ()
 
-        app.httpRouter = new HttpRouter ({listen, logger})
-            .add (app.createBackService ())
         app.httpRouter.listen ()
 
     },
