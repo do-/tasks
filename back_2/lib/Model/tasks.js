@@ -54,9 +54,9 @@ module.exports = {
     	},
 
     	{
-			phase  : 'AFTER UPDATE',
-			action : 'FOR EACH ROW WHEN (NEW.id_user_executor <> OLD.id_user_executor)',
-			sql    : /*sql*/`
+            phase  : 'AFTER UPDATE OF id_user_executor',
+            action : 'FOR EACH ROW',
+            sql    : /*sql*/`
 				BEGIN
 
                     IF NEW.id_user_author <> OLD.id_user_executor THEN
