@@ -4,6 +4,8 @@ module.exports = class extends DbChannelPg {
 
     constructor (app) {
 
+        const {base} = app.globals.get ('conf')
+
         super (app, {
 
             name: 'mail',
@@ -20,7 +22,21 @@ module.exports = class extends DbChannelPg {
 
                 end: function () {
 
-                    this.waitFor (this.smtp.sendMail (this.result))
+                    const {result} = this, {id} = result
+
+                    result.html = `
+                    <html>
+                        <head>
+                            <base href="${base}">
+                        </head>
+                        <body>
+                            ${result.html}
+                            <br><br>
+                            <small><a href="/tasks/${id}">${id}</a></small>
+                        </body>
+                    </html>`
+
+                    this.waitFor (this.smtp.sendMail (result))
 
                 },
                 

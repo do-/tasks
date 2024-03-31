@@ -124,32 +124,19 @@ do_notify_tasks:
 
     async function () {
 
-        const {conf, db, rq: {id, one}} = this
+        const {db, rq: {id, one}} = this
 
         const {to, notes} = await db.invoke ('get_mail_of_tasks', [id, one])
 
-        let subject, html = `
-        <html>
-            <body>
-            <head>
-                <base href="${conf.base}">
-            </head>
-        `
-            for (const {label, body} of notes) {
+        let subject, html = ''; for (const {label, body} of notes) {
 
-                if (!subject) subject = label; else html += `<h1>${label}</h1>`
+            if (!subject) subject = label; else html += `<h1>${label}</h1>`
 
-                html += body
+            html += body
 
-            }
+        }
 
-        html += `
-                <br><br>
-                <small><a href="/tasks/${id}">${id}</a></small>
-            </body>
-        </html>`
-
-        return {to, subject, html}
+        return {to, subject, html, id}
 
     },
 
