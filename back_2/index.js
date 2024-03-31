@@ -11,6 +11,21 @@ const logging = {}; for (const name of ['app', 'db']) logging [name] = createLog
 const dbListener = new DbListenerPg ({db, logger: logging.db})
 const httpRouter = new HttpRouter   ({listen, logger: logging.app})
 
+async function exit () {
+
+    try {
+        await Promise.all ([
+            dbListener.close (),
+            httpRouter.close (),
+        ])
+        process.exit (0)
+    }
+    catch (_) {
+        process.exit (1)
+    }
+
+}
+
 async function main () {
 
     const app = new Application (conf, logging)
@@ -19,16 +34,11 @@ async function main () {
     dbListener.add (app.mailChannel)
     httpRouter.add (app.backService)
 
+    for (const signal of ['SIGTERM', 'SIGINT', 'SIGBREAK']) process.on (signal, exit)
+
     await dbListener.listen ()
     httpRouter.listen ()
 
 }
 
 main ()
-        
-
-/*
-const exit = _ => app.perform ('stop')
-
-for (const signal of ['SIGTERM', 'SIGINT', 'SIGBREAK']) process.on (signal, exit)
-*/
