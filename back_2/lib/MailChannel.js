@@ -1,16 +1,13 @@
-const {DbListenerPg, DbChannelPg} = require ('doix-db-postgresql')
+const {DbChannelPg} = require ('doix-db-postgresql')
 
-module.exports = class extends DbListenerPg {
+module.exports = class extends DbChannelPg {
 
     constructor (app) {
 
-        const {db}     = app.globals.get   ('conf')
-        const {logger} = app.pools.get ('db')
+        super (app, {
 
-        super ({db, logger})
-
-        this.add (new DbChannelPg (app, {
             name: 'mail',
+
             on: {
 
                 start: function () {
@@ -28,7 +25,8 @@ module.exports = class extends DbListenerPg {
                 },
                 
             },
-        }))
+
+        })
 
     }
 

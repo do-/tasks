@@ -2,23 +2,19 @@ const nodemailer                    = require ('nodemailer')
 const {Application, PasswordShaker} = require ('doix')
 const {DbPool}                      = require ('doix-db')
 
-const createLogger                  = require ('./Logger.js')
 const DB                            = require ('./DB.js')
 const BackService                   = require ('./BackService.js')
 const PictureExtractor              = require ('./PictureExtractor.js')
 
-const {HttpRouter}                  = require ('doix-http')
 const MailChannel                   = require ('./MailChannel.js')
 
 module.exports = class extends Application {
 
-	constructor (conf) {		
-	
-		const log = name => createLogger (conf, name), logger = log ('app')
-				
+	constructor (conf, logging) {		
+					
 	    super ({
 	    	
-	    	logger,
+	    	logger: logging.app,
 	    
 			globals: {
 				conf,
@@ -28,7 +24,7 @@ module.exports = class extends Application {
 			},
 
 			pools: {
-				db: new DB (conf.db, log ('db')),
+				db: new DB (conf.db, logging.db),
 			},
 
 			modules: {
@@ -84,22 +80,19 @@ module.exports = class extends Application {
 
 		})
 
-		this.mailChannel = new MailChannel (this)
-
 		{
-
-			const {listen, auth: {sessions}} = conf
-
-			this.httpRouter = new HttpRouter ({listen, logger}).add (new BackService (this, {sessions}))
-
+			const {auth: {sessions}} = conf
+			this.backService = new BackService (this, {sessions})
 		}
 
-	}
-		
-	async perform (action) {
+		this.mailChannel = new MailChannel (this)
 
-		await this.createJob ({type: 'app', action}).toComplete ()
-	
+	}
+
+	async init () {
+
+		await this.createJob ({type: 'app', action: 'init'}).toComplete ()
+
 	}
 
 }
