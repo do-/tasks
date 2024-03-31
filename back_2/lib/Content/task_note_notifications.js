@@ -2,13 +2,13 @@ module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_process_task_notifications:
+do_process_task_note_notifications:
 
     async function () {
 
         const {db, rq: {id}} = this
 
-        const {to, notes} = await db.invoke ('get_mail_of_tasks', [id, true])
+        const {to, notes} = await db.invoke ('get_mail_of_tasks', [id, false])
 
         let subject, html = ''; for (const {label, body} of notes) {
 
