@@ -13,22 +13,25 @@ module.exports = {
     pk: 'uuid',
 
 	sql: /*sql*/ `
-	
+
 		SELECT
             t.uuid,
-            t.ts,
+            t.ts,           
             JSONB_BUILD_OBJECT (
                 'to',      u.mail_to,
                 'subject', t.label,
-                'html',    t.body,
-                'id',      t.id_task
+                'notes', (SELECT JSONB_AGG (
+                    JSONB_BUILD_OBJECT ('label', label, 'body', body)
+                    ORDER BY ts
+                ) FROM task_notes WHERE id_task = t.uuid),
+                'id',      t.uuid
             ) mail_content
 		FROM
-			vw_task_notes t
-            JOIN vw_users u ON t.id_user_to = u.uuid
+			tasks t
+            JOIN vw_users u ON t.id_user_executor = u.uuid
         WHERE
             t.is_to_notify
-		
+
 	`,
 
 }

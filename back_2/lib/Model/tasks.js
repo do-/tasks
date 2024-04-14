@@ -17,6 +17,7 @@ module.exports = {
         id_last_task_note  : "(task_notes) // Последняя реплика",
 
         id_voc_project     : "(voc_projects) // Проект",
+        is_to_notify       : 'bool=0 // следует ли отправить уведомление',
 
     },
 
@@ -24,6 +25,12 @@ module.exports = {
 
     keys : {
         id_user: 'id_user',
+        to_notify: {
+            parts: ['ts'],
+            options:  [
+                'WHERE is_to_notify',
+            ],
+        },
     },
 
 
@@ -54,7 +61,7 @@ module.exports = {
     	},
 
     	{
-            phase  : 'AFTER UPDATE OF id_user_executor',
+            phase  : 'BEFORE UPDATE OF id_user_executor',
             action : 'FOR EACH ROW',
             sql    : /*sql*/`
 				BEGIN
@@ -62,6 +69,20 @@ module.exports = {
                     IF NEW.id_user_author <> OLD.id_user_executor THEN
                         RAISE '#_#:Исполнитель этой задачи уже был назначен';
                     END IF;
+
+                    NEW.is_to_notify = TRUE;
+
+                    RETURN NEW;
+
+				END;
+			`,
+    	},
+
+    	{
+            phase  : 'AFTER UPDATE OF id_user_executor',
+            action : 'FOR EACH ROW',
+            sql    : /*sql*/`
+				BEGIN
 
                     UPDATE task_users SET id_user    = NEW.id_user_executor WHERE id_task = NEW.uuid AND is_author = 0;
                     UPDATE task_notes SET id_user_to = NEW.id_user_executor WHERE id_task = NEW.uuid;
