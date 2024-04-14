@@ -14,9 +14,9 @@ module.exports = class extends DbChannelPg {
 
                 start: function () {
 
-                    const [id, one] = JSON.parse (this.notification.payload)
+                    const name = this.notification.payload, type = name + '_notifications'
 
-                    this.rq = {type: one ? 'task_note_notifications' : 'task_notifications', action: 'process', id}
+                    this.rq = {type, action: 'process'}
 
                 },
 

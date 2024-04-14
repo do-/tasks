@@ -75,7 +75,7 @@ module.exports = {
 			sql    : /*sql*/`
 				BEGIN
                     NEW.is_to_notify = TRUE;
-                    PERFORM notify_on_task (NEW.id_task);
+                    NOTIFY mail, 'task_note';
                     RETURN NEW;
 				END;
 			`,
