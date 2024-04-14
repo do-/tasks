@@ -27,6 +27,8 @@ module.exports = {
 
     },
 
+    wrap: true,
+
     pk: 'uuid',
 
     sql : /*sql*/ `

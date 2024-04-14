@@ -4,6 +4,7 @@ module.exports = {
 
     columns: {
 
+        uuid               : 'uuid',
         label              : "text  // Имя", 
         role               : "text  // Роль", 
         mail_to            : "jsonb // Адрес для извещения",

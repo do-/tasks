@@ -17,6 +17,7 @@ module.exports = {
         txt                : "text // Полный текст",
 
         is_html            : 'bool=1 // HTML ли это',
+        is_to_notify       : 'bool=0 // следует ли отправить уведомление',
 
     },
 
@@ -25,6 +26,13 @@ module.exports = {
     keys : {
         id_task : ['id_task',      'ts'],
         id_user : ['id_user_from', 'ts'],
+        to_notify: {
+            parts: ['ts'],
+            options:  [
+                'WHERE is_to_notify',
+            ],
+        },
+
     },
 
     triggers: [
@@ -66,6 +74,7 @@ module.exports = {
 			action : `FOR EACH ROW WHEN (NEW.id_user_to <> current_setting ('app.user')::UUID)`,
 			sql    : /*sql*/`
 				BEGIN
+                    NEW.is_to_notify = TRUE;
                     PERFORM notify_on_task (NEW.id_task);
                     RETURN NEW;
 				END;
