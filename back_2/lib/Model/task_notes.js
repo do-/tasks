@@ -75,7 +75,7 @@ module.exports = {
 			sql    : /*sql*/`
 				BEGIN
                     NEW.is_to_notify = TRUE;
-                    NOTIFY mail, 'task_note';
+                    NOTIFY mail, 'vw_task_notes_to_notify';
                     RETURN NEW;
 				END;
 			`,

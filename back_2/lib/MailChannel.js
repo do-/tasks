@@ -12,14 +12,6 @@ module.exports = class extends DbChannelPg {
 
             on: {
 
-                start: function () {
-
-                    const name = this.notification.payload, type = name + '_notifications'
-
-                    this.rq = {type, action: 'process'}
-
-                },
-
                 end: function () {
 
                     const {result} = this, {id} = result
@@ -44,6 +36,32 @@ module.exports = class extends DbChannelPg {
 
         })
 
+        const self = this
+
+        this.addHandler ('start', function () {
+
+            const name = this.notification.payload
+
+            const q = self.model.find (name); if (!q) this.fail (`Queue '${name}' not found`)
+
+            const {queue} = q; if (!queue) this.fail (`'${name}' is not a queue`)
+
+            this.rq = {...queue.rq}
+
+        })
+
     }
+
+	setRouter (router) {
+
+        const {pool} = router
+
+        for (const db of this.app.pools.values ()) if (pool.isSameDbAs (db)) this.model = db.model
+
+        if (!('model' in this)) throw Error ("Listener's DB connection not found in application")
+
+        super.setRouter (router)
+
+	}
 
 }

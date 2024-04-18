@@ -87,7 +87,7 @@ module.exports = {
                     UPDATE task_users SET id_user    = NEW.id_user_executor WHERE id_task = NEW.uuid AND is_author = 0;
                     UPDATE task_notes SET id_user_to = NEW.id_user_executor WHERE id_task = NEW.uuid;
 
-                    NOTIFY mail, 'task';
+                    NOTIFY mail, 'vw_tasks_to_notify';
 
                     RETURN NEW;
 

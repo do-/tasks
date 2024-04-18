@@ -12,6 +12,12 @@ module.exports = {
 
     pk: 'uuid',
 
+    queue: {
+
+        rq: {type: 'task_notifications', action: 'process'},
+
+    },
+
 	sql: /*sql*/ `
 
 		SELECT
