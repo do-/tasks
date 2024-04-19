@@ -1,6 +1,6 @@
 const nodemailer                    = require ('nodemailer')
 const {Application, PasswordShaker} = require ('doix')
-const {DbPool}                      = require ('doix-db')
+const {DbPoolPg}                    = require ('doix-db-postgresql')
 
 const DB                            = require ('./DB.js')
 const BackService                   = require ('./BackService.js')
@@ -39,25 +39,13 @@ module.exports = class extends Application {
 
 				start: function () {
 
-					if (this.rq.action)
-					
-						for (const db of this.resources (DbPool))
-
-							if (typeof db.begin === 'function')
-						
-								this.waitFor (db.begin ())
+					if (this.rq.action) for (const db of this.resources (DbPoolPg)) this.waitFor (db.begin ())
 
 				},
 
-				finish: function () {
+				end: function () {
 				
-					for (const db of this.resources (DbPool)) {
-
-						if (db.txn) this.waitFor (db.commit ())
-						
-						db.txn = null
-
-					}
+					for (const db of this.resources (DbPoolPg)) this.waitFor (db.commit ())
 
 				},
 
