@@ -16,6 +16,8 @@ module.exports = {
 
         rq: {type: 'task_notifications', action: 'process'},
 
+        order: 'ts DESC',
+
     },
 
 	sql: /*sql*/ `

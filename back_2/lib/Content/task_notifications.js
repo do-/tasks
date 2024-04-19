@@ -6,9 +6,7 @@ do_process_task_notifications:
 
     async function () {
 
-        const {db} = this
-
-        const {uuid, mail_content: {to, subject, notes, id}} = await db.getObject ('SELECT * FROM vw_tasks_to_notify ORDER BY ts DESC LIMIT 1')
+        const {db, rq: {data: {uuid, mail_content: {to, subject, notes, id}}}} = this
 
         let html = ''; for (const {label, body} of notes) {
 
