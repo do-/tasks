@@ -33,7 +33,7 @@ module.exports = class extends WebService {
 
 			on: {
 
-				module: function () {
+				method: function () {
 
 					if (this.user) {
 

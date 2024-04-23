@@ -37,15 +37,9 @@ module.exports = class extends Application {
 
 			handlers: {
 
-				start: function () {
+				module: function () {
 
 					if (this.rq.action) for (const db of this.resources (DbPoolPg)) this.waitFor (db.begin ())
-
-				},
-
-				end: function () {
-				
-					for (const db of this.resources (DbPoolPg)) this.waitFor (db.commit ())
 
 				},
 
