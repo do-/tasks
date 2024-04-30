@@ -37,12 +37,6 @@ module.exports = class extends Application {
 
 			handlers: {
 
-				module: function () {
-
-					if (this.rq.action) for (const db of this.resources (DbPoolPg)) this.waitFor (db.begin ())
-
-				},
-
 				error : function (error) {
 
 					if (typeof error === 'string') error = Error (error)

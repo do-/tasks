@@ -35,16 +35,7 @@ module.exports = class extends WebService {
 
 				method: function () {
 
-					if (this.user) {
-
-						if (this.rq.action) this.waitFor (this.db.do (`SELECT set_config (?, ?, TRUE)`, ['app.user', this.user.uuid]))
-
-					}
-					else {
-
-						if (!this.module.allowAnonymous) this.fail (new UnauthorizedError ())
-
-					}
+					if (!this.user && !this.module.allowAnonymous) this.fail (new UnauthorizedError ())
 
 				},
 

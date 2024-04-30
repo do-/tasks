@@ -20,6 +20,22 @@ module.exports = class extends DbPoolPg {
 
 	}
 
+	isToBegin (db) {
+
+		return 'action' in db.job.rq
+
+	}
+
+	async onAcquire (db) {
+
+		await super.onAcquire (db)
+
+		const {user} = db.job
+
+		if (!db.isAutoCommit () && user) await db.do (`SELECT set_config (?, ?, TRUE)`, ['app.user', user.uuid])
+
+	}
+
 	async updateModel () {
 
 		if (this.pool.noModelUpdate) return
