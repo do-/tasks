@@ -28,11 +28,9 @@ module.exports = class extends DbPoolPg {
 
 	async onAcquire (db) {
 
-		await super.onAcquire (db)
+		await super.onAcquire (db); if (db.isAutoCommit ()) return
 
-		const {user} = db.job
-
-		if (!db.isAutoCommit () && user) await db.do (`SELECT set_config (?, ?, TRUE)`, ['app.user', user.uuid])
+		const {user} = db.job; if (user) await db.invoke ('set_config', ['app.user', user.uuid, true])
 
 	}
 
