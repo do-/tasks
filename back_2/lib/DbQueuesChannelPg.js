@@ -1,16 +1,20 @@
 const {DbChannelPg} = require ('doix-db-postgresql')
 
+const FIELD_NAME = 'payload'
+
 module.exports = class extends DbChannelPg {
 
     constructor (app, o) {
 
         super (app, o)
 
+        if (o.autoStart !== false) this.autoStart = true
+
         const self = this
 
         this.addHandler ('start', function () {
 
-            const name = this.notification.payload
+            const name = this.notification [FIELD_NAME]
 
             const q = self.db.model.find (name); if (!q) this.fail (`Queue '${name}' not found`)
 
@@ -30,6 +34,22 @@ module.exports = class extends DbChannelPg {
 
     }
 
+    check (name) {
+
+        this.process ({[FIELD_NAME]: name})
+
+    }
+
+    checkAll () {
+
+        for (const schema of this.db.model.schemata.values ())
+
+            for (const q of schema.map.values ()) if ('queue' in q)
+
+                this.check (q.qName.slice (1, -1))
+
+    }
+
 	setRouter (router) {
 
         const {pool} = router
@@ -46,6 +66,8 @@ module.exports = class extends DbChannelPg {
 
         super.setRouter (router)
 
+        if (this.autoStart) router.on ('start', () => this.checkAll ())
+        
 	}
 
 }
