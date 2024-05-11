@@ -14,39 +14,47 @@ module.exports = class extends DbChannelPg {
 
         this.addHandler ('start', function () {
 
-            const name = this.notification [FIELD_NAME]
-
-            const q = self.db.model.find (name); if (!q) this.fail (`Queue '${name}' not found`)
-
-            const {queue} = q; if (!queue) this.fail (`'${name}' is not a queue`)
-
-            const db = this [self.db.name], sql = `SELECT * FROM ${q.qName} ORDER BY ${queue.order}`
-
-            this.waitFor (
-
-                db.getObject (sql, [], {notFound: null})
-
-                .then (data => this.rq = data ? {...queue.rq, data} : {})
-
-            )
+            this.waitFor (self.onJobStart (this))
 
         })
 
     }
 
-    check (name) {
+    async onJobStart (job) {
 
-        this.process ({[FIELD_NAME]: name})
+        const queueName = job.notification [FIELD_NAME]
+
+        const q = this.db.model.find (queueName); if (!q) this.fail (`Queue '${queueName}' not found`)
+
+        const {queue} = q; if (!queue) this.fail (`'${queueName}' is not a queue`)
+
+        const sql = `SELECT * FROM ${q.qName} ORDER BY ${queue.order}`
+        
+        const db = job [this.db.name]
+
+        const data = await db.getObject (sql, [], {notFound: null}), notFound = data === null
+
+        job.rq = notFound ? {} : {...queue.rq, data}; if (notFound) return
+
+//      db.once ('released', () => self.check (queueName))
+
+    }
+
+    check (queue) {
+
+        const name = queue.qName.slice (1, -1)
+
+        setImmediate (() => {this.process ({[FIELD_NAME]: name})})
 
     }
 
     checkAll () {
 
-        for (const schema of this.db.model.schemata.values ())
+        for (const o of this.db.model.objects ())
+                
+            if ('queue' in o)
 
-            for (const q of schema.map.values ()) if ('queue' in q)
-
-                this.check (q.qName.slice (1, -1))
+                this.check (o)
 
     }
 
