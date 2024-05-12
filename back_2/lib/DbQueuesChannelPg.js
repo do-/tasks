@@ -1,4 +1,4 @@
-const {DbChannelPg} = require ('doix-db-postgresql')
+const {DbChannelPg, DbViewQueuePg} = require ('doix-db-postgresql')
 
 const FIELD_NAME = 'payload'
 
@@ -22,25 +22,19 @@ module.exports = class extends DbChannelPg {
 
     async onJobStart (job) {
 
-        const queueName = job.notification [FIELD_NAME]
+        const queueName = job.notification [FIELD_NAME], queue = this.db.model.find (queueName)
 
-        {
+        if (!queue) this.fail (`Queue '${queueName}' not found`)
 
-            const q = this.db.model.find (queueName); if (!q) this.fail (`Queue '${queueName}' not found`)
+        if (!(queue instanceof DbViewQueuePg)) this.fail (`'${queueName}' is not a queue`)
 
-            job.queue = q
+        const data = await job [this.db.name].peek (queue)
 
-        }
+        queue.setRq (job, data)
 
-        const {qName, queue} = job.queue; if (!queue) this.fail (`'${queueName}' is not a queue`)
+        job.queue = queue
 
-        const sql = `SELECT * FROM ${qName} ORDER BY ${queue.order}`
-
-        const data = await job [this.db.name].getObject (sql, [], {notFound: null}), isFound = data !== null
-
-        job.rq = isFound ? {...queue.rq, data} : {}
-
-        if (isFound) {
+        if (data !== null) {
 
             const db = job [this.db.name]
 
@@ -70,7 +64,7 @@ module.exports = class extends DbChannelPg {
 
         for (const o of this.db.model.objects ())
                 
-            if ('queue' in o)
+            if (o instanceof DbViewQueuePg)
 
                 this.check (o)
 

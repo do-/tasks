@@ -6,7 +6,7 @@ do_process_task_notifications:
 
     async function () {
 
-        const {db, rq: {data: {uuid, mail_content: {to, subject, notes, id}}}} = this
+        const {db, rq: {uuid, mail_content: {to, subject, notes, id}}} = this
 
         let html = ''; for (const {label, body} of notes) {
 
