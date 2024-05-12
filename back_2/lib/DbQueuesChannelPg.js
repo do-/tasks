@@ -24,19 +24,37 @@ module.exports = class extends DbChannelPg {
 
         const queueName = job.notification [FIELD_NAME]
 
-        const q = this.db.model.find (queueName); if (!q) this.fail (`Queue '${queueName}' not found`)
+        {
 
-        const {queue} = q; if (!queue) this.fail (`'${queueName}' is not a queue`)
+            const q = this.db.model.find (queueName); if (!q) this.fail (`Queue '${queueName}' not found`)
 
-        const sql = `SELECT * FROM ${q.qName} ORDER BY ${queue.order}`
-        
-        const db = job [this.db.name]
+            job.queue = q
 
-        const data = await db.getObject (sql, [], {notFound: null}), notFound = data === null
+        }
 
-        job.rq = notFound ? {} : {...queue.rq, data}; if (notFound) return
+        const {qName, queue} = job.queue; if (!queue) this.fail (`'${queueName}' is not a queue`)
 
-//      db.once ('released', () => self.check (queueName))
+        const sql = `SELECT * FROM ${qName} ORDER BY ${queue.order}`
+
+        const data = await job [this.db.name].getObject (sql, [], {notFound: null}), isFound = data !== null
+
+        job.rq = isFound ? {...queue.rq, data} : {}
+
+        if (isFound) {
+
+            const db = job [this.db.name]
+
+            db.once ('released', () => this.onDbReleased (db))
+
+        }
+
+    }
+
+    onDbReleased ({job: {queue, error}}) {
+
+        if (error) return
+
+        this.check (queue)
 
     }
 
