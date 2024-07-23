@@ -36,6 +36,8 @@ module.exports = class extends DbPoolPg {
 
 	async updateModel () {
 
+		this.model.loadModules ()		
+
 		if (this.pool.noModelUpdate) return
 
 		const {job, pool} = this

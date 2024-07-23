@@ -1,6 +1,6 @@
-const DbQueuesChannelPg = require ('./DbQueuesChannelPg')
+const {DbQueuesRouterPg} = require ('doix-db-postgresql')
 
-module.exports = class extends DbQueuesChannelPg {
+module.exports = class extends DbQueuesRouterPg {
 
     constructor (app) {
 
@@ -8,13 +8,11 @@ module.exports = class extends DbQueuesChannelPg {
 
         super (app, {
 
-            name: 'mail',
-
             on: {
 
-                end: function () {
+                'job-end': async job => {
 
-                    const {result} = this, {id} = result
+                    const {result} = job, {id} = result
 
                     result.html = `
                     <html>
@@ -28,7 +26,7 @@ module.exports = class extends DbQueuesChannelPg {
                         </body>
                     </html>`
 
-                    this.waitFor (this.smtp.sendMail (result))
+                    job.waitFor (job.smtp.sendMail (result))
 
                 },
                 

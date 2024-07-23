@@ -1,12 +1,11 @@
 const nodemailer                    = require ('nodemailer')
 const {Application, PasswordShaker} = require ('doix')
-const {DbPoolPg}                    = require ('doix-db-postgresql')
 
 const DB                            = require ('./DB.js')
 const BackService                   = require ('./BackService.js')
 const PictureExtractor              = require ('./PictureExtractor.js')
 
-const MailChannel                   = require ('./MailChannel.js')
+const MailRouter                    = require ('./MailRouter.js')
 
 module.exports = class extends Application {
 
@@ -61,13 +60,13 @@ module.exports = class extends Application {
 			this.backService = new BackService (this, {sessions})
 		}
 
-		this.mailChannel = new MailChannel (this)
-
 	}
 
 	async init () {
 
 		await this.createJob ({type: 'app', action: 'init'}).toComplete ()
+
+		this.mailRouter = new MailRouter (this)
 
 	}
 

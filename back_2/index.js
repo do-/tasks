@@ -8,7 +8,7 @@ const conf = require ('./lib/Conf.js'), {listen, db} = conf
 
 const logging = {}; for (const name of ['app', 'db']) logging [name] = createLogger (conf, name)
 
-const dbListener = new DbListenerPg ({db, logger: logging.db})
+const dbListener = new DbListenerPg ({db, channel: 'mail', logger: logging.db})
 const httpRouter = new HttpRouter   ({listen, logger: logging.app})
 
 async function exit () {
@@ -28,13 +28,13 @@ async function exit () {
 
 async function main () {
 
+    for (const signal of ['SIGTERM', 'SIGINT', 'SIGBREAK']) process.on (signal, exit)
+
     const app = new Application (conf, logging)
     await app.init ()
 
-    dbListener.add (app.mailChannel)
+    dbListener.add (app.mailRouter)
     httpRouter.add (app.backService)
-
-    for (const signal of ['SIGTERM', 'SIGINT', 'SIGBREAK']) process.on (signal, exit)
 
     await dbListener.listen ()
     httpRouter.listen ()

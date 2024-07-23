@@ -9,7 +9,7 @@ module.exports = class extends DbModel {
 			src: [{root: [__dirname], filter: (_, arr) => arr.at (-1) === 'Model'}],
 		})
 		
-		this.loadModules ()
+//		this.loadModules ()
 
 	}
 	
