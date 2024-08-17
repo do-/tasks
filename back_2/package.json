@@ -9,15 +9,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "doix": "^1.0.28",
-    "doix-db": "^1.0.57",
-    "doix-db-postgresql": "^1.0.46",
+    "doix": "^1.0.42",
+    "doix-db": "^1.0.65",
+    "doix-db-postgresql": "^1.0.65",
     "doix-devextreme": "^1.0.5",
-    "doix-http": "^1.0.5",
-    "doix-http-cookie-jwt": "^1.0.5",
+    "doix-http": "^1.0.9",
+    "doix-http-cookie-jwt": "^1.0.8",
     "doix-w2ui": "^1.0.5",
     "file-path-maker": "^1.0.0",
     "nodemailer": "^6.9.14",
+    "pwd-shaker": "^1.0.0",
+    "string-normalize-space": "^1.0.1",
     "string-replace-balanced": "^1.0.0",
     "winston": "^3.12.0"
   }

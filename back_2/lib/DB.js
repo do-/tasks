@@ -42,7 +42,7 @@ module.exports = class extends DbPoolPg {
 
 		const {job, pool} = this
 
-		await pool.toSet (job, 'db')
+		await pool.setResource (job, 'db')
 
         const {db} = job, plan = db.createMigrationPlan ()
 

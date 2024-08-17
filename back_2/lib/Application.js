@@ -1,5 +1,7 @@
 const nodemailer                    = require ('nodemailer')
-const {Application, PasswordShaker} = require ('doix')
+
+const {Application, JobSource}      = require ('doix')
+const {PasswordShakerFile}          = require ('pwd-shaker')
 
 const DB                            = require ('./DB.js')
 const BackService                   = require ('./BackService.js')
@@ -9,21 +11,21 @@ const MailRouter                    = require ('./MailRouter.js')
 
 module.exports = class extends Application {
 
-	constructor (conf, logging) {		
-					
+	constructor (conf, logger) {		
+
 	    super ({
 	    	
-	    	logger: logging.app,
+	    	logger,
 	    
 			globals: {
 				conf,
-			    pwd: new PasswordShaker ({path: conf.auth.salt_file}),
+			    pwd: new PasswordShakerFile ({path: conf.auth.salt_file}),
 				smtp: nodemailer.createTransport (conf.mail),
 				pix: new PictureExtractor (conf.pics),
 			},
 
 			pools: {
-				db: new DB (conf.db, logging.db),
+				db: new DB (conf.db, logger),
 			},
 
 			modules: {
@@ -56,15 +58,19 @@ module.exports = class extends Application {
 		})
 
 		{
+			this.default = new JobSource (this, {name: 'default'})
+		}
+
+		{
 			const {auth: {sessions}} = conf
 			this.backService = new BackService (this, {sessions})
-		}
+		}		
 
 	}
 
 	async init () {
 
-		await this.createJob ({type: 'app', action: 'init'}).toComplete ()
+		await this.default.createJob ({type: 'app', action: 'init'}).outcome ()
 
 		this.mailRouter = new MailRouter (this)
 

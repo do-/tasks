@@ -21,6 +21,8 @@ module.exports = class extends WebService {
 	constructor (app, {sessions: {timeout}}) {
 		
 	    super (app, {
+
+			name: 'UIBackend',
 	    
 			methods: ['POST'],
 
