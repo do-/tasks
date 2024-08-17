@@ -19,7 +19,36 @@ const logger = winston.createLogger ({
         winston.format.timestamp ({format: 'YYYY-MM-DD HH:mm:ss.SSS'})
 //        , winston.format.json ()
 //        , normalizeSpaceLogFormat ()
-        , winston.format.printf (info => `${info.timestamp} ${info.id} ${info.message??info.event}${info.elapsed ? ' ' + info.elapsed + ' ms' : ''}${info.details ? ' ' + JSON.stringify (info.details): ''}`)
+        , winston.format.printf (info => {
+            //`${info.timestamp} ${info.id} ${info.message??info.event}${info.elapsed ? ' ' + info.elapsed + ' ms' : ''}${info.details ? ' ' + JSON.stringify (info.details): ''}`
+
+            let s = `${info.timestamp} ${info.id}`
+
+            const {event} = info
+
+            switch (event) {
+
+                case 'finish':
+                    if ('elapsed' in info) return s + ` < ${info.elapsed} ms`
+                    break
+
+                case 'start':
+                case 'method':
+                    s += ` >`
+                    break
+
+            }
+
+            s += ` ${info.message??info.event}`
+
+            if ('details' in info) {
+                const d = JSON.stringify (info.details)
+                if (d != '{"params":[]}') s += ` ${d}`
+            }
+
+            return s
+
+        })
     ),
 })
 
