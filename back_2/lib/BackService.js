@@ -1,4 +1,5 @@
-const {WebService, HttpParamReader, HttpResultWriter} = require ('doix-http')
+const {Job} = require ('doix')
+const {WebService} = require ('doix-http')
 const {CookieJWT} = require ('doix-http-cookie-jwt')
 
 const QUERY = Symbol.for ('query')
@@ -26,73 +27,54 @@ module.exports = class extends WebService {
 	    
 			methods: ['POST'],
 
-			reader: new HttpParamReader ({
-				from: {
-					searchParams: true,
-					bodyString: s => JSON.parse (s),	
-				}
-			}),
+			createError: cause => {
+
+				const {field, message} = cause
+
+				const o = field ? {field, message} : {success: false, dt: new Date ()}
+
+				const {INSTANCE} = Job; if (INSTANCE in cause) o.id = cause [INSTANCE].id
+
+				const error = createError (field ? 422 : 500, JSON.stringify (o))
+
+				error.expose = true
+
+				error [HttpRequestContext.CONTENT_TYPE] = 'application/json'
+
+				return error
+
+			},
 
 			on: {
 
-				method: function () {
+				start: function () {
 
 					if (!this.user && !this.module.allowAnonymous) this.fail (new UnauthorizedError ())
 
 				},
 
-			},
+				end: function () {
 
-			writer: new HttpResultWriter ({
-
-				type: 'application/json',
-
-				stringify: content => {
+					let content = this.result ?? null
 
 					if (Array.isArray (content) && COUNT in content) content = {
 						[content [QUERY].tables [0].alias]: content,
 						cnt: content [COUNT],
 						portion: content [QUERY].options.limit,
-					}				
-				
-					return JSON.stringify ({
-						success: true, 
-						content, 
-					})
-				
-				}
-
-			}),
-
-			dumper: new HttpResultWriter ({
-
-				code: err =>
-
-					'code'  in err && /^[1-5]\d\d$/.test (err.code) ? err.code :
-
-					'field' in err ? 422 :
-
-					500,
-
-				type: 'application/json',
-
-				stringify: (err, job) => JSON.stringify (
-					'field' in err ? {
-						field: err.field,
-						message: err.message
 					}
-					: {
-						success: false,
-						id: job.uuid,
-						dt: new Date ().toJSON ()
-					}					
-				)
-				
-			}),
+
+					this.result = {
+						success: true,
+						content,
+					}
+
+				},
+
+			},
 
 	    })
 
-	    new CookieJWT ({ttl: timeout}).plugInto (this)
+	    new CookieJWT ({ttl: timeout, name: 'sid'}).plugInto (this)
 
 	}
 

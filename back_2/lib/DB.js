@@ -22,7 +22,7 @@ module.exports = class extends DbPoolPg {
 
 	isToBegin (db) {
 
-		return 'action' in db.job.rq
+		return 'action' in db.job.request
 
 	}
 

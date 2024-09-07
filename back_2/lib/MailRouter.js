@@ -8,6 +8,8 @@ module.exports = class extends DbQueuesRouterPg {
 
         super (app, {
 
+            name: 'QR',
+
             on: {
 
                 'job-end': async job => {

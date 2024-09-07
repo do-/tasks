@@ -14,7 +14,7 @@ module.exports = {
 
     queue: {
 
-        rq: {type: 'task_notifications', action: 'process'},
+        request: {type: 'task_notifications', action: 'process'},
 
         order: 'ts DESC',
 

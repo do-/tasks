@@ -4,11 +4,11 @@ module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-get_vocs_of_users:
+getVocs:
 
     async function () {
 
-    	const {db: {model}, rq: {type}} = this
+    	const {db: {model}, request: {type}} = this
 
 		return model.assignData ({
 			_fields: model.getFields (type),
@@ -20,7 +20,7 @@ get_vocs_of_users:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-get_peers_of_users:
+getPeers:
 
 	async function () {
 
@@ -30,21 +30,21 @@ get_peers_of_users:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_set_peers_users:
+doSetPeers:
 
 	async function () {
 
-		await this.db.invoke ('do_set_peers_users', [this.user.uuid, JSON.stringify (this.rq.data.ids)])
+		await this.db.invoke ('do_set_peers_users', [this.user.uuid, JSON.stringify (this.request.data.ids)])
 
 	},
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_create_users: 
+doCreate: 
 
 	async function () {
 
-    	const {db, rq} = this, {type, data} = rq
+    	const {db, request} = this, {type, data} = request
 		
 		await db.insert (type, data, {onlyIfMissing: true})
 
@@ -52,11 +52,11 @@ do_create_users:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_update_users: 
+doUpdate: 
 
 	async function () {
 
-    	const {db, rq} = this, {type, data, id} = rq
+    	const {db, request} = this, {type, data, id} = request
 
 		data.uuid = id
 		
@@ -66,31 +66,31 @@ do_update_users:
 	
 ////////////////////////////////////////////////////////////////////////////////
 
-do_delete_users:
+doDelete:
 	
 	async function () {
 
-        await this.db.do ('UPDATE users SET is_deleted = 1 WHERE uuid = ?', [this.rq.id])
+        await this.db.do ('UPDATE users SET is_deleted = 1 WHERE uuid = ?', [this.request.id])
 	
 	},
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_undelete_users:
+doUndelete:
 	
 	async function () {
 
-        await this.db.do ('UPDATE users SET is_deleted = 0 WHERE uuid = ?', [this.rq.id])
+        await this.db.do ('UPDATE users SET is_deleted = 0 WHERE uuid = ?', [this.request.id])
 	
 	},
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_set_password_users:
+doSetPassword:
 
     async function () {
 
-    	const {db, rq, user, pwd, http: {request: {headers}}} = this, p1 = headers ['x-request-param-p1'], p2 = headers ['x-request-param-p1']
+    	const {db, request, user, pwd, http: {request: {headers}}} = this, p1 = headers ['x-request-param-p1'], p2 = headers ['x-request-param-p1']
 
 		if (p1 == null) throw Error ('#p1#: Получено пустое значение пароля')
         if (p1 != p2)   throw Error ('#p2#: Повторное значение пароля не сходится')
@@ -98,7 +98,7 @@ do_set_password_users:
         const salt     = pwd.sprinkle (32)
         const password = pwd.cook (p1, salt)
 
-		const uuid = (user.role === 'admin' ? rq.id : null) || user.uuid
+		const uuid = (user.role === 'admin' ? request.id : null) || user.uuid
 
 		await db.update ('users', {uuid, salt, password})
 
@@ -106,7 +106,7 @@ do_set_password_users:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-select_users: 
+getList:
 
     async function () {
 

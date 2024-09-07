@@ -1,7 +1,7 @@
 const process        = require ('process')
 const Application    = require ('./lib/Application.js')
 const {DbListenerPg} = require ('doix-db-postgresql')
-const {HttpRouter}   = require ('doix-http')
+const {HttpRouter}   = require ('protocol-agnostic-router')
 const Path    = require ('path')
 const winston = require ('winston')
 const normalizeSpaceLogFormat = require ('string-normalize-space').logform
@@ -42,8 +42,13 @@ const logger = winston.createLogger ({
             s += ` ${info.message??info.event}`
 
             if ('details' in info) {
-                const d = JSON.stringify (info.details)
-                if (d != '{"params":[]}') s += ` ${d}`
+                try {
+                    const d = JSON.stringify (info.details)
+                    if (d != '{"params":[]}') s += ` ${d}`    
+                }
+                catch (x) {
+                    s += ' [CIRCULAR]'
+                } 
             }
 
             return s

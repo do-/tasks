@@ -10,7 +10,7 @@ allowAnonymous: true,
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_delete_sessions: 
+doDelete: 
 
     async function () {
 
@@ -20,11 +20,11 @@ do_delete_sessions:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_create_sessions: 
+doCreate: 
 
     async function () {
 
-    	const {conf: {auth: {allow_test_admin, sessions: {timeout}}}, db, rq: {data: {login}}, pwd, http: {request: {headers}}} = this
+    	const {conf: {auth: {allow_test_admin, sessions: {timeout}}}, db, request: {data: {login}}, pwd, http: {request: {headers}}} = this
 
         const user = await db.getObject ('SELECT * FROM users WHERE login = ?', [login], {notFound: TEST_USER})
 

@@ -2,11 +2,11 @@ module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_process_task_notifications:
+doProcess:
 
     async function () {
 
-        const {db, rq: {uuid, mail_content: {to, subject, notes, id}}} = this
+        const {db, request: {uuid, mail_content: {to, subject, notes, id}}} = this
 
         let html = ''; for (const {label, body} of notes) {
 

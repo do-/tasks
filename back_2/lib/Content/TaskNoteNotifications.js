@@ -2,11 +2,11 @@ module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_process_task_note_notifications:
+doProcess:
 
     async function () {
 
-        const {db, rq: {uuid, mail_content: {to, subject, html, id}}} = this
+        const {db, request: {uuid, mail_content: {to, subject, html, id}}} = this
 
         await db.do ('UPDATE task_notes SET is_to_notify = FALSE WHERE uuid = ?', [uuid])
 

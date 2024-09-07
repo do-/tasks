@@ -4,7 +4,7 @@ module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-get_vocs_of_tasks:
+getVocs:
 
     async function () {
 
@@ -21,11 +21,11 @@ get_vocs_of_tasks:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-get_item_of_tasks:
+getItem:
 
     async function () {
 
-    	const {db, rq: {id}} = this
+    	const {db, request: {id}} = this
 
         return db.invoke ('get_item_of_tasks', [id])
 
@@ -33,7 +33,7 @@ get_item_of_tasks:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-select_tasks:
+getList:
 
     function () {
 
@@ -59,11 +59,11 @@ select_tasks:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_create_tasks:
+doCreate:
 
     async function () {
 
-        const {db, rq} = this, {id, data} = rq, {id_voc_project, label} = data
+        const {db, request} = this, {id, data} = request, {id_voc_project, label} = data
 
         const result = {uuid: id}
 
@@ -71,8 +71,8 @@ do_create_tasks:
 
         if (!await db.insert ('tasks', task, {onlyIfMissing: true})) return result
 
-        rq.data.id_user_to = task.id_user_author
-        rq.data.uuid       = task.uuid
+        request.data.id_user_to = task.id_user_author
+        request.data.uuid       = task.uuid
 
         await this.module.do_comment_tasks.call (this)
 
@@ -82,11 +82,11 @@ do_create_tasks:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_assign_tasks:
+doAssign:
 
     async function () {
 
-        const {db, rq, user} = this, {id, data} = rq, {id_user_to} = data; if (!id_user_to) throw Error ('#id_user_to#:Не указан адресат')
+        const {db, request, user} = this, {id, data} = request, {id_user_to} = data; if (!id_user_to) throw Error ('#id_user_to#:Не указан адресат')
 
         data.id_user_to = user.uuid
 
@@ -98,11 +98,11 @@ do_assign_tasks:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-do_comment_tasks:
+doComment:
 
     async function () {
 
-        const {db, rq: {id, data}, user, pix} = this, {uuid} = data
+        const {db, request: {id, data}, user, pix} = this, {uuid} = data
 
         data.body = pix.process (data.body || '', uuid)
 
