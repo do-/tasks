@@ -37,7 +37,7 @@ doCreate:
         }
         else {
 
-            if (user.is_deleted) throw '#foo#: Вас пускать не велено'
+            if (user.is_deleted) this.raise ('Вас пускать не велено', {field: 'login'})
 
             if (pwd.cook (pass, user.salt) !== user.password) return {}
     

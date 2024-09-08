@@ -92,8 +92,8 @@ doSetPassword:
 
     	const {db, request, user, pwd, http: {request: {headers}}} = this, p1 = headers ['x-request-param-p1'], p2 = headers ['x-request-param-p1']
 
-		if (p1 == null) throw Error ('#p1#: Получено пустое значение пароля')
-        if (p1 != p2)   throw Error ('#p2#: Повторное значение пароля не сходится')
+		if (p1 == null) this.raise ('Получено пустое значение пароля', {field: 'p1'})
+        if (p1 != p2)   this.raise ('Повторное значение пароля не сходится', {field: 'p2'})
 
         const salt     = pwd.sprinkle (32)
         const password = pwd.cook (p1, salt)

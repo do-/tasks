@@ -86,7 +86,7 @@ doAssign:
 
     async function () {
 
-        const {db, request, user} = this, {id, data} = request, {id_user_to} = data; if (!id_user_to) throw Error ('#id_user_to#:Не указан адресат')
+        const {db, request, user} = this, {id, data} = request, {id_user_to} = data; if (!id_user_to) this.raise ('Не указан адресат', {field: 'id_user_to'})
 
         data.id_user_to = user.uuid
 
